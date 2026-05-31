@@ -1,0 +1,544 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum AppRole {
+  STUDENT
+  MENTOR
+  ADMIN
+  MODERATOR
+  CORPORATE_VIEWER
+}
+
+enum TeamMembershipRole {
+  MEMBER
+  LEAD
+  MENTOR
+  ADMIN
+  VIEWER
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  BLOCKED
+  IN_REVIEW
+  DONE
+  ARCHIVED
+}
+
+enum TaskType {
+  PERSONAL
+  MENTOR_ASSIGNED
+  ADMIN_ASSIGNED
+  TEAM
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum FocusActivityType {
+  STUDY
+  CODING
+  READING
+  WRITING
+  RESEARCH
+  REVIEW
+  OTHER
+}
+
+enum FocusSessionStatus {
+  PLANNED
+  ACTIVE
+  PAUSED
+  COMPLETED
+  ABANDONED
+}
+
+enum HelpPostStatus {
+  OPEN
+  ANSWERED
+  RESOLVED
+  CLOSED
+  FLAGGED
+}
+
+enum NotificationType {
+  TASK_ASSIGNED
+  TASK_DUE
+  HELP_RESPONSE
+  HELP_RESOLVED
+  BADGE_AWARDED
+  MENTOR_FEEDBACK
+  TEAM_UPDATE
+  SYSTEM
+}
+
+enum StudyMaterialType {
+  LINK
+  FILE
+  NOTE
+  VIDEO
+  COLLECTION
+}
+
+enum Visibility {
+  PRIVATE
+  TEAM
+  ORGANIZATION
+  PUBLIC
+}
+
+enum ReportScopeType {
+  STUDENT
+  TEAM
+  ORGANIZATION
+}
+
+enum ActivitySourceType {
+  FOCUS_SESSION
+  TASK
+  HELP_POST
+  HELP_RESPONSE
+  BADGE_AWARD
+  MANUAL
+}
+
+model UserProfile {
+  id                    String             @id @default(cuid())
+  authUserId            String             @unique
+  displayName           String
+  avatarUrl             String?
+  role                  AppRole            @default(STUDENT)
+  bio                   String?
+  timezone              String             @default("UTC")
+  institution           String?
+  department            String?
+  currentStreak         Int                @default(0)
+  totalFocusMinutes     Int                @default(0)
+  helpPoints            Int                @default(0)
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+  preferences           UserPreference?
+  ownedTeams            Team[]             @relation("TeamOwner")
+  memberships           TeamMembership[]
+  mentorAssignments     MentorAssignment[] @relation("MentorAssignments")
+  studentAssignments    MentorAssignment[] @relation("StudentAssignments")
+  createdTasks          Task[]             @relation("TaskCreator")
+  assignedTasks         Task[]             @relation("TaskAssignee")
+  taskComments          TaskComment[]
+  taskActivities        TaskActivity[]
+  focusSessions         FocusSession[]
+  activityEvents        ActivityEvent[]
+  helpPosts             HelpPost[]
+  helpResponses         HelpResponse[]
+  helperLimits          HelperLimit[]
+  awardedBadges         BadgeAward[]       @relation("BadgeRecipient")
+  givenBadges           BadgeAward[]       @relation("BadgeAwarder")
+  leaderboardEntries    LeaderboardEntry[]
+  receivedNotifications Notification[]     @relation("NotificationRecipient")
+  actedNotifications    Notification[]     @relation("NotificationActor")
+  studyMaterials        StudyMaterial[]
+  studentReports        StudentReport[]
+
+  @@index([role])
+  @@index([displayName])
+}
+
+model UserPreference {
+  id                   String      @id @default(cuid())
+  profileId            String      @unique
+  emailNotifications   Boolean     @default(true)
+  pushNotifications    Boolean     @default(true)
+  weeklyDigest         Boolean     @default(true)
+  focusReminderMinutes Int         @default(25)
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+  profile              UserProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+}
+
+model Team {
+  id                   String                    @id @default(cuid())
+  name                 String
+  slug                 String                    @unique
+  description          String?
+  avatarUrl            String?
+  ownerProfileId       String
+  createdAt            DateTime                  @default(now())
+  updatedAt            DateTime                  @updatedAt
+  owner                UserProfile               @relation("TeamOwner", fields: [ownerProfileId], references: [id], onDelete: Restrict)
+  memberships          TeamMembership[]
+  mentorAssignments    MentorAssignment[]
+  tasks                Task[]
+  focusSessions        FocusSession[]
+  activityEvents       ActivityEvent[]
+  helpPosts            HelpPost[]
+  leaderboardSnapshots LeaderboardSnapshot[]
+  studyMaterials       StudyMaterial[]
+  corporateReports     CorporateReportSnapshot[]
+
+  @@index([ownerProfileId])
+}
+
+model TeamMembership {
+  id        String             @id @default(cuid())
+  teamId    String
+  profileId String
+  role      TeamMembershipRole @default(MEMBER)
+  joinedAt  DateTime           @default(now())
+  leftAt    DateTime?
+  team      Team               @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  profile   UserProfile        @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, profileId])
+  @@index([profileId, leftAt])
+  @@index([teamId, role])
+}
+
+model MentorAssignment {
+  id               String      @id @default(cuid())
+  mentorProfileId  String
+  studentProfileId String
+  teamId           String?
+  startsAt         DateTime    @default(now())
+  endsAt           DateTime?
+  createdAt        DateTime    @default(now())
+  mentor           UserProfile @relation("MentorAssignments", fields: [mentorProfileId], references: [id], onDelete: Cascade)
+  student          UserProfile @relation("StudentAssignments", fields: [studentProfileId], references: [id], onDelete: Cascade)
+  team             Team?       @relation(fields: [teamId], references: [id], onDelete: SetNull)
+
+  @@index([mentorProfileId, endsAt])
+  @@index([studentProfileId, endsAt])
+  @@index([teamId])
+}
+
+model Task {
+  id                  String         @id @default(cuid())
+  title               String
+  description         String?
+  type                TaskType       @default(PERSONAL)
+  status              TaskStatus     @default(TODO)
+  priority            TaskPriority   @default(MEDIUM)
+  category            String?
+  createdByProfileId  String
+  assignedToProfileId String?
+  teamId              String?
+  dueAt               DateTime?
+  completedAt         DateTime?
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+  createdBy           UserProfile    @relation("TaskCreator", fields: [createdByProfileId], references: [id], onDelete: Restrict)
+  assignedTo          UserProfile?   @relation("TaskAssignee", fields: [assignedToProfileId], references: [id], onDelete: SetNull)
+  team                Team?          @relation(fields: [teamId], references: [id], onDelete: SetNull)
+  subtasks            Subtask[]
+  comments            TaskComment[]
+  activities          TaskActivity[]
+  focusSessions       FocusSession[]
+
+  @@index([assignedToProfileId, status, dueAt])
+  @@index([createdByProfileId, createdAt])
+  @@index([teamId, status])
+  @@index([type, status])
+}
+
+model Subtask {
+  id        String   @id @default(cuid())
+  taskId    String
+  title     String
+  isDone    Boolean  @default(false)
+  position  Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@index([taskId, position])
+}
+
+model TaskComment {
+  id              String      @id @default(cuid())
+  taskId          String
+  authorProfileId String
+  body            String
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  task            Task        @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  author          UserProfile @relation(fields: [authorProfileId], references: [id], onDelete: Cascade)
+
+  @@index([taskId, createdAt])
+  @@index([authorProfileId, createdAt])
+}
+
+model TaskActivity {
+  id             String      @id @default(cuid())
+  taskId         String
+  actorProfileId String
+  eventType      String
+  fromStatus     TaskStatus?
+  toStatus       TaskStatus?
+  metadata       Json?
+  createdAt      DateTime    @default(now())
+  task           Task        @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  actor          UserProfile @relation(fields: [actorProfileId], references: [id], onDelete: Cascade)
+
+  @@index([taskId, createdAt])
+  @@index([actorProfileId, createdAt])
+}
+
+model FocusSession {
+  id             String             @id @default(cuid())
+  profileId      String
+  taskId         String?
+  teamId         String?
+  activityType   FocusActivityType  @default(STUDY)
+  status         FocusSessionStatus @default(PLANNED)
+  plannedMinutes Int
+  actualMinutes  Int?
+  startedAt      DateTime?
+  pausedAt       DateTime?
+  completedAt    DateTime?
+  source         String?
+  notes          String?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  profile        UserProfile        @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  task           Task?              @relation(fields: [taskId], references: [id], onDelete: SetNull)
+  team           Team?              @relation(fields: [teamId], references: [id], onDelete: SetNull)
+
+  @@index([profileId, startedAt])
+  @@index([profileId, status])
+  @@index([teamId, startedAt])
+  @@index([taskId])
+}
+
+model ActivityEvent {
+  id         String             @id @default(cuid())
+  profileId  String
+  teamId     String?
+  type       String
+  sourceId   String?
+  sourceType ActivitySourceType @default(MANUAL)
+  points     Int                @default(0)
+  occurredAt DateTime           @default(now())
+  createdAt  DateTime           @default(now())
+  profile    UserProfile        @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  team       Team?              @relation(fields: [teamId], references: [id], onDelete: SetNull)
+
+  @@index([profileId, occurredAt])
+  @@index([teamId, occurredAt])
+  @@index([sourceType, sourceId])
+}
+
+model HelpPost {
+  id                String         @id @default(cuid())
+  authorProfileId   String
+  teamId            String?
+  title             String
+  body              String
+  status            HelpPostStatus @default(OPEN)
+  topic             String?
+  urgency           TaskPriority   @default(MEDIUM)
+  awardedResponseId String?        @unique
+  resolvedAt        DateTime?
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  author            UserProfile    @relation(fields: [authorProfileId], references: [id], onDelete: Cascade)
+  team              Team?          @relation(fields: [teamId], references: [id], onDelete: SetNull)
+  awardedResponse   HelpResponse?  @relation("AwardedHelpResponse", fields: [awardedResponseId], references: [id], onDelete: SetNull)
+  responses         HelpResponse[] @relation("HelpPostResponses")
+  tags              HelpPostTag[]
+
+  @@index([status, createdAt])
+  @@index([authorProfileId, createdAt])
+  @@index([teamId, status])
+  @@index([topic])
+}
+
+model HelpResponse {
+  id              String      @id @default(cuid())
+  postId          String
+  authorProfileId String
+  body            String
+  isAccepted      Boolean     @default(false)
+  pointsAwarded   Int         @default(0)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  post            HelpPost    @relation("HelpPostResponses", fields: [postId], references: [id], onDelete: Cascade)
+  author          UserProfile @relation(fields: [authorProfileId], references: [id], onDelete: Cascade)
+  awardedForPost  HelpPost?   @relation("AwardedHelpResponse")
+
+  @@index([postId, createdAt])
+  @@index([authorProfileId, createdAt])
+}
+
+model HelpPostTag {
+  id     String   @id @default(cuid())
+  postId String
+  tag    String
+  post   HelpPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, tag])
+  @@index([tag])
+}
+
+model HelperLimit {
+  id             String      @id @default(cuid())
+  profileId      String
+  periodStart    DateTime
+  periodEnd      DateTime
+  responsesGiven Int         @default(0)
+  pointsEarned   Int         @default(0)
+  profile        UserProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@unique([profileId, periodStart, periodEnd])
+}
+
+model Badge {
+  id          String       @id @default(cuid())
+  name        String       @unique
+  description String?
+  iconName    String
+  criteria    String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  awards      BadgeAward[]
+}
+
+model BadgeAward {
+  id                 String       @id @default(cuid())
+  badgeId            String
+  profileId          String
+  awardedByProfileId String?
+  reason             String?
+  awardedAt          DateTime     @default(now())
+  badge              Badge        @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+  profile            UserProfile  @relation("BadgeRecipient", fields: [profileId], references: [id], onDelete: Cascade)
+  awardedBy          UserProfile? @relation("BadgeAwarder", fields: [awardedByProfileId], references: [id], onDelete: SetNull)
+
+  @@unique([badgeId, profileId, awardedAt])
+  @@index([profileId, awardedAt])
+}
+
+model LeaderboardSnapshot {
+  id          String             @id @default(cuid())
+  scopeType   ReportScopeType
+  scopeId     String?
+  teamId      String?
+  periodStart DateTime
+  periodEnd   DateTime
+  generatedAt DateTime           @default(now())
+  team        Team?              @relation(fields: [teamId], references: [id], onDelete: SetNull)
+  entries     LeaderboardEntry[]
+
+  @@index([scopeType, scopeId, periodStart])
+  @@index([teamId, periodStart])
+}
+
+model LeaderboardEntry {
+  id             String              @id @default(cuid())
+  snapshotId     String
+  profileId      String
+  rank           Int
+  score          Int                 @default(0)
+  focusMinutes   Int                 @default(0)
+  tasksCompleted Int                 @default(0)
+  helpPoints     Int                 @default(0)
+  badgesEarned   Int                 @default(0)
+  snapshot       LeaderboardSnapshot @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
+  profile        UserProfile         @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@unique([snapshotId, profileId])
+  @@index([profileId])
+  @@index([snapshotId, rank])
+}
+
+model Notification {
+  id                 String           @id @default(cuid())
+  recipientProfileId String
+  actorProfileId     String?
+  type               NotificationType
+  title              String
+  body               String?
+  targetType         String?
+  targetId           String?
+  readAt             DateTime?
+  createdAt          DateTime         @default(now())
+  recipient          UserProfile      @relation("NotificationRecipient", fields: [recipientProfileId], references: [id], onDelete: Cascade)
+  actor              UserProfile?     @relation("NotificationActor", fields: [actorProfileId], references: [id], onDelete: SetNull)
+
+  @@index([recipientProfileId, readAt, createdAt])
+  @@index([targetType, targetId])
+}
+
+model StudyMaterial {
+  id             String             @id @default(cuid())
+  title          String
+  description    String?
+  type           StudyMaterialType
+  url            String?
+  fileKey        String?
+  ownerProfileId String
+  teamId         String?
+  visibility     Visibility         @default(PRIVATE)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  owner          UserProfile        @relation(fields: [ownerProfileId], references: [id], onDelete: Cascade)
+  team           Team?              @relation(fields: [teamId], references: [id], onDelete: SetNull)
+  tags           StudyMaterialTag[]
+
+  @@index([ownerProfileId, createdAt])
+  @@index([teamId, visibility])
+  @@index([type])
+}
+
+model StudyMaterialTag {
+  id         String        @id @default(cuid())
+  materialId String
+  tag        String
+  material   StudyMaterial @relation(fields: [materialId], references: [id], onDelete: Cascade)
+
+  @@unique([materialId, tag])
+  @@index([tag])
+}
+
+model StudentReport {
+  id             String      @id @default(cuid())
+  profileId      String
+  periodStart    DateTime
+  periodEnd      DateTime
+  focusMinutes   Int         @default(0)
+  tasksCompleted Int         @default(0)
+  helpPoints     Int         @default(0)
+  badgesEarned   Int         @default(0)
+  summary        String?
+  generatedAt    DateTime    @default(now())
+  profile        UserProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([profileId, periodStart])
+}
+
+model CorporateReportSnapshot {
+  id                     String   @id @default(cuid())
+  teamId                 String?
+  periodStart            DateTime
+  periodEnd              DateTime
+  activeStudents         Int      @default(0)
+  averageEngagement      Float    @default(0)
+  tasksCompleted         Int      @default(0)
+  focusMinutes           Int      @default(0)
+  helpDeskResolutionRate Float    @default(0)
+  summary                String?
+  generatedAt            DateTime @default(now())
+  team                   Team?    @relation(fields: [teamId], references: [id], onDelete: SetNull)
+
+  @@index([teamId, periodStart])
+  @@index([periodStart, periodEnd])
+}
