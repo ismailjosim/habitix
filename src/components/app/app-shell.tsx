@@ -25,6 +25,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { ThemeToggle } from "@/components/app/theme-toggle"
 import { navigationItems } from "@/lib/navigation"
 import { cn } from "@/lib/utils"
 
@@ -40,8 +41,8 @@ const currentUser = {
 
 export function AppShell({ children }: AppShellProps) {
   return (
-    <div className="min-h-screen bg-slate-100 text-slate-950">
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-72 border-r border-slate-200 bg-slate-950 text-white lg:block">
+    <div className="min-h-screen bg-canvas text-foreground">
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-72 border-r border-white/10 bg-sidebar text-sidebar-foreground lg:block">
         <SidebarContent />
       </aside>
 
@@ -57,31 +58,32 @@ export function AppShell({ children }: AppShellProps) {
 
 function TopBar() {
   return (
-    <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-slate-200 bg-white/95 px-4 backdrop-blur sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-border bg-card/95 px-4 backdrop-blur sm:px-6 lg:px-8">
       <Sheet>
         <SheetTrigger asChild>
           <Button variant="outline" size="icon" className="lg:hidden" aria-label="Open navigation">
             <IconMenu2 />
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="w-72 border-slate-800 bg-slate-950 p-0 text-white">
+        <SheetContent side="left" className="w-72 border-white/10 bg-sidebar p-0 text-sidebar-foreground">
           <SheetTitle className="sr-only">Habitix navigation</SheetTitle>
           <SidebarContent />
         </SheetContent>
       </Sheet>
 
       <div className="relative hidden w-full max-w-md sm:block">
-        <IconSearch className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
+        <IconSearch className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
         <Input
-          className="h-9 border-slate-200 bg-slate-50 pl-9"
+          className="h-9 border-border bg-secondary/70 pl-9"
           placeholder="Search tasks, teammates, reports..."
         />
       </div>
 
       <div className="ml-auto flex items-center gap-2">
+        <ThemeToggle />
         <Button variant="outline" size="icon" aria-label="Notifications" className="relative">
           <IconBell />
-          <span className="absolute right-1.5 top-1.5 size-2 rounded-full bg-blue-600" />
+          <span className="absolute right-1.5 top-1.5 size-2 rounded-full bg-primary" />
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -92,9 +94,9 @@ function TopBar() {
               </Avatar>
               <span className="hidden text-left sm:block">
                 <span className="block text-sm font-medium leading-4">{currentUser.name}</span>
-                <span className="block text-xs text-slate-500">{currentUser.role}</span>
+                <span className="block text-xs text-muted-foreground">{currentUser.role}</span>
               </span>
-              <IconChevronDown className="hidden size-4 text-slate-500 sm:block" />
+              <IconChevronDown className="hidden size-4 text-muted-foreground sm:block" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
@@ -142,8 +144,8 @@ function SidebarContent() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex h-10 items-center gap-3 rounded-lg px-3 text-sm font-medium text-slate-300 transition-colors hover:bg-white/10 hover:text-white",
-                  isActive && "bg-blue-600 text-white shadow-sm shadow-blue-950/20"
+                  "flex h-10 items-center gap-3 rounded-lg px-3 text-sm font-medium text-sidebar-foreground transition-colors hover:bg-sidebar-muted hover:text-white",
+                  isActive && "bg-primary text-primary-foreground shadow-sm shadow-blue-950/20"
                 )}
               >
                 <Icon className="size-5" />
@@ -158,9 +160,9 @@ function SidebarContent() {
         <div className="rounded-lg border border-white/10 bg-white/[0.06] p-3">
           <div className="flex items-center justify-between gap-2">
             <span className="text-sm font-medium">SCE Workspace</span>
-            <Badge className="bg-blue-500 text-white hover:bg-blue-500">MVP</Badge>
+            <Badge className="bg-primary text-primary-foreground hover:bg-primary">MVP</Badge>
           </div>
-          <p className="mt-2 text-xs leading-5 text-slate-400">
+          <p className="mt-2 text-xs leading-5 text-sidebar-foreground/80">
             Habitix branded student collaboration environment.
           </p>
         </div>
