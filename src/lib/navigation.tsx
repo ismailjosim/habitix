@@ -1,4 +1,4 @@
-import type { Icon } from "@tabler/icons-react"
+import type { Icon } from '@tabler/icons-react';
 import {
   IconBell,
   IconBriefcase,
@@ -11,82 +11,82 @@ import {
   IconTargetArrow,
   IconUsers,
   IconUserSquareRounded,
-} from "@tabler/icons-react"
+} from '@tabler/icons-react';
 
-export type UserRole = "student" | "mentor" | "admin" | "moderator" | "corporate"
+export type UserRole = 'student' | 'mentor' | 'admin' | 'moderator' | 'corporate';
 
 export type NavItem = {
-  title: string
-  href: string
-  icon: Icon
-  roles: UserRole[]
-}
+  title: string;
+  href: string;
+  icon: Icon;
+  roles: UserRole[];
+};
 
 export const navigationItems: NavItem[] = [
   {
-    title: "Dashboard",
-    href: "/dashboard",
+    title: 'Dashboard',
+    href: '/dashboard',
     icon: IconHome,
-    roles: ["student", "mentor", "admin", "moderator", "corporate"],
+    roles: ['student', 'mentor', 'admin', 'moderator', 'corporate'],
   },
   {
-    title: "Activity",
-    href: "/activity",
+    title: 'Activity',
+    href: '/activity',
     icon: IconChartBar,
-    roles: ["student", "mentor", "admin"],
+    roles: ['student', 'mentor', 'admin'],
   },
   {
-    title: "Focus Mode",
-    href: "/focus-mode",
+    title: 'Focus Mode',
+    href: '/focus-mode',
     icon: IconTargetArrow,
-    roles: ["student", "mentor"],
+    roles: ['student', 'mentor'],
   },
   {
-    title: "Tasks",
-    href: "/tasks",
+    title: 'Tasks',
+    href: '/tasks',
     icon: IconChecklist,
-    roles: ["student", "mentor", "admin"],
+    roles: ['student', 'mentor', 'admin'],
   },
   {
-    title: "Help Desk",
-    href: "/help-desk",
+    title: 'Help Desk',
+    href: '/help-desk',
     icon: IconHelpCircle,
-    roles: ["student", "mentor", "moderator", "admin"],
+    roles: ['student', 'mentor', 'moderator', 'admin'],
   },
   {
-    title: "Leaderboard",
-    href: "/leaderboard",
+    title: 'Leaderboard',
+    href: '/leaderboard',
     icon: IconMedal,
-    roles: ["student", "mentor", "admin"],
+    roles: ['student', 'mentor', 'admin'],
   },
   {
-    title: "Team",
-    href: "/team",
+    title: 'Team',
+    href: '/team',
     icon: IconUsers,
-    roles: ["student", "mentor", "admin", "corporate"],
+    roles: ['student', 'mentor', 'admin', 'corporate'],
   },
   {
-    title: "Notifications",
-    href: "/notifications",
+    title: 'Notifications',
+    href: '/notifications',
     icon: IconBell,
-    roles: ["student", "mentor", "admin", "moderator", "corporate"],
+    roles: ['student', 'mentor', 'admin', 'moderator', 'corporate'],
   },
   {
-    title: "Profile",
-    href: "/profile",
+    title: 'Profile',
+    href: '/profile',
     icon: IconUserSquareRounded,
-    roles: ["student", "mentor", "admin", "moderator", "corporate"],
+    roles: ['student', 'mentor', 'admin', 'moderator', 'corporate'],
   },
   {
-    title: "Study Materials",
-    href: "/study-materials",
+    title: 'Study Materials',
+    href: '/study-materials',
     icon: IconNotebook,
-    roles: ["student", "mentor", "admin"],
+    roles: ['student', 'mentor', 'admin'],
   },
   {
-    title: "Corporate Report",
-    href: "/corporate-report",
+    title: 'Corporate Report',
+    href: '/corporate-report',
     icon: IconBriefcase,
-    roles: ["admin", "corporate"],
+    roles: ['admin', 'corporate'],
   },
-]
+];

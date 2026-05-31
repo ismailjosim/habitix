@@ -1,19 +1,14 @@
-"use client"
+'use client';
 
-import Image from "next/image"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import {
-  IconBell,
-  IconChevronDown,
-  IconMenu2,
-  IconSearch,
-} from "@tabler/icons-react"
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { IconBell, IconChevronDown, IconMenu2, IconSearch } from '@tabler/icons-react';
 
-import habitixLogo from "@/assets/Habitix-logo-with-text.png"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import habitixLogo from '@/assets/Habitix-logo-with-text.png';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,23 +16,23 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { ThemeToggle } from "@/components/app/theme-toggle"
-import { navigationItems } from "@/lib/navigation"
-import { cn } from "@/lib/utils"
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { ThemeToggle } from '@/components/app/theme-toggle';
+import { navigationItems } from '@/lib/navigation';
+import { cn } from '@/lib/utils';
 
 type AppShellProps = {
-  children: React.ReactNode
-}
+  children: React.ReactNode;
+};
 
 const currentUser = {
-  name: "Ismail Hasan",
-  email: "ismail@habitix.app",
-  role: "Student",
-}
+  name: 'Ismail Hasan',
+  email: 'ismail@habitix.app',
+  role: 'Student',
+};
 
 export function AppShell({ children }: AppShellProps) {
   return (
@@ -48,12 +43,10 @@ export function AppShell({ children }: AppShellProps) {
 
       <div className="lg:pl-72">
         <TopBar />
-        <main className="min-h-[calc(100vh-4rem)] px-4 py-5 sm:px-6 lg:px-8">
-          {children}
-        </main>
+        <main className="min-h-[calc(100vh-4rem)] px-4 py-5 sm:px-6 lg:px-8">{children}</main>
       </div>
     </div>
-  )
+  );
 }
 
 function TopBar() {
@@ -65,7 +58,10 @@ function TopBar() {
             <IconMenu2 />
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="w-72 border-white/10 bg-sidebar p-0 text-sidebar-foreground">
+        <SheetContent
+          side="left"
+          className="w-72 border-white/10 bg-sidebar p-0 text-sidebar-foreground"
+        >
           <SheetTitle className="sr-only">Habitix navigation</SheetTitle>
           <SidebarContent />
         </SheetContent>
@@ -115,43 +111,37 @@ function TopBar() {
         </DropdownMenu>
       </div>
     </header>
-  )
+  );
 }
 
 function SidebarContent() {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
     <div className="flex h-full flex-col">
       <div className="flex h-16 items-center border-b border-white/10 px-5">
-        <Image
-          src={habitixLogo}
-          alt="Habitix"
-          className="h-9 w-auto object-contain"
-          priority
-        />
+        <Image src={habitixLogo} alt="Habitix" className="h-9 w-auto object-contain" priority />
       </div>
 
       <ScrollArea className="flex-1 px-3 py-4">
         <nav className="space-y-1">
           {navigationItems.map((item) => {
-            const Icon = item.icon
-            const isActive =
-              pathname === item.href || pathname.startsWith(`${item.href}/`)
+            const Icon = item.icon;
+            const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
 
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex h-10 items-center gap-3 rounded-lg px-3 text-sm font-medium text-sidebar-foreground transition-colors hover:bg-sidebar-muted hover:text-white",
-                  isActive && "bg-primary text-primary-foreground shadow-sm shadow-blue-950/20"
+                  'flex h-10 items-center gap-3 rounded-lg px-3 text-sm font-medium text-sidebar-foreground transition-colors hover:bg-sidebar-muted hover:text-white',
+                  isActive && 'bg-primary text-primary-foreground shadow-sm shadow-blue-950/20'
                 )}
               >
                 <Icon className="size-5" />
                 <span>{item.title}</span>
               </Link>
-            )
+            );
           })}
         </nav>
       </ScrollArea>
@@ -168,5 +158,5 @@ function SidebarContent() {
         </div>
       </div>
     </div>
-  )
+  );
 }
