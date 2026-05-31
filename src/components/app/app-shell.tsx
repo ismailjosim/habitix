@@ -20,21 +20,39 @@ import {
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { SignOutMenuItem } from '@/components/app/sign-out-menu-item';
 import { ThemeToggle } from '@/components/app/theme-toggle';
 import { navigationItems } from '@/lib/navigation';
 import { cn } from '@/lib/utils';
 
 type AppShellProps = {
   children: React.ReactNode;
+  user: {
+    name: string;
+    email: string;
+    image?: string | null;
+    role: string;
+  };
 };
 
-const currentUser = {
-  name: 'Ismail Hasan',
-  email: 'ismail@habitix.app',
-  role: 'Student',
-};
+function formatRole(role: string) {
+  return role
+    .toLowerCase()
+    .split('_')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+}
 
-export function AppShell({ children }: AppShellProps) {
+function initialsForName(name: string) {
+  return name
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join('');
+}
+
+export function AppShell({ children, user }: AppShellProps) {
   return (
     <div className="min-h-screen bg-canvas text-foreground">
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-72 border-r border-white/10 bg-sidebar text-sidebar-foreground lg:block">
@@ -42,14 +60,17 @@ export function AppShell({ children }: AppShellProps) {
       </aside>
 
       <div className="lg:pl-72">
-        <TopBar />
+        <TopBar user={user} />
         <main className="min-h-[calc(100vh-4rem)] px-4 py-5 sm:px-6 lg:px-8">{children}</main>
       </div>
     </div>
   );
 }
 
-function TopBar() {
+function TopBar({ user }: Pick<AppShellProps, 'user'>) {
+  const roleLabel = formatRole(user.role);
+  const initials = initialsForName(user.name) || 'HX';
+
   return (
     <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-border bg-card/95 px-4 backdrop-blur sm:px-6 lg:px-8">
       <Sheet>
@@ -85,28 +106,28 @@ function TopBar() {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-10 gap-2 px-2">
               <Avatar className="size-8">
-                <AvatarImage src="" alt={currentUser.name} />
-                <AvatarFallback>IH</AvatarFallback>
+                <AvatarImage src={user.image ?? ''} alt={user.name} />
+                <AvatarFallback>{initials}</AvatarFallback>
               </Avatar>
               <span className="hidden text-left sm:block">
-                <span className="block text-sm font-medium leading-4">{currentUser.name}</span>
-                <span className="block text-xs text-muted-foreground">{currentUser.role}</span>
+                <span className="block text-sm font-medium leading-4">{user.name}</span>
+                <span className="block text-xs text-muted-foreground">{roleLabel}</span>
               </span>
               <IconChevronDown className="hidden size-4 text-muted-foreground sm:block" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuLabel>
-              <span className="block">{currentUser.name}</span>
-              <span className="block text-xs font-normal text-muted-foreground">
-                {currentUser.email}
-              </span>
+              <span className="block">{user.name}</span>
+              <span className="block text-xs font-normal text-muted-foreground">{user.email}</span>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/profile">Profile</Link>
+            </DropdownMenuItem>
             <DropdownMenuItem>Account settings</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Sign out</DropdownMenuItem>
+            <SignOutMenuItem />
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
