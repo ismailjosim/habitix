@@ -1,0 +1,11 @@
+$ next dev "--hostname" "127.0.0.1" "--port" "3002"
+▲ Next.js 16.2.6 (Turbopack)
+- Local:         http://127.0.0.1:3002
+- Network:       http://127.0.0.1:3002
+- Environments: .env.local
+✓ Ready in 1185ms
+Creating turbopack project {
+  dir: 'C:\\Users\\ismai\\OneDrive\\Desktop\\Projects\\Habitix\\habitix-project',
+  testMode: true
+}
+
