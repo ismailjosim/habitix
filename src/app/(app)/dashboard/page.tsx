@@ -1,25 +1,59 @@
-import { IconActivity } from '@tabler/icons-react';
+import { getDashboardData } from '@/lib/queries/dashboard';
+import { getCurrentSession } from '@/lib/session';
+import { WelcomeBanner } from '@/components/dashboard/welcome-banner';
+import { StatCard } from '@/components/dashboard/stat-card';
+import { NotificationPanel } from '@/components/dashboard/notification-panel';
+import { OnlinePeersPanel } from '@/components/dashboard/online-peers-panel';
+import { ActivityHeatmap } from '@/components/dashboard/activity-heatmap';
+import { IconClock, IconFlame, IconCheck, IconTrophy } from '@tabler/icons-react';
 
-import { ModulePage } from '@/components/app/module-page';
+export default async function DashboardPage() {
+  const session = await getCurrentSession();
+  const data = await getDashboardData();
 
-export default function DashboardPage() {
+  const formatFocusTime = (minutes: number) => {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return `${hours}h ${mins}m`;
+  };
+
   return (
-    <ModulePage
-      title="Dashboard"
-      eyebrow="Student overview"
-      description="A compact command center for focus minutes, assigned work, team progress, and the day's collaboration signals."
-      icon={IconActivity}
-      metrics={[
-        { label: 'Focus time today', value: '2h 35m' },
-        { label: 'Open tasks', value: '8' },
-        { label: 'Team rank', value: '#3' },
-      ]}
-      nextSteps={[
-        'Connect focus sessions, tasks, help points, and leaderboard snapshots to database-backed metrics.',
-        'Add role-specific cards for students, mentors, admins, moderators, and corporate viewers.',
-        'Render recent activity and upcoming deadlines from seeded MVP data.',
-        'Match the dashboard panels against the provided SCE screenshots.',
-      ]}
-    />
+    <div className="space-y-6">
+      {/* Welcome Banner */}
+      <WelcomeBanner userName={session?.user?.name || 'Student'} />
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <StatCard
+          label="Focus Time Today"
+          value={formatFocusTime(data.stats.focusTimeToday)}
+          icon={<IconClock className="h-5 w-5" />}
+        />
+        <StatCard
+          label="Current Streak"
+          value={`${data.stats.currentStreak} days`}
+          icon={<IconFlame className="h-5 w-5" />}
+        />
+        <StatCard
+          label="Tasks Completed"
+          value={data.stats.completedTasksToday}
+          icon={<IconCheck className="h-5 w-5" />}
+        />
+        <StatCard
+          label="Help Points"
+          value={data.stats.helpPoints}
+          icon={<IconTrophy className="h-5 w-5" />}
+        />
+      </div>
+
+      {/* Activity Heatmap */}
+      <ActivityHeatmap activities={data.recentActivity} />
+
+      {/* Peers and Notifications */}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <OnlinePeersPanel peers={data.onlinePeers} />
+        <NotificationPanel notifications={data.notifications} />
+      </div>
+    </div>
   );
 }

@@ -3,8 +3,320 @@ import 'dotenv/config';
 import { prisma } from '../src/lib/prisma';
 
 async function main() {
-  console.log('Seed script placeholder: Day 05+ will add demo Habitix data.');
-  await prisma.$queryRaw`SELECT 1`;
+  console.log('Starting seed data creation...');
+
+  // Create test user
+  const mainUser = await prisma.user.upsert({
+    where: { email: 'student@habitix.dev' },
+    update: {},
+    create: {
+      id: 'user-1',
+      name: 'ISMAIL',
+      email: 'student@habitix.dev',
+      emailVerified: true,
+      image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ismail',
+      createdAt: new Date('2026-05-01'),
+      updatedAt: new Date(),
+    },
+  });
+
+  // Create user profile with stats
+  await prisma.userProfile.upsert({
+    where: { userId: mainUser.id },
+    update: {},
+    create: {
+      userId: mainUser.id,
+      currentStreak: 7,
+      longestStreak: 14,
+      totalFocusMinutes: 420,
+      helpPoints: 125,
+      bio: 'Focused learner working on web development',
+      createdAt: new Date('2026-05-01'),
+      updatedAt: new Date(),
+    },
+  });
+
+  // Create team members
+  const teamMembers = [];
+  for (let i = 0; i < 3; i++) {
+    const member = await prisma.user.upsert({
+      where: { email: `peer${i + 1}@habitix.dev` },
+      update: {},
+      create: {
+        id: `user-peer-${i + 1}`,
+        name: `Peer ${i + 1}`,
+        email: `peer${i + 1}@habitix.dev`,
+        emailVerified: true,
+        image: `https://api.dicebear.com/7.x/avataaars/svg?seed=peer${i + 1}`,
+        createdAt: new Date('2026-05-15'),
+        updatedAt: new Date(),
+      },
+    });
+
+    await prisma.userProfile.upsert({
+      where: { userId: member.id },
+      update: {},
+      create: {
+        userId: member.id,
+        currentStreak: Math.floor(Math.random() * 5) + 1,
+        longestStreak: Math.floor(Math.random() * 10) + 5,
+        totalFocusMinutes: Math.floor(Math.random() * 500) + 100,
+        helpPoints: Math.floor(Math.random() * 100),
+        bio: `Learning developer #${i + 1}`,
+        createdAt: new Date('2026-05-15'),
+        updatedAt: new Date(),
+      },
+    });
+
+    teamMembers.push(member);
+  }
+
+  // Create team
+  const team = await prisma.team.upsert({
+    where: { name: 'Focus Hub Beta' },
+    update: {},
+    create: {
+      id: 'team-1',
+      name: 'Focus Hub Beta',
+      description: 'A beta testing team for the Habitix focus features',
+      createdAt: new Date('2026-05-01'),
+      updatedAt: new Date(),
+    },
+  });
+
+  // Add team members
+  await prisma.teamMembership.upsert({
+    where: {
+      userId_teamId: {
+        userId: mainUser.id,
+        teamId: team.id,
+      },
+    },
+    update: {},
+    create: {
+      userId: mainUser.id,
+      teamId: team.id,
+      role: 'MEMBER',
+      joinedAt: new Date('2026-05-01'),
+    },
+  });
+
+  for (const member of teamMembers) {
+    await prisma.teamMembership.upsert({
+      where: {
+        userId_teamId: {
+          userId: member.id,
+          teamId: team.id,
+        },
+      },
+      update: {},
+      create: {
+        userId: member.id,
+        teamId: team.id,
+        role: 'MEMBER',
+        joinedAt: new Date('2026-05-15'),
+      },
+    });
+  }
+
+  // Create focus sessions (today and past days)
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  // Today's sessions
+  await prisma.focusSession.createMany({
+    data: [
+      {
+        id: 'focus-1',
+        userId: mainUser.id,
+        activityType: 'STUDY',
+        duration: 45,
+        status: 'COMPLETED',
+        startedAt: new Date(today.getTime() + 8 * 60 * 60 * 1000),
+        endedAt: new Date(today.getTime() + 8 * 60 * 60 * 1000 + 45 * 60 * 1000),
+        notes: 'Completed Chapter 3 of React Advanced Patterns',
+        createdAt: new Date(today.getTime() + 8 * 60 * 60 * 1000),
+        updatedAt: new Date(),
+      },
+      {
+        id: 'focus-2',
+        userId: mainUser.id,
+        activityType: 'CODING',
+        duration: 75,
+        status: 'COMPLETED',
+        startedAt: new Date(today.getTime() + 14 * 60 * 60 * 1000),
+        endedAt: new Date(today.getTime() + 14 * 60 * 60 * 1000 + 75 * 60 * 1000),
+        notes: 'Built user authentication component',
+        createdAt: new Date(today.getTime() + 14 * 60 * 60 * 1000),
+        updatedAt: new Date(),
+      },
+    ],
+    skipDuplicates: true,
+  });
+
+  // Past sessions for activity heatmap
+  for (let dayOffset = 1; dayOffset < 7; dayOffset++) {
+    const pastDate = new Date(today);
+    pastDate.setDate(pastDate.getDate() - dayOffset);
+
+    const sessionCount = Math.floor(Math.random() * 3) + 1;
+    for (let i = 0; i < sessionCount; i++) {
+      const startHour = 8 + Math.floor(Math.random() * 10);
+      const duration = Math.floor(Math.random() * 60) + 30;
+
+      await prisma.focusSession.create({
+        data: {
+          id: `focus-past-${dayOffset}-${i}`,
+          userId: mainUser.id,
+          activityType: ['STUDY', 'CODING', 'WRITING'][Math.floor(Math.random() * 3)] as any,
+          duration,
+          status: 'COMPLETED',
+          startedAt: new Date(pastDate.getTime() + startHour * 60 * 60 * 1000),
+          endedAt: new Date(pastDate.getTime() + startHour * 60 * 60 * 1000 + duration * 60 * 1000),
+          notes: `Session on day -${dayOffset}`,
+          createdAt: new Date(pastDate.getTime() + startHour * 60 * 60 * 1000),
+          updatedAt: new Date(),
+        },
+      });
+    }
+  }
+
+  // Create tasks (mix of statuses)
+  const tasks = [];
+  for (let i = 0; i < 5; i++) {
+    const task = await prisma.task.create({
+      data: {
+        id: `task-${i + 1}`,
+        title: `Task ${i + 1}: ${['Build API endpoint', 'Write unit tests', 'Review PR', 'Design database schema', 'Debug performance issue'][i]}`,
+        description: `A detailed description for task ${i + 1}`,
+        status: i < 3 ? 'DONE' : 'TODO',
+        type: 'PERSONAL',
+        priority: ['HIGH', 'MEDIUM', 'LOW'][Math.floor(Math.random() * 3)] as any,
+        teamId: team.id,
+        createdById: mainUser.id,
+        assignedToId: mainUser.id,
+        dueDate: new Date(today.getTime() + (i + 1) * 24 * 60 * 60 * 1000),
+        createdAt: new Date(today.getTime() - 24 * 60 * 60 * 1000),
+        updatedAt: i < 3 ? today : new Date(today.getTime() - 12 * 60 * 60 * 1000),
+      },
+    });
+    tasks.push(task);
+  }
+
+  // Create activity events
+  for (let i = 0; i < 10; i++) {
+    const eventDate = new Date(today);
+    eventDate.setDate(eventDate.getDate() - Math.floor(Math.random() * 7));
+
+    await prisma.activityEvent.create({
+      data: {
+        id: `activity-${i + 1}`,
+        userId: mainUser.id,
+        sourceType: ['FOCUS_SESSION', 'TASK', 'BADGE_AWARD'][Math.floor(Math.random() * 3)] as any,
+        sourceId: `source-${i}`,
+        description: `Activity event ${i + 1}`,
+        metadata: {},
+        createdAt: eventDate,
+        updatedAt: eventDate,
+      },
+    });
+  }
+
+  // Create notifications
+  const notifications = [
+    {
+      id: 'notif-1',
+      type: 'TASK_ASSIGNED' as const,
+      content: 'You have been assigned "Build API endpoint"',
+    },
+    {
+      id: 'notif-2',
+      type: 'BADGE_AWARDED' as const,
+      content: 'You earned the "Focus Master" badge for 50+ hours of focus',
+    },
+    {
+      id: 'notif-3',
+      type: 'HELP_RESPONSE' as const,
+      content: 'Someone replied to your help question about React hooks',
+    },
+    {
+      id: 'notif-4',
+      type: 'TEAM_UPDATE' as const,
+      content: 'Your team completed 50 focus sessions this week!',
+    },
+    {
+      id: 'notif-5',
+      type: 'TASK_DUE' as const,
+      content: 'Your task "Write unit tests" is due tomorrow',
+    },
+  ];
+
+  for (let i = 0; i < notifications.length; i++) {
+    const notificationDate = new Date(today);
+    notificationDate.setDate(notificationDate.getDate() - i);
+
+    await prisma.notification.upsert({
+      where: { id: notifications[i].id },
+      update: {},
+      create: {
+        id: notifications[i].id,
+        userId: mainUser.id,
+        type: notifications[i].type,
+        content: notifications[i].content,
+        isRead: i > 2,
+        createdAt: notificationDate,
+        updatedAt: notificationDate,
+      },
+    });
+  }
+
+  // Create badges
+  const badge = await prisma.badge.upsert({
+    where: { name: 'Focus Master' },
+    update: {},
+    create: {
+      id: 'badge-1',
+      name: 'Focus Master',
+      description: 'Reached 50+ hours of total focus time',
+      icon: '🎯',
+      type: 'ACHIEVEMENT',
+      rarity: 'RARE',
+      createdAt: new Date('2026-05-01'),
+      updatedAt: new Date(),
+    },
+  });
+
+  // Award badge
+  await prisma.badgeAward.upsert({
+    where: {
+      userId_badgeId: {
+        userId: mainUser.id,
+        badgeId: badge.id,
+      },
+    },
+    update: {},
+    create: {
+      userId: mainUser.id,
+      badgeId: badge.id,
+      awardedAt: new Date('2026-05-28'),
+      awardedBy: 'SYSTEM',
+    },
+  });
+
+  console.log('✅ Seed data created successfully!');
+  console.log(`
+  Test credentials:
+  Email: student@habitix.dev
+  Name: ISMAIL
+
+  Dashboard preview includes:
+  - 2 focus sessions today (120 minutes total)
+  - 7-day activity heatmap
+  - 3 team peers online
+  - 5 recent notifications
+  - 3 completed tasks today
+  - 7-day activity streak
+  `);
 }
 
 main()
