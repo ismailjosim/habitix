@@ -21,13 +21,15 @@ async function main() {
   });
 
   // Create user profile with stats
-  await prisma.userProfile.upsert({
-    where: { userId: mainUser.id },
+  const mainProfile = await prisma.userProfile.upsert({
+    where: { authUserId: mainUser.id },
     update: {},
     create: {
-      userId: mainUser.id,
+      id: 'profile-1',
+      authUserId: mainUser.id,
+      displayName: 'ISMAIL',
+      role: 'STUDENT',
       currentStreak: 7,
-      longestStreak: 14,
       totalFocusMinutes: 420,
       helpPoints: 125,
       bio: 'Focused learner working on web development',
@@ -53,13 +55,15 @@ async function main() {
       },
     });
 
-    await prisma.userProfile.upsert({
-      where: { userId: member.id },
+    const peerProfile = await prisma.userProfile.upsert({
+      where: { authUserId: member.id },
       update: {},
       create: {
-        userId: member.id,
+        id: `profile-peer-${i + 1}`,
+        authUserId: member.id,
+        displayName: `Peer ${i + 1}`,
+        role: 'STUDENT',
         currentStreak: Math.floor(Math.random() * 5) + 1,
-        longestStreak: Math.floor(Math.random() * 10) + 5,
         totalFocusMinutes: Math.floor(Math.random() * 500) + 100,
         helpPoints: Math.floor(Math.random() * 100),
         bio: `Learning developer #${i + 1}`,
@@ -68,17 +72,19 @@ async function main() {
       },
     });
 
-    teamMembers.push(member);
+    teamMembers.push(peerProfile);
   }
 
   // Create team
   const team = await prisma.team.upsert({
-    where: { name: 'Focus Hub Beta' },
+    where: { slug: 'focus-hub-beta' },
     update: {},
     create: {
       id: 'team-1',
       name: 'Focus Hub Beta',
+      slug: 'focus-hub-beta',
       description: 'A beta testing team for the Habitix focus features',
+      ownerProfileId: mainProfile.id,
       createdAt: new Date('2026-05-01'),
       updatedAt: new Date(),
     },
@@ -87,15 +93,15 @@ async function main() {
   // Add team members
   await prisma.teamMembership.upsert({
     where: {
-      userId_teamId: {
-        userId: mainUser.id,
+      teamId_profileId: {
         teamId: team.id,
+        profileId: mainProfile.id,
       },
     },
     update: {},
     create: {
-      userId: mainUser.id,
       teamId: team.id,
+      profileId: mainProfile.id,
       role: 'MEMBER',
       joinedAt: new Date('2026-05-01'),
     },
@@ -104,15 +110,15 @@ async function main() {
   for (const member of teamMembers) {
     await prisma.teamMembership.upsert({
       where: {
-        userId_teamId: {
-          userId: member.id,
+        teamId_profileId: {
           teamId: team.id,
+          profileId: member.id,
         },
       },
       update: {},
       create: {
-        userId: member.id,
         teamId: team.id,
+        profileId: member.id,
         role: 'MEMBER',
         joinedAt: new Date('2026-05-15'),
       },
@@ -128,24 +134,26 @@ async function main() {
     data: [
       {
         id: 'focus-1',
-        userId: mainUser.id,
+        profileId: mainProfile.id,
         activityType: 'STUDY',
-        duration: 45,
+        plannedMinutes: 60,
+        actualMinutes: 45,
         status: 'COMPLETED',
         startedAt: new Date(today.getTime() + 8 * 60 * 60 * 1000),
-        endedAt: new Date(today.getTime() + 8 * 60 * 60 * 1000 + 45 * 60 * 1000),
+        completedAt: new Date(today.getTime() + 8 * 60 * 60 * 1000 + 45 * 60 * 1000),
         notes: 'Completed Chapter 3 of React Advanced Patterns',
         createdAt: new Date(today.getTime() + 8 * 60 * 60 * 1000),
         updatedAt: new Date(),
       },
       {
         id: 'focus-2',
-        userId: mainUser.id,
+        profileId: mainProfile.id,
         activityType: 'CODING',
-        duration: 75,
+        plannedMinutes: 90,
+        actualMinutes: 75,
         status: 'COMPLETED',
         startedAt: new Date(today.getTime() + 14 * 60 * 60 * 1000),
-        endedAt: new Date(today.getTime() + 14 * 60 * 60 * 1000 + 75 * 60 * 1000),
+        completedAt: new Date(today.getTime() + 14 * 60 * 60 * 1000 + 75 * 60 * 1000),
         notes: 'Built user authentication component',
         createdAt: new Date(today.getTime() + 14 * 60 * 60 * 1000),
         updatedAt: new Date(),
@@ -167,12 +175,15 @@ async function main() {
       await prisma.focusSession.create({
         data: {
           id: `focus-past-${dayOffset}-${i}`,
-          userId: mainUser.id,
+          profileId: mainProfile.id,
           activityType: ['STUDY', 'CODING', 'WRITING'][Math.floor(Math.random() * 3)] as any,
-          duration,
+          plannedMinutes: Math.floor(duration * 1.2),
+          actualMinutes: duration,
           status: 'COMPLETED',
           startedAt: new Date(pastDate.getTime() + startHour * 60 * 60 * 1000),
-          endedAt: new Date(pastDate.getTime() + startHour * 60 * 60 * 1000 + duration * 60 * 1000),
+          completedAt: new Date(
+            pastDate.getTime() + startHour * 60 * 60 * 1000 + duration * 60 * 1000
+          ),
           notes: `Session on day -${dayOffset}`,
           createdAt: new Date(pastDate.getTime() + startHour * 60 * 60 * 1000),
           updatedAt: new Date(),
@@ -193,9 +204,10 @@ async function main() {
         type: 'PERSONAL',
         priority: ['HIGH', 'MEDIUM', 'LOW'][Math.floor(Math.random() * 3)] as any,
         teamId: team.id,
-        createdById: mainUser.id,
-        assignedToId: mainUser.id,
-        dueDate: new Date(today.getTime() + (i + 1) * 24 * 60 * 60 * 1000),
+        createdByProfileId: mainProfile.id,
+        assignedToProfileId: mainProfile.id,
+        dueAt: new Date(today.getTime() + (i + 1) * 24 * 60 * 60 * 1000),
+        completedAt: i < 3 ? today : null,
         createdAt: new Date(today.getTime() - 24 * 60 * 60 * 1000),
         updatedAt: i < 3 ? today : new Date(today.getTime() - 12 * 60 * 60 * 1000),
       },
@@ -211,13 +223,13 @@ async function main() {
     await prisma.activityEvent.create({
       data: {
         id: `activity-${i + 1}`,
-        userId: mainUser.id,
+        profileId: mainProfile.id,
+        teamId: team.id,
         sourceType: ['FOCUS_SESSION', 'TASK', 'BADGE_AWARD'][Math.floor(Math.random() * 3)] as any,
         sourceId: `source-${i}`,
-        description: `Activity event ${i + 1}`,
-        metadata: {},
+        type: 'activity',
+        occurredAt: eventDate,
         createdAt: eventDate,
-        updatedAt: eventDate,
       },
     });
   }
@@ -227,27 +239,32 @@ async function main() {
     {
       id: 'notif-1',
       type: 'TASK_ASSIGNED' as const,
-      content: 'You have been assigned "Build API endpoint"',
+      title: 'Task Assigned',
+      body: 'You have been assigned "Build API endpoint"',
     },
     {
       id: 'notif-2',
       type: 'BADGE_AWARDED' as const,
-      content: 'You earned the "Focus Master" badge for 50+ hours of focus',
+      title: 'Badge Awarded',
+      body: 'You earned the "Focus Master" badge for 50+ hours of focus',
     },
     {
       id: 'notif-3',
       type: 'HELP_RESPONSE' as const,
-      content: 'Someone replied to your help question about React hooks',
+      title: 'Help Response',
+      body: 'Someone replied to your help question about React hooks',
     },
     {
       id: 'notif-4',
       type: 'TEAM_UPDATE' as const,
-      content: 'Your team completed 50 focus sessions this week!',
+      title: 'Team Update',
+      body: 'Your team completed 50 focus sessions this week!',
     },
     {
       id: 'notif-5',
       type: 'TASK_DUE' as const,
-      content: 'Your task "Write unit tests" is due tomorrow',
+      title: 'Task Due',
+      body: 'Your task "Write unit tests" is due tomorrow',
     },
   ];
 
@@ -260,12 +277,12 @@ async function main() {
       update: {},
       create: {
         id: notifications[i].id,
-        userId: mainUser.id,
+        recipientProfileId: mainProfile.id,
         type: notifications[i].type,
-        content: notifications[i].content,
-        isRead: i > 2,
+        title: notifications[i].title,
+        body: notifications[i].body,
+        readAt: i > 2 ? notificationDate : null,
         createdAt: notificationDate,
-        updatedAt: notificationDate,
       },
     });
   }
@@ -278,9 +295,8 @@ async function main() {
       id: 'badge-1',
       name: 'Focus Master',
       description: 'Reached 50+ hours of total focus time',
-      icon: '🎯',
-      type: 'ACHIEVEMENT',
-      rarity: 'RARE',
+      iconName: 'trophy',
+      criteria: 'totalFocusMinutes >= 3000',
       createdAt: new Date('2026-05-01'),
       updatedAt: new Date(),
     },
@@ -289,17 +305,17 @@ async function main() {
   // Award badge
   await prisma.badgeAward.upsert({
     where: {
-      userId_badgeId: {
-        userId: mainUser.id,
+      badgeId_profileId_awardedAt: {
         badgeId: badge.id,
+        profileId: mainProfile.id,
+        awardedAt: new Date('2026-05-28'),
       },
     },
     update: {},
     create: {
-      userId: mainUser.id,
       badgeId: badge.id,
+      profileId: mainProfile.id,
       awardedAt: new Date('2026-05-28'),
-      awardedBy: 'SYSTEM',
     },
   });
 

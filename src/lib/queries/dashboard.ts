@@ -9,7 +9,18 @@ export async function getDashboardData() {
     throw new Error('Unauthorized');
   }
 
-  const userId = session.user.id;
+  const authUserId = session.user.id;
+
+  // Get user profile
+  const userProfile = await prisma.userProfile.findUnique({
+    where: { authUserId },
+  });
+
+  if (!userProfile) {
+    throw new Error('User profile not found');
+  }
+
+  const profileId = userProfile.id;
 
   // Get today's date range
   const today = new Date();
@@ -17,63 +28,60 @@ export async function getDashboardData() {
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
 
-  // Fetch today's focus time
+  // Fetch today's focus time (sum of actualMinutes from completed sessions)
   const todayFocusSessions = await prisma.focusSession.aggregate({
     where: {
-      userId,
-      createdAt: {
+      profileId,
+      completedAt: {
         gte: today,
         lt: tomorrow,
       },
       status: 'COMPLETED',
     },
     _sum: {
-      duration: true,
+      actualMinutes: true,
     },
   });
 
-  // Fetch current streak (consecutive days with focus)
-  const userProfile = await prisma.userProfile.findUnique({
-    where: { userId },
-  });
-
-  const currentStreak = userProfile?.currentStreak ?? 0;
+  const focusTimeToday = todayFocusSessions._sum.actualMinutes ?? 0;
+  const currentStreak = userProfile.currentStreak;
+  const helpPoints = userProfile.helpPoints;
 
   // Fetch completed tasks for today
   const completedTasksToday = await prisma.task.count({
     where: {
-      assignedToId: userId,
+      assignedToProfileId: profileId,
       status: 'DONE',
-      updatedAt: {
+      completedAt: {
         gte: today,
         lt: tomorrow,
       },
     },
   });
 
-  // Fetch help points (earned from answering help posts)
-  const helpPoints = userProfile?.helpPoints ?? 0;
-
   // Fetch recent notifications (last 5)
   const notifications = await prisma.notification.findMany({
-    where: { userId },
+    where: { recipientProfileId: profileId },
     orderBy: { createdAt: 'desc' },
     take: 5,
   });
 
-  // Fetch user's team and currently online peers
-  const userTeam = await prisma.teamMembership.findFirst({
-    where: { userId },
+  // Fetch user's team memberships to get team and peers
+  const teamMembership = await prisma.teamMembership.findFirst({
+    where: { profileId },
     include: {
       team: {
         include: {
-          members: {
+          memberships: {
             include: {
-              user: {
+              profile: {
                 include: {
-                  profile: true,
+                  authUser: true,
                 },
               },
+            },
+            where: {
+              leftAt: null, // Only active members
             },
           },
         },
@@ -81,7 +89,10 @@ export async function getDashboardData() {
     },
   });
 
-  const onlinePeers = userTeam?.team?.members?.filter((member) => member.userId !== userId) ?? [];
+  // Filter out current user from peers
+  const onlinePeers = (teamMembership?.team?.memberships ?? []).filter(
+    (member) => member.profileId !== profileId
+  );
 
   // Fetch recent activity events (last 7 days for heatmap)
   const sevenDaysAgo = new Date(today);
@@ -89,23 +100,31 @@ export async function getDashboardData() {
 
   const recentActivity = await prisma.activityEvent.findMany({
     where: {
-      userId,
-      createdAt: {
+      profileId,
+      occurredAt: {
         gte: sevenDaysAgo,
       },
     },
-    orderBy: { createdAt: 'desc' },
+    orderBy: { occurredAt: 'desc' },
   });
 
   return {
     stats: {
-      focusTimeToday: todayFocusSessions._sum.duration ?? 0,
+      focusTimeToday,
       currentStreak,
       completedTasksToday,
       helpPoints,
     },
     notifications,
-    onlinePeers,
+    onlinePeers: onlinePeers.map((member) => ({
+      profileId: member.profileId,
+      user: {
+        name: member.profile.authUser.name,
+        email: member.profile.authUser.email,
+        image: member.profile.authUser.image,
+      },
+      role: member.role,
+    })),
     recentActivity,
   };
 }

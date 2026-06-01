@@ -676,3 +676,6 @@ ALTER TABLE "StudentReport" ADD CONSTRAINT "StudentReport_profileId_fkey" FOREIG
 
 -- AddForeignKey
 ALTER TABLE "CorporateReportSnapshot" ADD CONSTRAINT "CorporateReportSnapshot_teamId_fkey" FOREIGN KEY ("teamId") REFERENCES "Team"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "UserProfile" ADD CONSTRAINT "UserProfile_authUserId_fkey" FOREIGN KEY ("authUserId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
