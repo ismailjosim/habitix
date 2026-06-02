@@ -203,6 +203,28 @@ async function ensureTeamAssignment(teamId: string, profileId: string) {
   }
 }
 
+async function ensureMentorCanManageTeam(profile: CurrentProfile, teamId: string) {
+  if (isPlatformAdmin(profile)) return;
+
+  const team = await prisma.team.findUnique({
+    where: { id: teamId },
+    select: {
+      ownerProfileId: true,
+      memberships: {
+        where: { profileId: profile.id, leftAt: null },
+        select: { role: true },
+      },
+    },
+  });
+
+  const role = team?.memberships[0]?.role;
+  const hasManagerRole = Boolean(role && ['LEAD', 'MENTOR', 'ADMIN'].includes(role));
+
+  if (!team || (team.ownerProfileId !== profile.id && !hasManagerRole)) {
+    throw new Error('Mentor team tasks can only be assigned inside teams you manage');
+  }
+}
+
 async function ensureTeamCreatorRole(teamId: string, profile: CurrentProfile) {
   if (isPlatformAdmin(profile)) return;
 
@@ -238,7 +260,41 @@ async function ensureMentorCanAssign(profile: CurrentProfile, assignedToProfileI
   });
 
   if (!assignment) {
-    throw new Error('Mentor tasks can only be assigned to active mentees');
+    const sharedTeam = await prisma.team.findFirst({
+      where: {
+        AND: [
+          {
+            memberships: {
+              some: {
+                profileId: assignedToProfileId,
+                leftAt: null,
+              },
+            },
+          },
+          {
+            OR: [
+              { ownerProfileId: profile.id },
+              {
+                memberships: {
+                  some: {
+                    profileId: profile.id,
+                    leftAt: null,
+                    role: { in: ['LEAD', 'MENTOR', 'ADMIN'] },
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      },
+      select: { id: true },
+    });
+
+    if (!sharedTeam) {
+      throw new Error(
+        'Mentor tasks can only be assigned to active mentees or managed team members'
+      );
+    }
   }
 }
 
@@ -296,6 +352,54 @@ async function recordActivity({
       toStatus,
       metadata,
     },
+  });
+}
+
+async function notifyTaskRecipients({
+  taskId,
+  actorProfileId,
+  assignedToProfileId,
+  teamId,
+  title,
+  event,
+}: {
+  taskId: string;
+  actorProfileId: string;
+  assignedToProfileId?: string | null;
+  teamId?: string | null;
+  title: string;
+  event: 'assigned' | 'updated';
+}) {
+  const recipientIds = new Set<string>();
+
+  if (assignedToProfileId && assignedToProfileId !== actorProfileId) {
+    recipientIds.add(assignedToProfileId);
+  }
+
+  if (teamId) {
+    const teamMembers = await prisma.teamMembership.findMany({
+      where: { teamId, leftAt: null, profileId: { not: actorProfileId } },
+      select: { profileId: true },
+    });
+
+    teamMembers.forEach((member) => recipientIds.add(member.profileId));
+  }
+
+  if (recipientIds.size === 0) return;
+
+  await prisma.notification.createMany({
+    data: [...recipientIds].map((recipientProfileId) => ({
+      recipientProfileId,
+      actorProfileId,
+      type: event === 'assigned' ? 'TASK_ASSIGNED' : 'TEAM_UPDATE',
+      title: event === 'assigned' ? 'Task assigned' : 'Task updated',
+      body:
+        event === 'assigned'
+          ? `You have been assigned "${title}".`
+          : `"${title}" was updated by your mentor or admin.`,
+      targetType: 'TASK',
+      targetId: taskId,
+    })),
   });
 }
 
@@ -434,6 +538,9 @@ export async function createTask(input: z.input<typeof createTaskSchema>): Promi
         throw new Error('Team tasks require a team');
       }
       await ensureTeamCreatorRole(data.teamId, profile);
+      if (data.type === 'TEAM' && canCreateMentorTask(profile)) {
+        await ensureMentorCanManageTeam(profile, data.teamId);
+      }
     }
 
     if (assignedToProfileId) {
@@ -491,6 +598,17 @@ export async function createTask(input: z.input<typeof createTaskSchema>): Promi
       });
     }
 
+    if (data.type !== 'PERSONAL') {
+      await notifyTaskRecipients({
+        taskId: task.id,
+        actorProfileId: profile.id,
+        assignedToProfileId,
+        teamId: task.teamId,
+        title: task.title,
+        event: 'assigned',
+      });
+    }
+
     revalidateTasks(task.id);
     return { success: true, message: 'Task created', data: task };
   } catch (error) {
@@ -503,6 +621,11 @@ export async function updateTask(input: z.input<typeof updateTaskSchema>): Promi
     const profile = await requireCurrentProfile();
     const data = updateTaskSchema.parse(input);
     const existing = await canAccessTask(data.taskId, profile);
+    const canManageTask = existing.createdByProfileId === profile.id || isPlatformAdmin(profile);
+
+    if (!canManageTask) {
+      throw new Error('Only the assigner or an admin can update task assignment details');
+    }
 
     if (data.assignedToProfileId) {
       await ensureActiveProfile(data.assignedToProfileId);
@@ -564,6 +687,19 @@ export async function updateTask(input: z.input<typeof updateTaskSchema>): Promi
         },
       });
     }
+
+    await notifyTaskRecipients({
+      taskId: task.id,
+      actorProfileId: profile.id,
+      assignedToProfileId: task.assignedToProfileId,
+      teamId: task.teamId,
+      title: task.title,
+      event:
+        data.assignedToProfileId !== undefined &&
+        data.assignedToProfileId !== existing.assignedToProfileId
+          ? 'assigned'
+          : 'updated',
+    });
 
     revalidateTasks(task.id);
     return { success: true, message: 'Task updated', data: task };
