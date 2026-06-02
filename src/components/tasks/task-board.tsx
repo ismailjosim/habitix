@@ -10,10 +10,12 @@ import {
   IconCircleCheck,
   IconClockHour4,
   IconPlus,
+  IconUserPlus,
+  IconUsers,
 } from '@tabler/icons-react';
 
 import { createTask, changeTaskStatus } from '@/lib/actions/tasks';
-import type { BoardTask } from '@/lib/queries/tasks';
+import type { AssignableStudent, AssignableTeam, BoardTask } from '@/lib/queries/tasks';
 import { formatDate, getStatusLabel } from '@/lib/display-helpers';
 import { cn } from '@/lib/utils';
 import { EmptyState } from '@/components/shared';
@@ -87,19 +89,36 @@ const priorities = ['LOW', 'MEDIUM', 'HIGH', 'URGENT'];
 interface TaskBoardProps {
   personalTasks: BoardTask[];
   assignedTasks: BoardTask[];
+  assignableStudents: AssignableStudent[];
+  assignableTeams: AssignableTeam[];
+  currentRole: string | null;
+  currentProfileId: string | null;
+  canAssignTasks: boolean;
 }
 
-export function TaskBoard({ personalTasks, assignedTasks }: TaskBoardProps) {
+export function TaskBoard({
+  personalTasks,
+  assignedTasks,
+  assignableStudents,
+  assignableTeams,
+  currentRole,
+  currentProfileId,
+  canAssignTasks,
+}: TaskBoardProps) {
   const router = useRouter();
   const [activeSection, setActiveSection] = useState<BoardSection>('personal');
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [assignDialogOpen, setAssignDialogOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
   const activeTasks = activeSection === 'personal' ? personalTasks : assignedTasks;
   const groupedTasks = useMemo(() => groupTasks(activeTasks), [activeTasks]);
+  const assignedByMe = assignedTasks.filter((task) => task.createdBy.id === currentProfileId);
+  const assignedByMeDone = assignedByMe.filter((task) => task.status === 'DONE').length;
   const blockedCount = activeTasks.filter((task) => task.status === 'BLOCKED').length;
   const reviewCount = activeTasks.filter((task) => task.status === 'IN_REVIEW').length;
+  const assignmentTargetCount = assignableStudents.length + assignableTeams.length;
 
   function handleCreateTask(formData: FormData) {
     setError(null);
@@ -130,6 +149,50 @@ export function TaskBoard({ personalTasks, assignedTasks }: TaskBoardProps) {
     });
   }
 
+  function handleAssignTask(formData: FormData) {
+    setError(null);
+
+    startTransition(async () => {
+      const target = String(formData.get('target') || '');
+      const [targetType, targetId] = target.split(':');
+
+      if (!targetId || !['student', 'team'].includes(targetType)) {
+        setError('Choose a student or team assignee');
+        return;
+      }
+
+      const result = await createTask({
+        title: String(formData.get('title') || ''),
+        description: String(formData.get('description') || ''),
+        category: String(formData.get('category') || ''),
+        priority: String(formData.get('priority') || 'MEDIUM'),
+        dueAt: String(formData.get('dueAt') || ''),
+        type:
+          targetType === 'team'
+            ? 'team'
+            : currentRole === 'ADMIN' || currentRole === 'MODERATOR'
+              ? 'admin'
+              : 'mentor',
+        assignedToProfileId: targetType === 'student' ? targetId : null,
+        teamId: targetType === 'team' ? targetId : null,
+        subtasks: String(formData.get('subtasks') || '')
+          .split('\n')
+          .map((line) => line.trim())
+          .filter(Boolean)
+          .map((line) => ({ title: line })),
+      });
+
+      if (!result.success) {
+        setError(result.message);
+        return;
+      }
+
+      setAssignDialogOpen(false);
+      setActiveSection('assigned');
+      router.refresh();
+    });
+  }
+
   function moveTask(taskId: string, status: BoardStatus) {
     startTransition(async () => {
       const result = await changeTaskStatus({ taskId, status });
@@ -154,114 +217,122 @@ export function TaskBoard({ personalTasks, assignedTasks }: TaskBoardProps) {
           </p>
         </div>
 
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogTrigger asChild>
-            <Button>
-              <IconPlus />
-              New task
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <form action={handleCreateTask} className="space-y-4">
-              <DialogHeader>
-                <DialogTitle>Create personal task</DialogTitle>
-                <DialogDescription>
-                  Add a task to your private board with optional subtasks.
-                </DialogDescription>
-              </DialogHeader>
-
-              {error && (
-                <div className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-                  {error}
-                </div>
-              )}
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium" htmlFor="task-title">
-                  Title
-                </label>
-                <Input id="task-title" name="title" placeholder="Build API validation" required />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium" htmlFor="task-description">
-                  Description
-                </label>
-                <Textarea
-                  id="task-description"
-                  name="description"
-                  placeholder="Add useful context"
-                  rows={3}
-                />
-              </div>
-
-              <div className="grid gap-3 sm:grid-cols-3">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Category</label>
-                  <Select name="category" defaultValue="Coding">
-                    <SelectTrigger className="w-full">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categories.map((category) => (
-                        <SelectItem key={category} value={category}>
-                          {category}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Priority</label>
-                  <Select name="priority" defaultValue="MEDIUM">
-                    <SelectTrigger className="w-full">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {priorities.map((priority) => (
-                        <SelectItem key={priority} value={priority}>
-                          {priority.charAt(0) + priority.slice(1).toLowerCase()}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium" htmlFor="task-due-at">
-                    Due date
-                  </label>
-                  <Input id="task-due-at" name="dueAt" type="date" />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium" htmlFor="task-subtasks">
-                  Subtasks
-                </label>
-                <Textarea
-                  id="task-subtasks"
-                  name="subtasks"
-                  placeholder="One subtask per line"
-                  rows={3}
-                />
-              </div>
-
-              <DialogFooter>
-                <DialogClose asChild>
-                  <Button type="button" variant="outline">
-                    Cancel
-                  </Button>
-                </DialogClose>
-                <Button type="submit" disabled={isPending}>
-                  Create task
+        <div className="flex flex-wrap gap-2">
+          {canAssignTasks && (
+            <Dialog open={assignDialogOpen} onOpenChange={setAssignDialogOpen}>
+              <DialogTrigger asChild>
+                <Button variant="outline" disabled={assignmentTargetCount === 0}>
+                  <IconUserPlus />
+                  Assign task
                 </Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl">
+                <form action={handleAssignTask} className="space-y-4">
+                  <DialogHeader>
+                    <DialogTitle>Assign mentor/admin task</DialogTitle>
+                    <DialogDescription>
+                      Send work to a scoped student or managed team.
+                    </DialogDescription>
+                  </DialogHeader>
+
+                  <TaskFormFields
+                    error={error}
+                    titleId="assigned-task-title"
+                    dueDateId="assigned-task-due-at"
+                    subtaskId="assigned-task-subtasks"
+                  />
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Assignee</label>
+                    <Select name="target" required>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Choose student or team" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {assignableStudents.map((student) => (
+                          <SelectItem key={student.id} value={`student:${student.id}`}>
+                            {student.displayName}
+                            {student.teamName ? ` - ${student.teamName}` : ''}
+                          </SelectItem>
+                        ))}
+                        {assignableTeams.map((team) => (
+                          <SelectItem key={team.id} value={`team:${team.id}`}>
+                            {team.name} team ({team.memberCount})
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <DialogFooter>
+                    <DialogClose asChild>
+                      <Button type="button" variant="outline">
+                        Cancel
+                      </Button>
+                    </DialogClose>
+                    <Button type="submit" disabled={isPending}>
+                      Assign task
+                    </Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+          )}
+
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogTrigger asChild>
+              <Button>
+                <IconPlus />
+                New task
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <form action={handleCreateTask} className="space-y-4">
+                <DialogHeader>
+                  <DialogTitle>Create personal task</DialogTitle>
+                  <DialogDescription>
+                    Add a task to your private board with optional subtasks.
+                  </DialogDescription>
+                </DialogHeader>
+
+                <TaskFormFields
+                  error={error}
+                  titleId="task-title"
+                  dueDateId="task-due-at"
+                  subtaskId="task-subtasks"
+                />
+
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button type="button" variant="outline">
+                      Cancel
+                    </Button>
+                  </DialogClose>
+                  <Button type="submit" disabled={isPending}>
+                    Create task
+                  </Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
+
+      {canAssignTasks && (
+        <div className="grid gap-3 md:grid-cols-3">
+          <AssignmentMetric
+            icon={IconUserPlus}
+            label="Assigned by you"
+            value={assignedByMe.length}
+          />
+          <AssignmentMetric icon={IconCircleCheck} label="Completed" value={assignedByMeDone} />
+          <AssignmentMetric
+            icon={IconUsers}
+            label="Assignable targets"
+            value={assignmentTargetCount}
+          />
+        </div>
+      )}
 
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="inline-flex w-full rounded-lg border bg-background p-1 sm:w-fit">
@@ -336,6 +407,117 @@ export function TaskBoard({ personalTasks, assignedTasks }: TaskBoardProps) {
             </section>
           );
         })}
+      </div>
+    </div>
+  );
+}
+
+function TaskFormFields({
+  error,
+  titleId,
+  dueDateId,
+  subtaskId,
+}: {
+  error: string | null;
+  titleId: string;
+  dueDateId: string;
+  subtaskId: string;
+}) {
+  return (
+    <>
+      {error && (
+        <div className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+          {error}
+        </div>
+      )}
+
+      <div className="space-y-2">
+        <label className="text-sm font-medium" htmlFor={titleId}>
+          Title
+        </label>
+        <Input id={titleId} name="title" placeholder="Build API validation" required />
+      </div>
+
+      <div className="space-y-2">
+        <label className="text-sm font-medium" htmlFor={`${titleId}-description`}>
+          Description
+        </label>
+        <Textarea
+          id={`${titleId}-description`}
+          name="description"
+          placeholder="Add useful context"
+          rows={3}
+        />
+      </div>
+
+      <div className="grid gap-3 sm:grid-cols-3">
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Category</label>
+          <Select name="category" defaultValue="Coding">
+            <SelectTrigger className="w-full">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {categories.map((category) => (
+                <SelectItem key={category} value={category}>
+                  {category}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Priority</label>
+          <Select name="priority" defaultValue="MEDIUM">
+            <SelectTrigger className="w-full">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {priorities.map((priority) => (
+                <SelectItem key={priority} value={priority}>
+                  {priority.charAt(0) + priority.slice(1).toLowerCase()}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-medium" htmlFor={dueDateId}>
+            Due date
+          </label>
+          <Input id={dueDateId} name="dueAt" type="date" />
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <label className="text-sm font-medium" htmlFor={subtaskId}>
+          Subtasks
+        </label>
+        <Textarea id={subtaskId} name="subtasks" placeholder="One subtask per line" rows={3} />
+      </div>
+    </>
+  );
+}
+
+function AssignmentMetric({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: typeof IconUserPlus;
+  label: string;
+  value: number;
+}) {
+  return (
+    <div className="flex items-center gap-3 rounded-lg border bg-background p-3">
+      <span className="flex size-8 items-center justify-center rounded-md bg-muted">
+        <Icon className="size-4" />
+      </span>
+      <div>
+        <p className="text-sm font-medium">{label}</p>
+        <p className="text-xs text-muted-foreground">{value} total</p>
       </div>
     </div>
   );
