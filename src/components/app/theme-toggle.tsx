@@ -15,11 +15,11 @@ export function ThemeToggle() {
       variant="outline"
       size="icon"
       aria-label="Toggle theme"
-      title={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+      title="Toggle theme"
       onClick={() => setTheme(isDark ? 'light' : 'dark')}
-      suppressHydrationWarning
     >
-      {isDark ? <IconSun /> : <IconMoon />}
+      <IconSun className="hidden dark:block" />
+      <IconMoon className="block dark:hidden" />
     </Button>
   );
 }
