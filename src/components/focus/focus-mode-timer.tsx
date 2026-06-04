@@ -1,6 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   IconBrandVscode,
   IconPlayerPause,
@@ -10,7 +11,14 @@ import {
   IconTargetArrow,
 } from '@tabler/icons-react';
 
-import type { FocusTaskOption } from '@/lib/queries/focus';
+import {
+  completeFocusSession,
+  pauseFocusSession,
+  resumeFocusSession,
+  startFocusSession,
+  stopFocusSession,
+} from '@/lib/actions/focus';
+import type { ActiveFocusSession, FocusSessionSummary, FocusTaskOption } from '@/lib/queries/focus';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -25,15 +33,6 @@ import {
 } from '@/components/ui/select';
 
 type TimerState = 'idle' | 'running' | 'paused' | 'completed' | 'stopped';
-
-type LocalFocusSession = {
-  id: string;
-  activityType: string;
-  taskTitle: string | null;
-  plannedMinutes: number;
-  actualSeconds: number;
-  status: 'Completed' | 'Stopped';
-};
 
 const durationOptions = [25, 45, 50] as const;
 
@@ -50,15 +49,38 @@ const activityTypes = [
 
 interface FocusModeTimerProps {
   tasks: FocusTaskOption[];
+  todaySessions: FocusSessionSummary[];
+  activeSession: ActiveFocusSession | null;
+  todayFocusMinutes: number;
 }
 
-export function FocusModeTimer({ tasks }: FocusModeTimerProps) {
-  const [durationMinutes, setDurationMinutes] = useState<number>(25);
-  const [activityType, setActivityType] = useState<string>('Coding');
-  const [taskId, setTaskId] = useState<string>('none');
-  const [timerState, setTimerState] = useState<TimerState>('idle');
-  const [remainingSeconds, setRemainingSeconds] = useState(durationMinutes * 60);
-  const [sessions, setSessions] = useState<LocalFocusSession[]>([]);
+export function FocusModeTimer({
+  tasks,
+  todaySessions,
+  activeSession,
+  todayFocusMinutes,
+}: FocusModeTimerProps) {
+  const router = useRouter();
+  const completingRef = useRef(false);
+  const [isPending, startTransition] = useTransition();
+  const [sessionId, setSessionId] = useState<string | null>(activeSession?.id ?? null);
+  const [durationMinutes, setDurationMinutes] = useState<number>(
+    activeSession?.plannedMinutes ?? 25
+  );
+  const [activityType, setActivityType] = useState<string>(
+    activeSession?.activityLabel ?? 'Coding'
+  );
+  const [taskId, setTaskId] = useState<string>(activeSession?.taskId ?? 'none');
+  const [timerState, setTimerState] = useState<TimerState>(
+    activeSession?.status === 'ACTIVE'
+      ? 'running'
+      : activeSession?.status === 'PAUSED'
+        ? 'paused'
+        : 'idle'
+  );
+  const [remainingSeconds, setRemainingSeconds] = useState(
+    activeSession?.remainingSeconds ?? (activeSession?.plannedMinutes ?? 25) * 60
+  );
   const [error, setError] = useState<string | null>(null);
 
   const totalSeconds = durationMinutes * 60;
@@ -70,23 +92,27 @@ export function FocusModeTimer({ tasks }: FocusModeTimerProps) {
   );
   const canStart = timerState !== 'running' && timerState !== 'paused';
 
-  const finishSession = useCallback(
-    (status: LocalFocusSession['status'], actualSeconds: number) => {
-      setTimerState(status === 'Completed' ? 'completed' : 'stopped');
-      setSessions((current) => [
-        {
-          id: crypto.randomUUID(),
-          activityType,
-          taskTitle: selectedTask?.title ?? null,
-          plannedMinutes: durationMinutes,
-          actualSeconds,
-          status,
-        },
-        ...current,
-      ]);
-    },
-    [activityType, durationMinutes, selectedTask]
-  );
+  const completeCurrentSession = useCallback(() => {
+    if (!sessionId || completingRef.current) return;
+    completingRef.current = true;
+
+    startTransition(async () => {
+      const result = await completeFocusSession({ sessionId });
+
+      if (!result.success) {
+        completingRef.current = false;
+        setError(result.message);
+        return;
+      }
+
+      setError(null);
+      setTimerState('completed');
+      setSessionId(null);
+      setRemainingSeconds(0);
+      completingRef.current = false;
+      router.refresh();
+    });
+  }, [router, sessionId]);
 
   useEffect(() => {
     if (timerState !== 'running') return;
@@ -95,7 +121,7 @@ export function FocusModeTimer({ tasks }: FocusModeTimerProps) {
       setRemainingSeconds((current) => {
         if (current <= 1) {
           window.clearInterval(intervalId);
-          finishSession('Completed', totalSeconds);
+          completeCurrentSession();
           return 0;
         }
 
@@ -104,7 +130,7 @@ export function FocusModeTimer({ tasks }: FocusModeTimerProps) {
     }, 1000);
 
     return () => window.clearInterval(intervalId);
-  }, [finishSession, timerState, totalSeconds]);
+  }, [completeCurrentSession, timerState]);
 
   function changeDuration(duration: number) {
     if (timerState === 'running' || timerState === 'paused') return;
@@ -129,28 +155,87 @@ export function FocusModeTimer({ tasks }: FocusModeTimerProps) {
     }
 
     setError(null);
-    setRemainingSeconds(totalSeconds);
-    setTimerState('running');
+    startTransition(async () => {
+      const result = await startFocusSession({
+        plannedMinutes: durationMinutes,
+        activityType: activityType as (typeof activityTypes)[number],
+        taskId: taskId === 'none' ? null : taskId,
+      });
+
+      if (!result.success) {
+        setError(result.message);
+        return;
+      }
+
+      const session = result.data as { id: string };
+      setSessionId(session.id);
+      setRemainingSeconds(totalSeconds);
+      setTimerState('running');
+      router.refresh();
+    });
   }
 
   function pauseSession() {
-    if (timerState !== 'running') return;
-    setTimerState('paused');
+    if (timerState !== 'running' || !sessionId) return;
+
+    startTransition(async () => {
+      const result = await pauseFocusSession({ sessionId });
+
+      if (!result.success) {
+        setError(result.message);
+        return;
+      }
+
+      setError(null);
+      setTimerState('paused');
+      router.refresh();
+    });
   }
 
   function resumeSession() {
-    if (timerState !== 'paused') return;
-    setTimerState('running');
+    if (timerState !== 'paused' || !sessionId) return;
+
+    startTransition(async () => {
+      const result = await resumeFocusSession({ sessionId });
+
+      if (!result.success) {
+        setError(result.message);
+        return;
+      }
+
+      setError(null);
+      setTimerState('running');
+      router.refresh();
+    });
   }
 
   function stopSession() {
-    if (timerState !== 'running' && timerState !== 'paused') return;
-    finishSession('Stopped', elapsedSeconds);
-    setRemainingSeconds(totalSeconds);
+    if ((timerState !== 'running' && timerState !== 'paused') || !sessionId) return;
+
+    startTransition(async () => {
+      const result = await stopFocusSession({ sessionId });
+
+      if (!result.success) {
+        setError(result.message);
+        return;
+      }
+
+      setError(null);
+      setTimerState('stopped');
+      setSessionId(null);
+      setRemainingSeconds(totalSeconds);
+      router.refresh();
+    });
   }
 
   function resetSession() {
+    if (timerState === 'running' || timerState === 'paused') {
+      setError('Stop or complete the active session before resetting.');
+      return;
+    }
+
     setError(null);
+    setSessionId(null);
     setTimerState('idle');
     setRemainingSeconds(totalSeconds);
   }
@@ -163,6 +248,10 @@ export function FocusModeTimer({ tasks }: FocusModeTimerProps) {
           <h1 className="text-3xl font-bold tracking-normal">Focus Mode</h1>
           <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
             Start timed sessions tied to activities and active tasks.
+          </p>
+          <p className="mt-2 text-sm font-medium">
+            {todayFocusMinutes}m completed today
+            {activeSession ? ' · active session restored from the database' : ''}
           </p>
         </div>
         <Badge variant="outline" className="w-fit capitalize">
@@ -182,27 +271,27 @@ export function FocusModeTimer({ tasks }: FocusModeTimerProps) {
             <CardTitle className="text-base">Sessions</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            {sessions.length === 0 ? (
+            {todaySessions.length === 0 ? (
               <div className="rounded-lg border border-dashed p-4 text-sm text-muted-foreground">
-                No local sessions yet.
+                No saved sessions today.
               </div>
             ) : (
-              sessions.slice(0, 6).map((session) => (
+              todaySessions.slice(0, 6).map((session) => (
                 <div key={session.id} className="rounded-lg border p-3">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-medium">{session.activityType}</p>
+                      <p className="truncate text-sm font-medium">{session.activityLabel}</p>
                       <p className="truncate text-xs text-muted-foreground">
                         {session.taskTitle ?? 'No related task'}
                       </p>
                     </div>
-                    <Badge variant={session.status === 'Completed' ? 'secondary' : 'outline'}>
-                      {session.status}
+                    <Badge variant={session.status === 'COMPLETED' ? 'secondary' : 'outline'}>
+                      {formatStatus(session.status)}
                     </Badge>
                   </div>
                   <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
                     <span>{session.plannedMinutes}m planned</span>
-                    <span>{formatElapsed(session.actualSeconds)}</span>
+                    <span>{formatElapsed(session.elapsedSeconds)}</span>
                   </div>
                 </div>
               ))
@@ -220,7 +309,7 @@ export function FocusModeTimer({ tasks }: FocusModeTimerProps) {
                     key={duration}
                     type="button"
                     variant={durationMinutes === duration ? 'secondary' : 'outline'}
-                    disabled={timerState === 'running' || timerState === 'paused'}
+                    disabled={timerState === 'running' || timerState === 'paused' || isPending}
                     onClick={() => changeDuration(duration)}
                   >
                     {duration}m
@@ -235,7 +324,7 @@ export function FocusModeTimer({ tasks }: FocusModeTimerProps) {
                 <Select
                   value={activityType}
                   onValueChange={setActivityType}
-                  disabled={timerState === 'running' || timerState === 'paused'}
+                  disabled={timerState === 'running' || timerState === 'paused' || isPending}
                 >
                   <SelectTrigger className="w-full">
                     <SelectValue />
@@ -255,7 +344,7 @@ export function FocusModeTimer({ tasks }: FocusModeTimerProps) {
                 <Select
                   value={taskId}
                   onValueChange={setTaskId}
-                  disabled={timerState === 'running' || timerState === 'paused'}
+                  disabled={timerState === 'running' || timerState === 'paused' || isPending}
                 >
                   <SelectTrigger className="w-full">
                     <SelectValue />
@@ -297,12 +386,12 @@ export function FocusModeTimer({ tasks }: FocusModeTimerProps) {
 
             <div className="flex flex-wrap justify-center gap-2">
               {timerState === 'paused' ? (
-                <Button type="button" onClick={resumeSession}>
+                <Button type="button" disabled={isPending} onClick={resumeSession}>
                   <IconPlayerPlay />
                   Resume
                 </Button>
               ) : (
-                <Button type="button" disabled={!canStart} onClick={startSession}>
+                <Button type="button" disabled={!canStart || isPending} onClick={startSession}>
                   <IconPlayerPlay />
                   Start
                 </Button>
@@ -310,7 +399,7 @@ export function FocusModeTimer({ tasks }: FocusModeTimerProps) {
               <Button
                 type="button"
                 variant="outline"
-                disabled={timerState !== 'running'}
+                disabled={timerState !== 'running' || isPending}
                 onClick={pauseSession}
               >
                 <IconPlayerPause />
@@ -319,13 +408,13 @@ export function FocusModeTimer({ tasks }: FocusModeTimerProps) {
               <Button
                 type="button"
                 variant="outline"
-                disabled={timerState !== 'running' && timerState !== 'paused'}
+                disabled={(timerState !== 'running' && timerState !== 'paused') || isPending}
                 onClick={stopSession}
               >
                 <IconPlayerStop />
                 Stop
               </Button>
-              <Button type="button" variant="ghost" onClick={resetSession}>
+              <Button type="button" variant="ghost" disabled={isPending} onClick={resetSession}>
                 <IconRefresh />
                 Reset
               </Button>
@@ -342,7 +431,11 @@ export function FocusModeTimer({ tasks }: FocusModeTimerProps) {
           </CardHeader>
           <CardContent className="space-y-4">
             <StatusRow label="Extension" value="Not connected" tone="muted" />
-            <StatusRow label="Session sync" value="Prepared" tone="ready" />
+            <StatusRow
+              label="Session sync"
+              value={sessionId ? 'Persisting' : 'Ready'}
+              tone="ready"
+            />
             <StatusRow label="Activity" value={activityType} tone="ready" />
             <StatusRow
               label="Task link"
@@ -403,6 +496,13 @@ function formatClock(seconds: number) {
   const minutes = Math.floor(seconds / 60);
   const remaining = seconds % 60;
   return `${minutes.toString().padStart(2, '0')}:${remaining.toString().padStart(2, '0')}`;
+}
+
+function formatStatus(status: string) {
+  return status
+    .split('_')
+    .map((word) => word.charAt(0) + word.slice(1).toLowerCase())
+    .join(' ');
 }
 
 function formatElapsed(seconds: number) {
