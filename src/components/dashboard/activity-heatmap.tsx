@@ -1,9 +1,9 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ActivityEvent } from '@prisma/client';
+import type { ActivityEventModel } from '@/generated/prisma/models';
 
 interface ActivityHeatmapProps {
-  activities: ActivityEvent[];
+  activities: ActivityEventModel[];
 }
 
 export function ActivityHeatmap({ activities }: ActivityHeatmapProps) {

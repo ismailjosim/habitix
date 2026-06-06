@@ -1,10 +1,10 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Notification } from '@prisma/client';
+import type { NotificationModel } from '@/generated/prisma/models';
 
 interface NotificationPanelProps {
-  notifications: Notification[];
+  notifications: NotificationModel[];
 }
 
 export function NotificationPanel({ notifications }: NotificationPanelProps) {
@@ -51,7 +51,10 @@ export function NotificationPanel({ notifications }: NotificationPanelProps) {
               <Badge className={getNotificationColor(notification.type)}>
                 {notification.type.replace(/_/g, ' ')}
               </Badge>
-              <p className="mt-1 text-sm text-foreground">{notification.content}</p>
+              <p className="mt-1 text-sm font-medium text-foreground">{notification.title}</p>
+              {notification.body && (
+                <p className="mt-1 text-sm text-muted-foreground">{notification.body}</p>
+              )}
               <p className="mt-1 text-xs text-muted-foreground">
                 {new Date(notification.createdAt).toLocaleDateString()}
               </p>

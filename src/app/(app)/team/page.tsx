@@ -1,25 +1,71 @@
-import { IconUsers } from '@tabler/icons-react';
+import { Suspense } from 'react';
+import { getTeamData } from '@/lib/queries/team';
+import { getTeamTasks } from '@/lib/queries/team-tasks';
+import { TeamHeader, TeamRoleCards, TeamMembers, TeamTasks } from '@/components/team';
+import { LAYOUT_CONSTRAINTS } from '@/lib/layout-constraints';
+import { LoadingState, PageHeader, EmptyState } from '@/components/shared';
 
-import { ModulePage } from '@/components/app/module-page';
+async function TeamContent() {
+  const teamData = await getTeamData();
+
+  if (!teamData) {
+    return (
+      <div
+        className={`${LAYOUT_CONSTRAINTS.pageMaxWidth} ${LAYOUT_CONSTRAINTS.pagePadding} mx-auto`}
+      >
+        <div className={LAYOUT_CONSTRAINTS.pageVerticalSpacing}>
+          <PageHeader title="Team" description="Collaboration and team management" />
+          <EmptyState
+            title="You're not in a team yet"
+            description="Ask your instructor to invite you to a team, or create one to get started"
+          />
+        </div>
+      </div>
+    );
+  }
+
+  const tasks = await getTeamTasks(teamData.id);
+
+  return (
+    <>
+      <TeamHeader team={teamData} />
+
+      <div
+        className={`${LAYOUT_CONSTRAINTS.pageMaxWidth} ${LAYOUT_CONSTRAINTS.pagePadding} mx-auto`}
+      >
+        <div className={LAYOUT_CONSTRAINTS.pageVerticalSpacing}>
+          {/* Role Cards */}
+          <TeamRoleCards leaders={teamData.roles.leaders} mentors={teamData.roles.mentors} />
+
+          {/* Main Content Grid */}
+          <div className="grid gap-6 lg:grid-cols-3">
+            <div className="lg:col-span-2">
+              <TeamTasks tasks={tasks} />
+            </div>
+            <div>
+              <TeamMembers members={teamData.members} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
 
 export default function TeamPage() {
   return (
-    <ModulePage
-      title="Team"
-      eyebrow="Collaboration"
-      description="View team members, mentor relationships, shared progress, team assignments, and group support activity."
-      icon={IconUsers}
-      metrics={[
-        { label: 'Members', value: '24' },
-        { label: 'Mentors', value: '2' },
-        { label: 'Shared tasks', value: '18' },
-      ]}
-      nextSteps={[
-        'Model teams, memberships, roles, mentors, admins, and corporate viewer access.',
-        'Support membership history and invitation states for later onboarding flows.',
-        'Add team-level progress summaries backed by tasks and focus sessions.',
-        'Keep private student data out of corporate reporting surfaces.',
-      ]}
-    />
+    <Suspense
+      fallback={
+        <div
+          className={`${LAYOUT_CONSTRAINTS.pageMaxWidth} ${LAYOUT_CONSTRAINTS.pagePadding} mx-auto`}
+        >
+          <div className={LAYOUT_CONSTRAINTS.pageVerticalSpacing}>
+            <LoadingState title="Loading team..." count={4} />
+          </div>
+        </div>
+      }
+    >
+      <TeamContent />
+    </Suspense>
   );
 }

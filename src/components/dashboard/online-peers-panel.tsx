@@ -3,23 +3,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 
-interface OnlinePeer {
-  id: string;
-  user: {
-    name: string;
-    email: string;
-    image?: string;
-  };
-  role: string;
-}
-
 interface OnlinePeersPanelProps {
   peers: Array<{
-    userId: string;
+    profileId: string;
     user: {
       name: string;
       email: string;
-      image?: string;
+      image: string | null;
     };
     role: string;
   }>;
@@ -47,7 +37,7 @@ export function OnlinePeersPanel({ peers }: OnlinePeersPanelProps) {
       <CardContent className="space-y-3">
         {peers.map((peer) => (
           <div
-            key={peer.userId}
+            key={peer.profileId}
             className="flex items-center justify-between gap-3 border-b pb-3 last:border-0"
           >
             <div className="flex items-center gap-3">
