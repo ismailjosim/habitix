@@ -15,7 +15,7 @@ export function TeamHeader({ team }: TeamHeaderProps) {
     .slice(0, 2);
 
   return (
-    <div className="bg-gradient-to-r from-purple-600 to-purple-400 px-6 py-12 text-white">
+    <div className="bg-linear-to-r from-purple-600 to-purple-400 px-6 py-12 text-white">
       <div className="flex items-start gap-6">
         <Avatar className="h-24 w-24 border-4 border-white">
           <AvatarImage src={team.avatarUrl || undefined} />
