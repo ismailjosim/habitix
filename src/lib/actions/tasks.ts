@@ -346,9 +346,12 @@ async function refreshTaskProgress(taskId: string, actorProfileId: string) {
   return updated;
 }
 
-function revalidateTasks() {
+function revalidateTasks(taskId?: string) {
   revalidatePath('/tasks');
   revalidatePath('/team');
+  if (taskId) {
+    revalidatePath(`/tasks/${taskId}`);
+  }
 }
 
 function handleActionError(error: unknown, fallback: string): ActionResult {
@@ -495,7 +498,7 @@ export async function createTask(input: z.input<typeof createTaskSchema>): Promi
       });
     }
 
-    revalidateTasks();
+    revalidateTasks(task.id);
     return { success: true, message: 'Task created', data: task };
   } catch (error) {
     return handleActionError(error, 'Failed to create task');
@@ -569,7 +572,7 @@ export async function updateTask(input: z.input<typeof updateTaskSchema>): Promi
       });
     }
 
-    revalidateTasks();
+    revalidateTasks(task.id);
     return { success: true, message: 'Task updated', data: task };
   } catch (error) {
     return handleActionError(error, 'Failed to update task');
@@ -600,7 +603,7 @@ export async function changeTaskStatus(
       toStatus: data.status,
     });
 
-    revalidateTasks();
+    revalidateTasks(task.id);
     return { success: true, message: 'Task status updated', data: task };
   } catch (error) {
     return handleActionError(error, 'Failed to update task status');
@@ -659,7 +662,7 @@ export async function createSubtask(
       metadata: { subtaskId: subtask.id },
     });
 
-    revalidateTasks();
+    revalidateTasks(task.id);
     return { success: true, message: 'Subtask created', data: subtask };
   } catch (error) {
     return handleActionError(error, 'Failed to create subtask');
@@ -704,7 +707,7 @@ export async function updateSubtask(
       await refreshTaskProgress(subtask.taskId, profile.id);
     }
 
-    revalidateTasks();
+    revalidateTasks(subtask.taskId);
     return { success: true, message: 'Subtask updated', data: subtask };
   } catch (error) {
     return handleActionError(error, 'Failed to update subtask');
@@ -742,7 +745,7 @@ export async function toggleSubtask(
 
     await refreshTaskProgress(subtask.taskId, profile.id);
 
-    revalidateTasks();
+    revalidateTasks(subtask.taskId);
     return { success: true, message: 'Subtask toggled', data: subtask };
   } catch (error) {
     return handleActionError(error, 'Failed to toggle subtask');
@@ -770,7 +773,7 @@ export async function addTaskComment(input: z.input<typeof commentSchema>): Prom
       metadata: { commentId: comment.id },
     });
 
-    revalidateTasks();
+    revalidateTasks(task.id);
     return { success: true, message: 'Comment added', data: comment };
   } catch (error) {
     return handleActionError(error, 'Failed to add task comment');

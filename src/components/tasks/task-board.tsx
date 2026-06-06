@@ -318,7 +318,7 @@ export function TaskBoard({ personalTasks, assignedTasks }: TaskBoardProps) {
                 <Badge variant="secondary">{tasks.length}</Badge>
               </div>
 
-              <div className="max-h-[720px] space-y-3 overflow-y-auto pr-1">
+              <div className="max-h-180 space-y-3 overflow-y-auto pr-1">
                 {tasks.length === 0 ? (
                   <EmptyState title={`No ${column.title.toLowerCase()} tasks`} />
                 ) : (
@@ -358,7 +358,9 @@ function TaskCard({
   const movementOptions = boardStatuses.filter((status) => status.value !== currentStatus);
 
   return (
-    <Card className={cn('border bg-background shadow-xs', currentStatus === 'DONE' && 'opacity-80')}>
+    <Card
+      className={cn('border bg-background shadow-xs', currentStatus === 'DONE' && 'opacity-80')}
+    >
       <CardHeader className="space-y-3 pb-3">
         <div className="flex items-start justify-between gap-2">
           <Link href={`/tasks/${task.id}`} className="min-w-0 flex-1 hover:underline">
@@ -426,7 +428,9 @@ function TaskCard({
 function groupTasks(tasks: BoardTask[]): Record<BoardStatus, BoardTask[]> {
   return {
     TODO: tasks.filter((task) => task.status === 'TODO' || task.status === 'BLOCKED'),
-    IN_PROGRESS: tasks.filter((task) => task.status === 'IN_PROGRESS' || task.status === 'IN_REVIEW'),
+    IN_PROGRESS: tasks.filter(
+      (task) => task.status === 'IN_PROGRESS' || task.status === 'IN_REVIEW'
+    ),
     DONE: tasks.filter((task) => task.status === 'DONE'),
   };
 }
