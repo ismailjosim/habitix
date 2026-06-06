@@ -1,6 +1,11 @@
 import 'dotenv/config';
 
+import { ActivitySourceType, FocusActivityType, TaskPriority } from '../src/generated/prisma/enums';
 import { prisma } from '../src/lib/prisma';
+
+function pickOne<T>(items: readonly T[]): T {
+  return items[Math.floor(Math.random() * items.length)];
+}
 
 async function main() {
   console.log('Starting seed data creation...');
@@ -176,7 +181,11 @@ async function main() {
         data: {
           id: `focus-past-${dayOffset}-${i}`,
           profileId: mainProfile.id,
-          activityType: ['STUDY', 'CODING', 'WRITING'][Math.floor(Math.random() * 3)] as any,
+          activityType: pickOne([
+            FocusActivityType.STUDY,
+            FocusActivityType.CODING,
+            FocusActivityType.WRITING,
+          ]),
           plannedMinutes: Math.floor(duration * 1.2),
           actualMinutes: duration,
           status: 'COMPLETED',
@@ -202,7 +211,7 @@ async function main() {
         description: `A detailed description for task ${i + 1}`,
         status: i < 3 ? 'DONE' : 'TODO',
         type: 'PERSONAL',
-        priority: ['HIGH', 'MEDIUM', 'LOW'][Math.floor(Math.random() * 3)] as any,
+        priority: pickOne([TaskPriority.HIGH, TaskPriority.MEDIUM, TaskPriority.LOW]),
         teamId: team.id,
         createdByProfileId: mainProfile.id,
         assignedToProfileId: mainProfile.id,
@@ -225,7 +234,11 @@ async function main() {
         id: `activity-${i + 1}`,
         profileId: mainProfile.id,
         teamId: team.id,
-        sourceType: ['FOCUS_SESSION', 'TASK', 'BADGE_AWARD'][Math.floor(Math.random() * 3)] as any,
+        sourceType: pickOne([
+          ActivitySourceType.FOCUS_SESSION,
+          ActivitySourceType.TASK,
+          ActivitySourceType.BADGE_AWARD,
+        ]),
         sourceId: `source-${i}`,
         type: 'activity',
         occurredAt: eventDate,

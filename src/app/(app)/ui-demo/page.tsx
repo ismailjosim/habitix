@@ -19,6 +19,7 @@ import { LAYOUT_CONSTRAINTS } from '@/lib/layout-constraints';
 
 const sampleDate = new Date('2026-05-15');
 const sampleDateTime = new Date('2026-05-15T14:30:00');
+const sampleRelativeDate = new Date('2026-05-15T13:30:00');
 
 export default function UISystemDemoPage() {
   return (
@@ -42,7 +43,7 @@ export default function UISystemDemoPage() {
               <DataRow label="formatDuration(145)" value={formatDuration(145)} />
               <DataRow
                 label="formatRelativeTime()"
-                value={formatRelativeTime(new Date(Date.now() - 3600000))}
+                value={formatRelativeTime(sampleRelativeDate)}
               />
             </div>
           </DataPanel>
@@ -128,10 +129,7 @@ export default function UISystemDemoPage() {
               <DataRow label="Tasks Completed" value="42" />
               <DataRow label="Current Streak" value="7 days" />
               <DataRow label="Team Role" value={<RoleBadge role="MENTOR" />} />
-              <DataRow
-                label="Last Active"
-                value={formatRelativeTime(new Date(Date.now() - 3600000))}
-              />
+              <DataRow label="Last Active" value={formatRelativeTime(sampleRelativeDate)} />
             </div>
           </DataPanel>
         </section>

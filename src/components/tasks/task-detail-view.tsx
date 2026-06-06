@@ -181,7 +181,7 @@ export function TaskDetailView({ task }: TaskDetailViewProps) {
                       key={subtask.id}
                       className={cn(
                         'flex items-center gap-3 rounded-lg border p-3 text-sm',
-                        subtask.isDone && 'bg-muted/50 text-muted-foreground',
+                        subtask.isDone && 'bg-muted/50 text-muted-foreground'
                       )}
                     >
                       <input
@@ -193,7 +193,7 @@ export function TaskDetailView({ task }: TaskDetailViewProps) {
                             toggleSubtask({
                               subtaskId: subtask.id,
                               isDone: event.currentTarget.checked,
-                            }),
+                            })
                           )
                         }
                         className="size-4 rounded border-border"
@@ -275,7 +275,7 @@ export function TaskDetailView({ task }: TaskDetailViewProps) {
                       <p className="text-xs text-muted-foreground">
                         {activity.fromStatus && activity.toStatus
                           ? `${getStatusLabel(activity.fromStatus)} to ${getStatusLabel(
-                              activity.toStatus,
+                              activity.toStatus
                             )} · `
                           : ''}
                         {formatDateTime(activity.createdAt)}

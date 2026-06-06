@@ -38,29 +38,20 @@ const categories = [
   'Styling',
 ] as const;
 
-const taskStatusSchema = z.preprocess(
-  (value) => {
-    if (typeof value !== 'string') return value;
-    return statusAliases[value as keyof typeof statusAliases] ?? value.toUpperCase();
-  },
-  z.enum(taskStatuses),
-);
+const taskStatusSchema = z.preprocess((value) => {
+  if (typeof value !== 'string') return value;
+  return statusAliases[value as keyof typeof statusAliases] ?? value.toUpperCase();
+}, z.enum(taskStatuses));
 
-const taskTypeSchema = z.preprocess(
-  (value) => {
-    if (typeof value !== 'string') return value;
-    return typeAliases[value as keyof typeof typeAliases] ?? value.toUpperCase();
-  },
-  z.enum(taskTypes),
-);
+const taskTypeSchema = z.preprocess((value) => {
+  if (typeof value !== 'string') return value;
+  return typeAliases[value as keyof typeof typeAliases] ?? value.toUpperCase();
+}, z.enum(taskTypes));
 
-const taskPrioritySchema = z.preprocess(
-  (value) => {
-    if (typeof value !== 'string') return value;
-    return value.toUpperCase();
-  },
-  z.enum(taskPriorities),
-);
+const taskPrioritySchema = z.preprocess((value) => {
+  if (typeof value !== 'string') return value;
+  return value.toUpperCase();
+}, z.enum(taskPriorities));
 
 const optionalDateSchema = z
   .union([z.string(), z.date()])
@@ -102,7 +93,7 @@ const createTaskSchema = z.object({
     .array(
       z.object({
         title: z.string().trim().min(1).max(160),
-      }),
+      })
     )
     .max(25)
     .optional(),
@@ -380,7 +371,9 @@ export async function listTasks(input?: z.input<typeof listTasksSchema>): Promis
       where: {
         ...(filters.status ? { status: filters.status } : {}),
         ...(filters.type ? { type: filters.type } : {}),
-        ...(filters.assignedToProfileId ? { assignedToProfileId: filters.assignedToProfileId } : {}),
+        ...(filters.assignedToProfileId
+          ? { assignedToProfileId: filters.assignedToProfileId }
+          : {}),
         ...(filters.teamId ? { teamId: filters.teamId } : {}),
         ...(filters.includeArchived ? {} : { status: { not: 'ARCHIVED' } }),
         OR: isPlatformAdmin(profile)
@@ -580,7 +573,7 @@ export async function updateTask(input: z.input<typeof updateTaskSchema>): Promi
 }
 
 export async function changeTaskStatus(
-  input: z.input<typeof statusChangeSchema>,
+  input: z.input<typeof statusChangeSchema>
 ): Promise<ActionResult> {
   try {
     const profile = await requireCurrentProfile();
@@ -639,7 +632,7 @@ export async function deleteTask(input: z.input<typeof taskIdSchema>): Promise<A
 }
 
 export async function createSubtask(
-  input: z.input<typeof subtaskCreateSchema>,
+  input: z.input<typeof subtaskCreateSchema>
 ): Promise<ActionResult> {
   try {
     const profile = await requireCurrentProfile();
@@ -670,7 +663,7 @@ export async function createSubtask(
 }
 
 export async function updateSubtask(
-  input: z.input<typeof subtaskUpdateSchema>,
+  input: z.input<typeof subtaskUpdateSchema>
 ): Promise<ActionResult> {
   try {
     const profile = await requireCurrentProfile();
@@ -715,7 +708,7 @@ export async function updateSubtask(
 }
 
 export async function toggleSubtask(
-  input: z.input<typeof subtaskToggleSchema>,
+  input: z.input<typeof subtaskToggleSchema>
 ): Promise<ActionResult> {
   try {
     const profile = await requireCurrentProfile();

@@ -78,7 +78,7 @@ export async function getTaskDetail(taskId: string) {
   const isDirectUser =
     task.createdByProfileId === profile.id || task.assignedToProfileId === profile.id;
   const isTeamMember = Boolean(
-    task.team?.memberships.some((membership) => membership.profileId === profile.id),
+    task.team?.memberships.some((membership) => membership.profileId === profile.id)
   );
 
   if (!isDirectUser && !isTeamMember && !isPlatformAdmin) {
@@ -87,7 +87,7 @@ export async function getTaskDetail(taskId: string) {
 
   const focusMinutes = task.focusSessions.reduce(
     (total, session) => total + (session.actualMinutes ?? session.plannedMinutes),
-    0,
+    0
   );
 
   const assignedMembers = [
@@ -97,7 +97,7 @@ export async function getTaskDetail(taskId: string) {
     .filter((member): member is NonNullable<typeof member> => Boolean(member))
     .filter(
       (member, index, members) =>
-        members.findIndex((candidate) => candidate.id === member.id) === index,
+        members.findIndex((candidate) => candidate.id === member.id) === index
     );
 
   return {

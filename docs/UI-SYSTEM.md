@@ -249,11 +249,11 @@ import {
 
 const date = new Date('2026-05-15');
 
-formatDate(date)           // "May 15"
-formatDateTime(date)       // "May 15, 02:30 PM"
-formatRelativeTime(date)   // "2 days ago" or "May 15"
-formatDuration(145)        // "2h 25m"
-formatDuration(45)         // "45m"
+formatDate(date); // "May 15"
+formatDateTime(date); // "May 15, 02:30 PM"
+formatRelativeTime(date); // "2 days ago" or "May 15"
+formatDuration(145); // "2h 25m"
+formatDuration(45); // "45m"
 ```
 
 **Functions:**
@@ -283,11 +283,11 @@ import {
 } from '@/lib/display-helpers';
 
 // Use color classes directly
-const bgColor = statusColors['IN_PROGRESS'];  // 'bg-blue-100 text-blue-800'
+const bgColor = statusColors['IN_PROGRESS']; // 'bg-blue-100 text-blue-800'
 
 // Get readable labels
-getStatusLabel('IN_PROGRESS')  // "In Progress"
-getPriorityLabel('HIGH')       // "High"
+getStatusLabel('IN_PROGRESS'); // "In Progress"
+getPriorityLabel('HIGH'); // "High"
 ```
 
 ---
@@ -347,9 +347,7 @@ export default function MyPage() {
           actions={<Button>Action</Button>}
         />
 
-        <div className={LAYOUT_CONSTRAINTS.sectionSpacing}>
-          {/* Main content */}
-        </div>
+        <div className={LAYOUT_CONSTRAINTS.sectionSpacing}>{/* Main content */}</div>
       </div>
     </div>
   );
@@ -372,8 +370,12 @@ export default function MyPage() {
       {users.map((user) => (
         <tr key={user.id} className="border-b">
           <td className="py-2">{user.name}</td>
-          <td className="py-2"><RoleBadge role={user.role} /></td>
-          <td className="text-right"><Button size="sm">Edit</Button></td>
+          <td className="py-2">
+            <RoleBadge role={user.role} />
+          </td>
+          <td className="text-right">
+            <Button size="sm">Edit</Button>
+          </td>
         </tr>
       ))}
     </tbody>

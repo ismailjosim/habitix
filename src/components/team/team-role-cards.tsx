@@ -1,8 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { RoleBadge } from '@/components/shared';
-import { EmptyState } from '@/components/shared';
+import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import type { TeamMember } from '@/lib/queries/team';
 
 interface TeamRoleCardsProps {
