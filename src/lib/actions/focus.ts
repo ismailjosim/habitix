@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUserProfile } from '@/lib/session';
 import { touchPresence } from '@/lib/presence';
+import { awardEligibleBadges } from '@/lib/badges';
 
 const durationOptions = [25, 45, 50] as const;
 const activityLabels = [
@@ -459,6 +460,7 @@ export async function completeFocusSession(
       return updated;
     });
 
+    await awardEligibleBadges(profile.id);
     await touchPresence(profile.id);
     revalidateFocus(session.taskId);
     return { success: true, message: 'Focus session completed', data: completed };

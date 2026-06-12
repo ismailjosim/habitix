@@ -3,6 +3,7 @@ import { Badge } from '@/components/ui/badge';
 import { EmptyState } from '@/components/shared';
 import { formatRelativeTime } from '@/lib/display-helpers';
 import type { ProfileData } from '@/lib/queries/profile';
+import { BadgeIcon } from '@/components/badges/badge-icon';
 
 interface ProfileBadgesProps {
   profile: ProfileData;
@@ -32,12 +33,15 @@ export function ProfileBadges({ profile }: ProfileBadgesProps) {
           <Card key={badge.id} className="flex flex-col">
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between">
-                <div className="text-3xl">{badge.badgeIcon}</div>
+                <BadgeIcon name={badge.badgeIcon} />
                 <Badge variant="secondary" className="text-xs">
                   {formatRelativeTime(badge.awardedAt)}
                 </Badge>
               </div>
               <CardTitle className="text-base">{badge.badgeName}</CardTitle>
+              {badge.periodKey !== 'lifetime' && (
+                <p className="text-xs text-muted-foreground">{formatPeriod(badge.periodKey)}</p>
+              )}
             </CardHeader>
             {badge.badgeDescription && (
               <CardContent className="flex-1 text-sm text-muted-foreground">
@@ -49,4 +53,11 @@ export function ProfileBadges({ profile }: ProfileBadgesProps) {
       </div>
     </div>
   );
+}
+
+function formatPeriod(periodKey: string) {
+  const [type, value] = periodKey.split(':');
+  if (type === 'week') return `Week of ${value}`;
+  if (type === 'month') return `Month ${value}`;
+  return periodKey;
 }

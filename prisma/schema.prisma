@@ -492,12 +492,13 @@ model BadgeAward {
   profileId          String
   awardedByProfileId String?
   reason             String?
+  periodKey          String       @default("lifetime")
   awardedAt          DateTime     @default(now())
   badge              Badge        @relation(fields: [badgeId], references: [id], onDelete: Cascade)
   profile            UserProfile  @relation("BadgeRecipient", fields: [profileId], references: [id], onDelete: Cascade)
   awardedBy          UserProfile? @relation("BadgeAwarder", fields: [awardedByProfileId], references: [id], onDelete: SetNull)
 
-  @@unique([badgeId, profileId, awardedAt])
+  @@unique([badgeId, profileId, periodKey])
   @@index([profileId, awardedAt])
 }
 

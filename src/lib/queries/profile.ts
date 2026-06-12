@@ -27,6 +27,7 @@ export interface ProfileData {
     badgeName: string;
     badgeIcon: string;
     badgeDescription: string | null;
+    periodKey: string;
     awardedAt: Date;
   }>;
 }
@@ -86,6 +87,7 @@ export async function getProfileData(): Promise<ProfileData> {
       badgeName: award.badge.name,
       badgeIcon: award.badge.iconName,
       badgeDescription: award.badge.description,
+      periodKey: award.periodKey,
       awardedAt: award.awardedAt,
     })),
   };

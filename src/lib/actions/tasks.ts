@@ -6,6 +6,7 @@ import { z } from 'zod';
 import type { Prisma } from '@/generated/prisma/client';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUserProfile } from '@/lib/session';
+import { awardEligibleBadges } from '@/lib/badges';
 
 const taskStatuses = ['TODO', 'IN_PROGRESS', 'BLOCKED', 'IN_REVIEW', 'DONE', 'ARCHIVED'] as const;
 const taskTypes = ['PERSONAL', 'MENTOR_ASSIGNED', 'ADMIN_ASSIGNED', 'TEAM'] as const;
@@ -609,6 +610,10 @@ export async function createTask(input: z.input<typeof createTaskSchema>): Promi
       });
     }
 
+    if (task.status === 'DONE') {
+      await awardEligibleBadges(task.assignedToProfileId ?? task.createdByProfileId);
+    }
+
     revalidateTasks(task.id);
     return { success: true, message: 'Task created', data: task };
   } catch (error) {
@@ -701,6 +706,10 @@ export async function updateTask(input: z.input<typeof updateTaskSchema>): Promi
           : 'updated',
     });
 
+    if (data.status === 'DONE' && existing.status !== 'DONE') {
+      await awardEligibleBadges(task.assignedToProfileId ?? task.createdByProfileId);
+    }
+
     revalidateTasks(task.id);
     return { success: true, message: 'Task updated', data: task };
   } catch (error) {
@@ -731,6 +740,10 @@ export async function changeTaskStatus(
       fromStatus: existing.status,
       toStatus: data.status,
     });
+
+    if (data.status === 'DONE' && existing.status !== 'DONE') {
+      await awardEligibleBadges(task.assignedToProfileId ?? task.createdByProfileId);
+    }
 
     revalidateTasks(task.id);
     return { success: true, message: 'Task status updated', data: task };

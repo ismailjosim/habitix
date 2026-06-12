@@ -400,6 +400,7 @@ export const BadgeAwardScalarFieldEnum = {
   profileId: 'profileId',
   awardedByProfileId: 'awardedByProfileId',
   reason: 'reason',
+  periodKey: 'periodKey',
   awardedAt: 'awardedAt',
 } as const;
 

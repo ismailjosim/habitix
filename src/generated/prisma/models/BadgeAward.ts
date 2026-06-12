@@ -29,6 +29,7 @@ export type BadgeAwardMinAggregateOutputType = {
   profileId: string | null;
   awardedByProfileId: string | null;
   reason: string | null;
+  periodKey: string | null;
   awardedAt: Date | null;
 };
 
@@ -38,6 +39,7 @@ export type BadgeAwardMaxAggregateOutputType = {
   profileId: string | null;
   awardedByProfileId: string | null;
   reason: string | null;
+  periodKey: string | null;
   awardedAt: Date | null;
 };
 
@@ -47,6 +49,7 @@ export type BadgeAwardCountAggregateOutputType = {
   profileId: number;
   awardedByProfileId: number;
   reason: number;
+  periodKey: number;
   awardedAt: number;
   _all: number;
 };
@@ -57,6 +60,7 @@ export type BadgeAwardMinAggregateInputType = {
   profileId?: true;
   awardedByProfileId?: true;
   reason?: true;
+  periodKey?: true;
   awardedAt?: true;
 };
 
@@ -66,6 +70,7 @@ export type BadgeAwardMaxAggregateInputType = {
   profileId?: true;
   awardedByProfileId?: true;
   reason?: true;
+  periodKey?: true;
   awardedAt?: true;
 };
 
@@ -75,6 +80,7 @@ export type BadgeAwardCountAggregateInputType = {
   profileId?: true;
   awardedByProfileId?: true;
   reason?: true;
+  periodKey?: true;
   awardedAt?: true;
   _all?: true;
 };
@@ -160,6 +166,7 @@ export type BadgeAwardGroupByOutputType = {
   profileId: string;
   awardedByProfileId: string | null;
   reason: string | null;
+  periodKey: string;
   awardedAt: Date;
   _count: BadgeAwardCountAggregateOutputType | null;
   _min: BadgeAwardMinAggregateOutputType | null;
@@ -187,6 +194,7 @@ export type BadgeAwardWhereInput = {
   profileId?: Prisma.StringFilter<'BadgeAward'> | string;
   awardedByProfileId?: Prisma.StringNullableFilter<'BadgeAward'> | string | null;
   reason?: Prisma.StringNullableFilter<'BadgeAward'> | string | null;
+  periodKey?: Prisma.StringFilter<'BadgeAward'> | string;
   awardedAt?: Prisma.DateTimeFilter<'BadgeAward'> | Date | string;
   badge?: Prisma.XOR<Prisma.BadgeScalarRelationFilter, Prisma.BadgeWhereInput>;
   profile?: Prisma.XOR<Prisma.UserProfileScalarRelationFilter, Prisma.UserProfileWhereInput>;
@@ -202,6 +210,7 @@ export type BadgeAwardOrderByWithRelationInput = {
   profileId?: Prisma.SortOrder;
   awardedByProfileId?: Prisma.SortOrderInput | Prisma.SortOrder;
   reason?: Prisma.SortOrderInput | Prisma.SortOrder;
+  periodKey?: Prisma.SortOrder;
   awardedAt?: Prisma.SortOrder;
   badge?: Prisma.BadgeOrderByWithRelationInput;
   profile?: Prisma.UserProfileOrderByWithRelationInput;
@@ -211,7 +220,7 @@ export type BadgeAwardOrderByWithRelationInput = {
 export type BadgeAwardWhereUniqueInput = Prisma.AtLeast<
   {
     id?: string;
-    badgeId_profileId_awardedAt?: Prisma.BadgeAwardBadgeIdProfileIdAwardedAtCompoundUniqueInput;
+    badgeId_profileId_periodKey?: Prisma.BadgeAwardBadgeIdProfileIdPeriodKeyCompoundUniqueInput;
     AND?: Prisma.BadgeAwardWhereInput | Prisma.BadgeAwardWhereInput[];
     OR?: Prisma.BadgeAwardWhereInput[];
     NOT?: Prisma.BadgeAwardWhereInput | Prisma.BadgeAwardWhereInput[];
@@ -219,6 +228,7 @@ export type BadgeAwardWhereUniqueInput = Prisma.AtLeast<
     profileId?: Prisma.StringFilter<'BadgeAward'> | string;
     awardedByProfileId?: Prisma.StringNullableFilter<'BadgeAward'> | string | null;
     reason?: Prisma.StringNullableFilter<'BadgeAward'> | string | null;
+    periodKey?: Prisma.StringFilter<'BadgeAward'> | string;
     awardedAt?: Prisma.DateTimeFilter<'BadgeAward'> | Date | string;
     badge?: Prisma.XOR<Prisma.BadgeScalarRelationFilter, Prisma.BadgeWhereInput>;
     profile?: Prisma.XOR<Prisma.UserProfileScalarRelationFilter, Prisma.UserProfileWhereInput>;
@@ -227,7 +237,7 @@ export type BadgeAwardWhereUniqueInput = Prisma.AtLeast<
       Prisma.UserProfileWhereInput
     > | null;
   },
-  'id' | 'badgeId_profileId_awardedAt'
+  'id' | 'badgeId_profileId_periodKey'
 >;
 
 export type BadgeAwardOrderByWithAggregationInput = {
@@ -236,6 +246,7 @@ export type BadgeAwardOrderByWithAggregationInput = {
   profileId?: Prisma.SortOrder;
   awardedByProfileId?: Prisma.SortOrderInput | Prisma.SortOrder;
   reason?: Prisma.SortOrderInput | Prisma.SortOrder;
+  periodKey?: Prisma.SortOrder;
   awardedAt?: Prisma.SortOrder;
   _count?: Prisma.BadgeAwardCountOrderByAggregateInput;
   _max?: Prisma.BadgeAwardMaxOrderByAggregateInput;
@@ -255,12 +266,14 @@ export type BadgeAwardScalarWhereWithAggregatesInput = {
   profileId?: Prisma.StringWithAggregatesFilter<'BadgeAward'> | string;
   awardedByProfileId?: Prisma.StringNullableWithAggregatesFilter<'BadgeAward'> | string | null;
   reason?: Prisma.StringNullableWithAggregatesFilter<'BadgeAward'> | string | null;
+  periodKey?: Prisma.StringWithAggregatesFilter<'BadgeAward'> | string;
   awardedAt?: Prisma.DateTimeWithAggregatesFilter<'BadgeAward'> | Date | string;
 };
 
 export type BadgeAwardCreateInput = {
   id?: string;
   reason?: string | null;
+  periodKey?: string;
   awardedAt?: Date | string;
   badge: Prisma.BadgeCreateNestedOneWithoutAwardsInput;
   profile: Prisma.UserProfileCreateNestedOneWithoutAwardedBadgesInput;
@@ -273,12 +286,14 @@ export type BadgeAwardUncheckedCreateInput = {
   profileId: string;
   awardedByProfileId?: string | null;
   reason?: string | null;
+  periodKey?: string;
   awardedAt?: Date | string;
 };
 
 export type BadgeAwardUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  periodKey?: Prisma.StringFieldUpdateOperationsInput | string;
   awardedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   badge?: Prisma.BadgeUpdateOneRequiredWithoutAwardsNestedInput;
   profile?: Prisma.UserProfileUpdateOneRequiredWithoutAwardedBadgesNestedInput;
@@ -291,6 +306,7 @@ export type BadgeAwardUncheckedUpdateInput = {
   profileId?: Prisma.StringFieldUpdateOperationsInput | string;
   awardedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  periodKey?: Prisma.StringFieldUpdateOperationsInput | string;
   awardedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 
@@ -300,12 +316,14 @@ export type BadgeAwardCreateManyInput = {
   profileId: string;
   awardedByProfileId?: string | null;
   reason?: string | null;
+  periodKey?: string;
   awardedAt?: Date | string;
 };
 
 export type BadgeAwardUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  periodKey?: Prisma.StringFieldUpdateOperationsInput | string;
   awardedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 
@@ -315,6 +333,7 @@ export type BadgeAwardUncheckedUpdateManyInput = {
   profileId?: Prisma.StringFieldUpdateOperationsInput | string;
   awardedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  periodKey?: Prisma.StringFieldUpdateOperationsInput | string;
   awardedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 
@@ -328,10 +347,10 @@ export type BadgeAwardOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder;
 };
 
-export type BadgeAwardBadgeIdProfileIdAwardedAtCompoundUniqueInput = {
+export type BadgeAwardBadgeIdProfileIdPeriodKeyCompoundUniqueInput = {
   badgeId: string;
   profileId: string;
-  awardedAt: Date | string;
+  periodKey: string;
 };
 
 export type BadgeAwardCountOrderByAggregateInput = {
@@ -340,6 +359,7 @@ export type BadgeAwardCountOrderByAggregateInput = {
   profileId?: Prisma.SortOrder;
   awardedByProfileId?: Prisma.SortOrder;
   reason?: Prisma.SortOrder;
+  periodKey?: Prisma.SortOrder;
   awardedAt?: Prisma.SortOrder;
 };
 
@@ -349,6 +369,7 @@ export type BadgeAwardMaxOrderByAggregateInput = {
   profileId?: Prisma.SortOrder;
   awardedByProfileId?: Prisma.SortOrder;
   reason?: Prisma.SortOrder;
+  periodKey?: Prisma.SortOrder;
   awardedAt?: Prisma.SortOrder;
 };
 
@@ -358,6 +379,7 @@ export type BadgeAwardMinOrderByAggregateInput = {
   profileId?: Prisma.SortOrder;
   awardedByProfileId?: Prisma.SortOrder;
   reason?: Prisma.SortOrder;
+  periodKey?: Prisma.SortOrder;
   awardedAt?: Prisma.SortOrder;
 };
 
@@ -622,6 +644,7 @@ export type BadgeAwardUncheckedUpdateManyWithoutBadgeNestedInput = {
 export type BadgeAwardCreateWithoutProfileInput = {
   id?: string;
   reason?: string | null;
+  periodKey?: string;
   awardedAt?: Date | string;
   badge: Prisma.BadgeCreateNestedOneWithoutAwardsInput;
   awardedBy?: Prisma.UserProfileCreateNestedOneWithoutGivenBadgesInput;
@@ -632,6 +655,7 @@ export type BadgeAwardUncheckedCreateWithoutProfileInput = {
   badgeId: string;
   awardedByProfileId?: string | null;
   reason?: string | null;
+  periodKey?: string;
   awardedAt?: Date | string;
 };
 
@@ -651,6 +675,7 @@ export type BadgeAwardCreateManyProfileInputEnvelope = {
 export type BadgeAwardCreateWithoutAwardedByInput = {
   id?: string;
   reason?: string | null;
+  periodKey?: string;
   awardedAt?: Date | string;
   badge: Prisma.BadgeCreateNestedOneWithoutAwardsInput;
   profile: Prisma.UserProfileCreateNestedOneWithoutAwardedBadgesInput;
@@ -661,6 +686,7 @@ export type BadgeAwardUncheckedCreateWithoutAwardedByInput = {
   badgeId: string;
   profileId: string;
   reason?: string | null;
+  periodKey?: string;
   awardedAt?: Date | string;
 };
 
@@ -714,6 +740,7 @@ export type BadgeAwardScalarWhereInput = {
   profileId?: Prisma.StringFilter<'BadgeAward'> | string;
   awardedByProfileId?: Prisma.StringNullableFilter<'BadgeAward'> | string | null;
   reason?: Prisma.StringNullableFilter<'BadgeAward'> | string | null;
+  periodKey?: Prisma.StringFilter<'BadgeAward'> | string;
   awardedAt?: Prisma.DateTimeFilter<'BadgeAward'> | Date | string;
 };
 
@@ -748,6 +775,7 @@ export type BadgeAwardUpdateManyWithWhereWithoutAwardedByInput = {
 export type BadgeAwardCreateWithoutBadgeInput = {
   id?: string;
   reason?: string | null;
+  periodKey?: string;
   awardedAt?: Date | string;
   profile: Prisma.UserProfileCreateNestedOneWithoutAwardedBadgesInput;
   awardedBy?: Prisma.UserProfileCreateNestedOneWithoutGivenBadgesInput;
@@ -758,6 +786,7 @@ export type BadgeAwardUncheckedCreateWithoutBadgeInput = {
   profileId: string;
   awardedByProfileId?: string | null;
   reason?: string | null;
+  periodKey?: string;
   awardedAt?: Date | string;
 };
 
@@ -807,6 +836,7 @@ export type BadgeAwardCreateManyProfileInput = {
   badgeId: string;
   awardedByProfileId?: string | null;
   reason?: string | null;
+  periodKey?: string;
   awardedAt?: Date | string;
 };
 
@@ -815,12 +845,14 @@ export type BadgeAwardCreateManyAwardedByInput = {
   badgeId: string;
   profileId: string;
   reason?: string | null;
+  periodKey?: string;
   awardedAt?: Date | string;
 };
 
 export type BadgeAwardUpdateWithoutProfileInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  periodKey?: Prisma.StringFieldUpdateOperationsInput | string;
   awardedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   badge?: Prisma.BadgeUpdateOneRequiredWithoutAwardsNestedInput;
   awardedBy?: Prisma.UserProfileUpdateOneWithoutGivenBadgesNestedInput;
@@ -831,6 +863,7 @@ export type BadgeAwardUncheckedUpdateWithoutProfileInput = {
   badgeId?: Prisma.StringFieldUpdateOperationsInput | string;
   awardedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  periodKey?: Prisma.StringFieldUpdateOperationsInput | string;
   awardedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 
@@ -839,12 +872,14 @@ export type BadgeAwardUncheckedUpdateManyWithoutProfileInput = {
   badgeId?: Prisma.StringFieldUpdateOperationsInput | string;
   awardedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  periodKey?: Prisma.StringFieldUpdateOperationsInput | string;
   awardedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 
 export type BadgeAwardUpdateWithoutAwardedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  periodKey?: Prisma.StringFieldUpdateOperationsInput | string;
   awardedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   badge?: Prisma.BadgeUpdateOneRequiredWithoutAwardsNestedInput;
   profile?: Prisma.UserProfileUpdateOneRequiredWithoutAwardedBadgesNestedInput;
@@ -855,6 +890,7 @@ export type BadgeAwardUncheckedUpdateWithoutAwardedByInput = {
   badgeId?: Prisma.StringFieldUpdateOperationsInput | string;
   profileId?: Prisma.StringFieldUpdateOperationsInput | string;
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  periodKey?: Prisma.StringFieldUpdateOperationsInput | string;
   awardedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 
@@ -863,6 +899,7 @@ export type BadgeAwardUncheckedUpdateManyWithoutAwardedByInput = {
   badgeId?: Prisma.StringFieldUpdateOperationsInput | string;
   profileId?: Prisma.StringFieldUpdateOperationsInput | string;
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  periodKey?: Prisma.StringFieldUpdateOperationsInput | string;
   awardedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 
@@ -871,12 +908,14 @@ export type BadgeAwardCreateManyBadgeInput = {
   profileId: string;
   awardedByProfileId?: string | null;
   reason?: string | null;
+  periodKey?: string;
   awardedAt?: Date | string;
 };
 
 export type BadgeAwardUpdateWithoutBadgeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  periodKey?: Prisma.StringFieldUpdateOperationsInput | string;
   awardedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   profile?: Prisma.UserProfileUpdateOneRequiredWithoutAwardedBadgesNestedInput;
   awardedBy?: Prisma.UserProfileUpdateOneWithoutGivenBadgesNestedInput;
@@ -887,6 +926,7 @@ export type BadgeAwardUncheckedUpdateWithoutBadgeInput = {
   profileId?: Prisma.StringFieldUpdateOperationsInput | string;
   awardedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  periodKey?: Prisma.StringFieldUpdateOperationsInput | string;
   awardedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 
@@ -895,6 +935,7 @@ export type BadgeAwardUncheckedUpdateManyWithoutBadgeInput = {
   profileId?: Prisma.StringFieldUpdateOperationsInput | string;
   awardedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  periodKey?: Prisma.StringFieldUpdateOperationsInput | string;
   awardedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 
@@ -907,6 +948,7 @@ export type BadgeAwardSelect<
     profileId?: boolean;
     awardedByProfileId?: boolean;
     reason?: boolean;
+    periodKey?: boolean;
     awardedAt?: boolean;
     badge?: boolean | Prisma.BadgeDefaultArgs<ExtArgs>;
     profile?: boolean | Prisma.UserProfileDefaultArgs<ExtArgs>;
@@ -924,6 +966,7 @@ export type BadgeAwardSelectCreateManyAndReturn<
     profileId?: boolean;
     awardedByProfileId?: boolean;
     reason?: boolean;
+    periodKey?: boolean;
     awardedAt?: boolean;
     badge?: boolean | Prisma.BadgeDefaultArgs<ExtArgs>;
     profile?: boolean | Prisma.UserProfileDefaultArgs<ExtArgs>;
@@ -941,6 +984,7 @@ export type BadgeAwardSelectUpdateManyAndReturn<
     profileId?: boolean;
     awardedByProfileId?: boolean;
     reason?: boolean;
+    periodKey?: boolean;
     awardedAt?: boolean;
     badge?: boolean | Prisma.BadgeDefaultArgs<ExtArgs>;
     profile?: boolean | Prisma.UserProfileDefaultArgs<ExtArgs>;
@@ -955,13 +999,14 @@ export type BadgeAwardSelectScalar = {
   profileId?: boolean;
   awardedByProfileId?: boolean;
   reason?: boolean;
+  periodKey?: boolean;
   awardedAt?: boolean;
 };
 
 export type BadgeAwardOmit<
   ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = runtime.Types.Extensions.GetOmit<
-  'id' | 'badgeId' | 'profileId' | 'awardedByProfileId' | 'reason' | 'awardedAt',
+  'id' | 'badgeId' | 'profileId' | 'awardedByProfileId' | 'reason' | 'periodKey' | 'awardedAt',
   ExtArgs['result']['badgeAward']
 >;
 export type BadgeAwardInclude<
@@ -1002,6 +1047,7 @@ export type $BadgeAwardPayload<
       profileId: string;
       awardedByProfileId: string | null;
       reason: string | null;
+      periodKey: string;
       awardedAt: Date;
     },
     ExtArgs['result']['badgeAward']
@@ -1618,6 +1664,7 @@ export interface BadgeAwardFieldRefs {
   readonly profileId: Prisma.FieldRef<'BadgeAward', 'String'>;
   readonly awardedByProfileId: Prisma.FieldRef<'BadgeAward', 'String'>;
   readonly reason: Prisma.FieldRef<'BadgeAward', 'String'>;
+  readonly periodKey: Prisma.FieldRef<'BadgeAward', 'String'>;
   readonly awardedAt: Prisma.FieldRef<'BadgeAward', 'DateTime'>;
 }
 

@@ -2,6 +2,7 @@ import 'dotenv/config';
 
 import { ActivitySourceType, FocusActivityType, TaskPriority } from '../src/generated/prisma/enums';
 import { prisma } from '../src/lib/prisma';
+import { BADGE_DEFINITIONS } from '../src/lib/badges';
 
 function pickOne<T>(items: readonly T[]): T {
   return items[Math.floor(Math.random() * items.length)];
@@ -9,6 +10,14 @@ function pickOne<T>(items: readonly T[]): T {
 
 async function main() {
   console.log('Starting seed data creation...');
+
+  for (const definition of BADGE_DEFINITIONS) {
+    await prisma.badge.upsert({
+      where: { name: definition.name },
+      update: definition,
+      create: definition,
+    });
+  }
 
   // Create test user
   const mainUser = await prisma.user.upsert({
@@ -318,16 +327,17 @@ async function main() {
   // Award badge
   await prisma.badgeAward.upsert({
     where: {
-      badgeId_profileId_awardedAt: {
+      badgeId_profileId_periodKey: {
         badgeId: badge.id,
         profileId: mainProfile.id,
-        awardedAt: new Date('2026-05-28'),
+        periodKey: 'lifetime',
       },
     },
     update: {},
     create: {
       badgeId: badge.id,
       profileId: mainProfile.id,
+      periodKey: 'lifetime',
       awardedAt: new Date('2026-05-28'),
     },
   });

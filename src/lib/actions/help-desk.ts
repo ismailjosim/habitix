@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUserProfile } from '@/lib/session';
 import { MAX_PEER_HELPERS } from '@/lib/queries/help-desk';
+import { awardEligibleBadges } from '@/lib/badges';
 
 const topics = [
   'Coding',
@@ -240,6 +241,9 @@ export async function resolveHelpPost(input: z.input<typeof resolveSchema>): Pro
       }
     });
 
+    if (awardedResponse) {
+      await awardEligibleBadges(awardedResponse.authorProfileId);
+    }
     revalidateHelpDesk();
     revalidatePath('/activity');
     revalidatePath('/leaderboard');

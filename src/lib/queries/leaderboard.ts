@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { getCurrentUserProfile } from '@/lib/session';
+import { awardBadge, awardEligibleBadges } from '@/lib/badges';
 
 type Period = 'weekly' | 'monthly';
 
@@ -27,6 +28,17 @@ export type LeaderboardData = {
   currentProfileId: string | null;
   weekly: LeaderboardPeriodData;
   monthly: LeaderboardPeriodData;
+  badges: {
+    id: string;
+    profileId: string;
+    displayName: string;
+    badgeName: string;
+    badgeDescription: string | null;
+    iconName: string;
+    periodKey: string;
+    awardedAt: Date;
+    isCurrentUser: boolean;
+  }[];
 };
 
 export async function getLeaderboardData(): Promise<LeaderboardData> {
@@ -72,11 +84,58 @@ export async function getLeaderboardData(): Promise<LeaderboardData> {
     helpResponses: profile.helpResponses,
   }));
 
+  const weekly = buildPeriod(baseRows, current.profile.id, weekStart, 'weekly');
+  const monthly = buildPeriod(baseRows, current.profile.id, monthStart, 'monthly');
+
+  await Promise.all(baseRows.map((row) => awardEligibleBadges(row.profileId)));
+  if (weekly.performers[0]?.focusMinutes) {
+    await awardBadge({
+      profileId: weekly.performers[0].profileId,
+      badgeName: 'Weekly Champion',
+      reason: `Led ${membership.team.name} for the week of ${dateKey(weekStart)}`,
+      periodKey: `week:${dateKey(weekStart)}`,
+    });
+  }
+  if (monthly.performers[0]?.focusMinutes) {
+    await awardBadge({
+      profileId: monthly.performers[0].profileId,
+      badgeName: 'Monthly Champion',
+      reason: `Led ${membership.team.name} for ${monthKey(monthStart)}`,
+      periodKey: `month:${monthKey(monthStart)}`,
+    });
+  }
+
+  const badges = await prisma.badgeAward.findMany({
+    where: {
+      profile: { memberships: { some: { teamId: membership.teamId, leftAt: null } } },
+    },
+    select: {
+      id: true,
+      profileId: true,
+      periodKey: true,
+      awardedAt: true,
+      profile: { select: { displayName: true } },
+      badge: { select: { name: true, description: true, iconName: true } },
+    },
+    orderBy: { awardedAt: 'desc' },
+  });
+
   return {
     teamName: membership.team.name,
     currentProfileId: current.profile.id,
-    weekly: buildPeriod(baseRows, current.profile.id, weekStart, 'weekly'),
-    monthly: buildPeriod(baseRows, current.profile.id, monthStart, 'monthly'),
+    weekly,
+    monthly,
+    badges: badges.map((award) => ({
+      id: award.id,
+      profileId: award.profileId,
+      displayName: award.profile.displayName,
+      badgeName: award.badge.name,
+      badgeDescription: award.badge.description,
+      iconName: award.badge.iconName,
+      periodKey: award.periodKey,
+      awardedAt: award.awardedAt,
+      isCurrentUser: award.profileId === current.profile.id,
+    })),
   };
 }
 
@@ -145,6 +204,17 @@ function startOfWeek(date: Date) {
   return start;
 }
 
+function dateKey(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function monthKey(date: Date) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+}
+
 function emptyPeriod(label: string): LeaderboardPeriodData {
   return {
     label,
@@ -161,5 +231,6 @@ function emptyData(): LeaderboardData {
     currentProfileId: null,
     weekly: emptyPeriod('This week'),
     monthly: emptyPeriod('This month'),
+    badges: [],
   };
 }
