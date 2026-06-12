@@ -2,6 +2,7 @@
 
 import { prisma } from '@/lib/prisma';
 import { getCurrentSession } from '@/lib/session';
+import { getTeamPresence } from '@/lib/queries/presence';
 
 export async function getDashboardData() {
   const session = await getCurrentSession();
@@ -68,31 +69,17 @@ export async function getDashboardData() {
 
   // Fetch user's team memberships to get team and peers
   const teamMembership = await prisma.teamMembership.findFirst({
-    where: { profileId },
-    include: {
-      team: {
-        include: {
-          memberships: {
-            include: {
-              profile: {
-                include: {
-                  authUser: true,
-                },
-              },
-            },
-            where: {
-              leftAt: null, // Only active members
-            },
-          },
-        },
-      },
-    },
+    where: { profileId, leftAt: null },
+    select: { teamId: true },
   });
 
-  // Filter out current user from peers
-  const onlinePeers = (teamMembership?.team?.memberships ?? []).filter(
-    (member) => member.profileId !== profileId
-  );
+  const onlinePeers = teamMembership
+    ? await getTeamPresence({
+        teamId: teamMembership.teamId,
+        viewerProfileId: profileId,
+        includeViewer: false,
+      })
+    : [];
 
   // Fetch recent activity events (last 7 days for heatmap)
   const sevenDaysAgo = new Date(today);
@@ -116,15 +103,7 @@ export async function getDashboardData() {
       helpPoints,
     },
     notifications,
-    onlinePeers: onlinePeers.map((member) => ({
-      profileId: member.profileId,
-      user: {
-        name: member.profile.authUser.name,
-        email: member.profile.authUser.email,
-        image: member.profile.authUser.image,
-      },
-      role: member.role,
-    })),
+    onlinePeers,
     recentActivity,
   };
 }

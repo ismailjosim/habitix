@@ -301,6 +301,10 @@ export type UserProfileWhereInput = {
     Prisma.UserPreferenceNullableScalarRelationFilter,
     Prisma.UserPreferenceWhereInput
   > | null;
+  presence?: Prisma.XOR<
+    Prisma.PresenceNullableScalarRelationFilter,
+    Prisma.PresenceWhereInput
+  > | null;
   ownedTeams?: Prisma.TeamListRelationFilter;
   memberships?: Prisma.TeamMembershipListRelationFilter;
   mentorAssignments?: Prisma.MentorAssignmentListRelationFilter;
@@ -340,6 +344,7 @@ export type UserProfileOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder;
   authUser?: Prisma.UserOrderByWithRelationInput;
   preferences?: Prisma.UserPreferenceOrderByWithRelationInput;
+  presence?: Prisma.PresenceOrderByWithRelationInput;
   ownedTeams?: Prisma.TeamOrderByRelationAggregateInput;
   memberships?: Prisma.TeamMembershipOrderByRelationAggregateInput;
   mentorAssignments?: Prisma.MentorAssignmentOrderByRelationAggregateInput;
@@ -385,6 +390,10 @@ export type UserProfileWhereUniqueInput = Prisma.AtLeast<
     preferences?: Prisma.XOR<
       Prisma.UserPreferenceNullableScalarRelationFilter,
       Prisma.UserPreferenceWhereInput
+    > | null;
+    presence?: Prisma.XOR<
+      Prisma.PresenceNullableScalarRelationFilter,
+      Prisma.PresenceWhereInput
     > | null;
     ownedTeams?: Prisma.TeamListRelationFilter;
     memberships?: Prisma.TeamMembershipListRelationFilter;
@@ -472,6 +481,7 @@ export type UserProfileCreateInput = {
   updatedAt?: Date | string;
   authUser: Prisma.UserCreateNestedOneWithoutProfileInput;
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutMentorInput;
@@ -510,6 +520,7 @@ export type UserProfileUncheckedCreateInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceUncheckedCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipUncheckedCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutMentorInput;
@@ -548,6 +559,7 @@ export type UserProfileUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   authUser?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput;
   preferences?: Prisma.UserPreferenceUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUpdateManyWithoutMentorNestedInput;
@@ -586,6 +598,7 @@ export type UserProfileUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUncheckedUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUncheckedUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUncheckedUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutMentorNestedInput;
@@ -822,6 +835,32 @@ export type UserProfileUpdateOneRequiredWithoutPreferencesNestedInput = {
       Prisma.UserProfileUpdateWithoutPreferencesInput
     >,
     Prisma.UserProfileUncheckedUpdateWithoutPreferencesInput
+  >;
+};
+
+export type UserProfileCreateNestedOneWithoutPresenceInput = {
+  create?: Prisma.XOR<
+    Prisma.UserProfileCreateWithoutPresenceInput,
+    Prisma.UserProfileUncheckedCreateWithoutPresenceInput
+  >;
+  connectOrCreate?: Prisma.UserProfileCreateOrConnectWithoutPresenceInput;
+  connect?: Prisma.UserProfileWhereUniqueInput;
+};
+
+export type UserProfileUpdateOneRequiredWithoutPresenceNestedInput = {
+  create?: Prisma.XOR<
+    Prisma.UserProfileCreateWithoutPresenceInput,
+    Prisma.UserProfileUncheckedCreateWithoutPresenceInput
+  >;
+  connectOrCreate?: Prisma.UserProfileCreateOrConnectWithoutPresenceInput;
+  upsert?: Prisma.UserProfileUpsertWithoutPresenceInput;
+  connect?: Prisma.UserProfileWhereUniqueInput;
+  update?: Prisma.XOR<
+    Prisma.XOR<
+      Prisma.UserProfileUpdateToOneWithWhereWithoutPresenceInput,
+      Prisma.UserProfileUpdateWithoutPresenceInput
+    >,
+    Prisma.UserProfileUncheckedUpdateWithoutPresenceInput
   >;
 };
 
@@ -1366,6 +1405,7 @@ export type UserProfileCreateWithoutAuthUserInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutMentorInput;
@@ -1403,6 +1443,7 @@ export type UserProfileUncheckedCreateWithoutAuthUserInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceUncheckedCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipUncheckedCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutMentorInput;
@@ -1468,6 +1509,7 @@ export type UserProfileUpdateWithoutAuthUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   preferences?: Prisma.UserPreferenceUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUpdateManyWithoutMentorNestedInput;
@@ -1505,6 +1547,7 @@ export type UserProfileUncheckedUpdateWithoutAuthUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUncheckedUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUncheckedUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUncheckedUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutMentorNestedInput;
@@ -1542,6 +1585,7 @@ export type UserProfileCreateWithoutPreferencesInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   authUser: Prisma.UserCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutMentorInput;
@@ -1579,6 +1623,7 @@ export type UserProfileUncheckedCreateWithoutPreferencesInput = {
   helpPoints?: number;
   createdAt?: Date | string;
   updatedAt?: Date | string;
+  presence?: Prisma.PresenceUncheckedCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipUncheckedCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutMentorInput;
@@ -1644,6 +1689,7 @@ export type UserProfileUpdateWithoutPreferencesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   authUser?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUpdateManyWithoutMentorNestedInput;
@@ -1681,6 +1727,187 @@ export type UserProfileUncheckedUpdateWithoutPreferencesInput = {
   helpPoints?: Prisma.IntFieldUpdateOperationsInput | number;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  presence?: Prisma.PresenceUncheckedUpdateOneWithoutProfileNestedInput;
+  ownedTeams?: Prisma.TeamUncheckedUpdateManyWithoutOwnerNestedInput;
+  memberships?: Prisma.TeamMembershipUncheckedUpdateManyWithoutProfileNestedInput;
+  mentorAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutMentorNestedInput;
+  studentAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutStudentNestedInput;
+  createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
+  assignedTasks?: Prisma.TaskUncheckedUpdateManyWithoutAssignedToNestedInput;
+  taskComments?: Prisma.TaskCommentUncheckedUpdateManyWithoutAuthorNestedInput;
+  taskActivities?: Prisma.TaskActivityUncheckedUpdateManyWithoutActorNestedInput;
+  focusSessions?: Prisma.FocusSessionUncheckedUpdateManyWithoutProfileNestedInput;
+  activityEvents?: Prisma.ActivityEventUncheckedUpdateManyWithoutProfileNestedInput;
+  helpPosts?: Prisma.HelpPostUncheckedUpdateManyWithoutAuthorNestedInput;
+  helpResponses?: Prisma.HelpResponseUncheckedUpdateManyWithoutAuthorNestedInput;
+  helperLimits?: Prisma.HelperLimitUncheckedUpdateManyWithoutProfileNestedInput;
+  awardedBadges?: Prisma.BadgeAwardUncheckedUpdateManyWithoutProfileNestedInput;
+  givenBadges?: Prisma.BadgeAwardUncheckedUpdateManyWithoutAwardedByNestedInput;
+  leaderboardEntries?: Prisma.LeaderboardEntryUncheckedUpdateManyWithoutProfileNestedInput;
+  receivedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput;
+  actedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
+  studyMaterials?: Prisma.StudyMaterialUncheckedUpdateManyWithoutOwnerNestedInput;
+  studentReports?: Prisma.StudentReportUncheckedUpdateManyWithoutProfileNestedInput;
+};
+
+export type UserProfileCreateWithoutPresenceInput = {
+  id?: string;
+  displayName: string;
+  avatarUrl?: string | null;
+  role?: $Enums.AppRole;
+  bio?: string | null;
+  timezone?: string;
+  institution?: string | null;
+  department?: string | null;
+  currentStreak?: number;
+  totalFocusMinutes?: number;
+  helpPoints?: number;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  authUser: Prisma.UserCreateNestedOneWithoutProfileInput;
+  preferences?: Prisma.UserPreferenceCreateNestedOneWithoutProfileInput;
+  ownedTeams?: Prisma.TeamCreateNestedManyWithoutOwnerInput;
+  memberships?: Prisma.TeamMembershipCreateNestedManyWithoutProfileInput;
+  mentorAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutMentorInput;
+  studentAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutStudentInput;
+  createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
+  assignedTasks?: Prisma.TaskCreateNestedManyWithoutAssignedToInput;
+  taskComments?: Prisma.TaskCommentCreateNestedManyWithoutAuthorInput;
+  taskActivities?: Prisma.TaskActivityCreateNestedManyWithoutActorInput;
+  focusSessions?: Prisma.FocusSessionCreateNestedManyWithoutProfileInput;
+  activityEvents?: Prisma.ActivityEventCreateNestedManyWithoutProfileInput;
+  helpPosts?: Prisma.HelpPostCreateNestedManyWithoutAuthorInput;
+  helpResponses?: Prisma.HelpResponseCreateNestedManyWithoutAuthorInput;
+  helperLimits?: Prisma.HelperLimitCreateNestedManyWithoutProfileInput;
+  awardedBadges?: Prisma.BadgeAwardCreateNestedManyWithoutProfileInput;
+  givenBadges?: Prisma.BadgeAwardCreateNestedManyWithoutAwardedByInput;
+  leaderboardEntries?: Prisma.LeaderboardEntryCreateNestedManyWithoutProfileInput;
+  receivedNotifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput;
+  actedNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput;
+  studyMaterials?: Prisma.StudyMaterialCreateNestedManyWithoutOwnerInput;
+  studentReports?: Prisma.StudentReportCreateNestedManyWithoutProfileInput;
+};
+
+export type UserProfileUncheckedCreateWithoutPresenceInput = {
+  id?: string;
+  authUserId: string;
+  displayName: string;
+  avatarUrl?: string | null;
+  role?: $Enums.AppRole;
+  bio?: string | null;
+  timezone?: string;
+  institution?: string | null;
+  department?: string | null;
+  currentStreak?: number;
+  totalFocusMinutes?: number;
+  helpPoints?: number;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutProfileInput;
+  ownedTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutOwnerInput;
+  memberships?: Prisma.TeamMembershipUncheckedCreateNestedManyWithoutProfileInput;
+  mentorAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutMentorInput;
+  studentAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutStudentInput;
+  createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
+  assignedTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssignedToInput;
+  taskComments?: Prisma.TaskCommentUncheckedCreateNestedManyWithoutAuthorInput;
+  taskActivities?: Prisma.TaskActivityUncheckedCreateNestedManyWithoutActorInput;
+  focusSessions?: Prisma.FocusSessionUncheckedCreateNestedManyWithoutProfileInput;
+  activityEvents?: Prisma.ActivityEventUncheckedCreateNestedManyWithoutProfileInput;
+  helpPosts?: Prisma.HelpPostUncheckedCreateNestedManyWithoutAuthorInput;
+  helpResponses?: Prisma.HelpResponseUncheckedCreateNestedManyWithoutAuthorInput;
+  helperLimits?: Prisma.HelperLimitUncheckedCreateNestedManyWithoutProfileInput;
+  awardedBadges?: Prisma.BadgeAwardUncheckedCreateNestedManyWithoutProfileInput;
+  givenBadges?: Prisma.BadgeAwardUncheckedCreateNestedManyWithoutAwardedByInput;
+  leaderboardEntries?: Prisma.LeaderboardEntryUncheckedCreateNestedManyWithoutProfileInput;
+  receivedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput;
+  actedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
+  studyMaterials?: Prisma.StudyMaterialUncheckedCreateNestedManyWithoutOwnerInput;
+  studentReports?: Prisma.StudentReportUncheckedCreateNestedManyWithoutProfileInput;
+};
+
+export type UserProfileCreateOrConnectWithoutPresenceInput = {
+  where: Prisma.UserProfileWhereUniqueInput;
+  create: Prisma.XOR<
+    Prisma.UserProfileCreateWithoutPresenceInput,
+    Prisma.UserProfileUncheckedCreateWithoutPresenceInput
+  >;
+};
+
+export type UserProfileUpsertWithoutPresenceInput = {
+  update: Prisma.XOR<
+    Prisma.UserProfileUpdateWithoutPresenceInput,
+    Prisma.UserProfileUncheckedUpdateWithoutPresenceInput
+  >;
+  create: Prisma.XOR<
+    Prisma.UserProfileCreateWithoutPresenceInput,
+    Prisma.UserProfileUncheckedCreateWithoutPresenceInput
+  >;
+  where?: Prisma.UserProfileWhereInput;
+};
+
+export type UserProfileUpdateToOneWithWhereWithoutPresenceInput = {
+  where?: Prisma.UserProfileWhereInput;
+  data: Prisma.XOR<
+    Prisma.UserProfileUpdateWithoutPresenceInput,
+    Prisma.UserProfileUncheckedUpdateWithoutPresenceInput
+  >;
+};
+
+export type UserProfileUpdateWithoutPresenceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string;
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string;
+  institution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  currentStreak?: Prisma.IntFieldUpdateOperationsInput | number;
+  totalFocusMinutes?: Prisma.IntFieldUpdateOperationsInput | number;
+  helpPoints?: Prisma.IntFieldUpdateOperationsInput | number;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  authUser?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput;
+  preferences?: Prisma.UserPreferenceUpdateOneWithoutProfileNestedInput;
+  ownedTeams?: Prisma.TeamUpdateManyWithoutOwnerNestedInput;
+  memberships?: Prisma.TeamMembershipUpdateManyWithoutProfileNestedInput;
+  mentorAssignments?: Prisma.MentorAssignmentUpdateManyWithoutMentorNestedInput;
+  studentAssignments?: Prisma.MentorAssignmentUpdateManyWithoutStudentNestedInput;
+  createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
+  assignedTasks?: Prisma.TaskUpdateManyWithoutAssignedToNestedInput;
+  taskComments?: Prisma.TaskCommentUpdateManyWithoutAuthorNestedInput;
+  taskActivities?: Prisma.TaskActivityUpdateManyWithoutActorNestedInput;
+  focusSessions?: Prisma.FocusSessionUpdateManyWithoutProfileNestedInput;
+  activityEvents?: Prisma.ActivityEventUpdateManyWithoutProfileNestedInput;
+  helpPosts?: Prisma.HelpPostUpdateManyWithoutAuthorNestedInput;
+  helpResponses?: Prisma.HelpResponseUpdateManyWithoutAuthorNestedInput;
+  helperLimits?: Prisma.HelperLimitUpdateManyWithoutProfileNestedInput;
+  awardedBadges?: Prisma.BadgeAwardUpdateManyWithoutProfileNestedInput;
+  givenBadges?: Prisma.BadgeAwardUpdateManyWithoutAwardedByNestedInput;
+  leaderboardEntries?: Prisma.LeaderboardEntryUpdateManyWithoutProfileNestedInput;
+  receivedNotifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput;
+  actedNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
+  studyMaterials?: Prisma.StudyMaterialUpdateManyWithoutOwnerNestedInput;
+  studentReports?: Prisma.StudentReportUpdateManyWithoutProfileNestedInput;
+};
+
+export type UserProfileUncheckedUpdateWithoutPresenceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  authUserId?: Prisma.StringFieldUpdateOperationsInput | string;
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string;
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string;
+  institution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  currentStreak?: Prisma.IntFieldUpdateOperationsInput | number;
+  totalFocusMinutes?: Prisma.IntFieldUpdateOperationsInput | number;
+  helpPoints?: Prisma.IntFieldUpdateOperationsInput | number;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUncheckedUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUncheckedUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutMentorNestedInput;
@@ -1719,6 +1946,7 @@ export type UserProfileCreateWithoutOwnedTeamsInput = {
   updatedAt?: Date | string;
   authUser: Prisma.UserCreateNestedOneWithoutProfileInput;
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceCreateNestedOneWithoutProfileInput;
   memberships?: Prisma.TeamMembershipCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutMentorInput;
   studentAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutStudentInput;
@@ -1756,6 +1984,7 @@ export type UserProfileUncheckedCreateWithoutOwnedTeamsInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceUncheckedCreateNestedOneWithoutProfileInput;
   memberships?: Prisma.TeamMembershipUncheckedCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutMentorInput;
   studentAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutStudentInput;
@@ -1821,6 +2050,7 @@ export type UserProfileUpdateWithoutOwnedTeamsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   authUser?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput;
   preferences?: Prisma.UserPreferenceUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUpdateOneWithoutProfileNestedInput;
   memberships?: Prisma.TeamMembershipUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUpdateManyWithoutMentorNestedInput;
   studentAssignments?: Prisma.MentorAssignmentUpdateManyWithoutStudentNestedInput;
@@ -1858,6 +2088,7 @@ export type UserProfileUncheckedUpdateWithoutOwnedTeamsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUncheckedUpdateOneWithoutProfileNestedInput;
   memberships?: Prisma.TeamMembershipUncheckedUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutMentorNestedInput;
   studentAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutStudentNestedInput;
@@ -1895,6 +2126,7 @@ export type UserProfileCreateWithoutMembershipsInput = {
   updatedAt?: Date | string;
   authUser: Prisma.UserCreateNestedOneWithoutProfileInput;
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamCreateNestedManyWithoutOwnerInput;
   mentorAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutMentorInput;
   studentAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutStudentInput;
@@ -1932,6 +2164,7 @@ export type UserProfileUncheckedCreateWithoutMembershipsInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceUncheckedCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutOwnerInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutMentorInput;
   studentAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutStudentInput;
@@ -1997,6 +2230,7 @@ export type UserProfileUpdateWithoutMembershipsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   authUser?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput;
   preferences?: Prisma.UserPreferenceUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUpdateManyWithoutOwnerNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUpdateManyWithoutMentorNestedInput;
   studentAssignments?: Prisma.MentorAssignmentUpdateManyWithoutStudentNestedInput;
@@ -2034,6 +2268,7 @@ export type UserProfileUncheckedUpdateWithoutMembershipsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUncheckedUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUncheckedUpdateManyWithoutOwnerNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutMentorNestedInput;
   studentAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutStudentNestedInput;
@@ -2071,6 +2306,7 @@ export type UserProfileCreateWithoutMentorAssignmentsInput = {
   updatedAt?: Date | string;
   authUser: Prisma.UserCreateNestedOneWithoutProfileInput;
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipCreateNestedManyWithoutProfileInput;
   studentAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutStudentInput;
@@ -2108,6 +2344,7 @@ export type UserProfileUncheckedCreateWithoutMentorAssignmentsInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceUncheckedCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipUncheckedCreateNestedManyWithoutProfileInput;
   studentAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutStudentInput;
@@ -2153,6 +2390,7 @@ export type UserProfileCreateWithoutStudentAssignmentsInput = {
   updatedAt?: Date | string;
   authUser: Prisma.UserCreateNestedOneWithoutProfileInput;
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutMentorInput;
@@ -2190,6 +2428,7 @@ export type UserProfileUncheckedCreateWithoutStudentAssignmentsInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceUncheckedCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipUncheckedCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutMentorInput;
@@ -2255,6 +2494,7 @@ export type UserProfileUpdateWithoutMentorAssignmentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   authUser?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput;
   preferences?: Prisma.UserPreferenceUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUpdateManyWithoutProfileNestedInput;
   studentAssignments?: Prisma.MentorAssignmentUpdateManyWithoutStudentNestedInput;
@@ -2292,6 +2532,7 @@ export type UserProfileUncheckedUpdateWithoutMentorAssignmentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUncheckedUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUncheckedUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUncheckedUpdateManyWithoutProfileNestedInput;
   studentAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutStudentNestedInput;
@@ -2349,6 +2590,7 @@ export type UserProfileUpdateWithoutStudentAssignmentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   authUser?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput;
   preferences?: Prisma.UserPreferenceUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUpdateManyWithoutMentorNestedInput;
@@ -2386,6 +2628,7 @@ export type UserProfileUncheckedUpdateWithoutStudentAssignmentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUncheckedUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUncheckedUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUncheckedUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutMentorNestedInput;
@@ -2423,6 +2666,7 @@ export type UserProfileCreateWithoutCreatedTasksInput = {
   updatedAt?: Date | string;
   authUser: Prisma.UserCreateNestedOneWithoutProfileInput;
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutMentorInput;
@@ -2460,6 +2704,7 @@ export type UserProfileUncheckedCreateWithoutCreatedTasksInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceUncheckedCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipUncheckedCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutMentorInput;
@@ -2505,6 +2750,7 @@ export type UserProfileCreateWithoutAssignedTasksInput = {
   updatedAt?: Date | string;
   authUser: Prisma.UserCreateNestedOneWithoutProfileInput;
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutMentorInput;
@@ -2542,6 +2788,7 @@ export type UserProfileUncheckedCreateWithoutAssignedTasksInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceUncheckedCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipUncheckedCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutMentorInput;
@@ -2607,6 +2854,7 @@ export type UserProfileUpdateWithoutCreatedTasksInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   authUser?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput;
   preferences?: Prisma.UserPreferenceUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUpdateManyWithoutMentorNestedInput;
@@ -2644,6 +2892,7 @@ export type UserProfileUncheckedUpdateWithoutCreatedTasksInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUncheckedUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUncheckedUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUncheckedUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutMentorNestedInput;
@@ -2701,6 +2950,7 @@ export type UserProfileUpdateWithoutAssignedTasksInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   authUser?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput;
   preferences?: Prisma.UserPreferenceUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUpdateManyWithoutMentorNestedInput;
@@ -2738,6 +2988,7 @@ export type UserProfileUncheckedUpdateWithoutAssignedTasksInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUncheckedUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUncheckedUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUncheckedUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutMentorNestedInput;
@@ -2775,6 +3026,7 @@ export type UserProfileCreateWithoutTaskCommentsInput = {
   updatedAt?: Date | string;
   authUser: Prisma.UserCreateNestedOneWithoutProfileInput;
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutMentorInput;
@@ -2812,6 +3064,7 @@ export type UserProfileUncheckedCreateWithoutTaskCommentsInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceUncheckedCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipUncheckedCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutMentorInput;
@@ -2877,6 +3130,7 @@ export type UserProfileUpdateWithoutTaskCommentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   authUser?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput;
   preferences?: Prisma.UserPreferenceUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUpdateManyWithoutMentorNestedInput;
@@ -2914,6 +3168,7 @@ export type UserProfileUncheckedUpdateWithoutTaskCommentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUncheckedUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUncheckedUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUncheckedUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutMentorNestedInput;
@@ -2951,6 +3206,7 @@ export type UserProfileCreateWithoutTaskActivitiesInput = {
   updatedAt?: Date | string;
   authUser: Prisma.UserCreateNestedOneWithoutProfileInput;
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutMentorInput;
@@ -2988,6 +3244,7 @@ export type UserProfileUncheckedCreateWithoutTaskActivitiesInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceUncheckedCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipUncheckedCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutMentorInput;
@@ -3053,6 +3310,7 @@ export type UserProfileUpdateWithoutTaskActivitiesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   authUser?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput;
   preferences?: Prisma.UserPreferenceUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUpdateManyWithoutMentorNestedInput;
@@ -3090,6 +3348,7 @@ export type UserProfileUncheckedUpdateWithoutTaskActivitiesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUncheckedUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUncheckedUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUncheckedUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutMentorNestedInput;
@@ -3127,6 +3386,7 @@ export type UserProfileCreateWithoutFocusSessionsInput = {
   updatedAt?: Date | string;
   authUser: Prisma.UserCreateNestedOneWithoutProfileInput;
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutMentorInput;
@@ -3164,6 +3424,7 @@ export type UserProfileUncheckedCreateWithoutFocusSessionsInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceUncheckedCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipUncheckedCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutMentorInput;
@@ -3229,6 +3490,7 @@ export type UserProfileUpdateWithoutFocusSessionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   authUser?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput;
   preferences?: Prisma.UserPreferenceUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUpdateManyWithoutMentorNestedInput;
@@ -3266,6 +3528,7 @@ export type UserProfileUncheckedUpdateWithoutFocusSessionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUncheckedUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUncheckedUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUncheckedUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutMentorNestedInput;
@@ -3303,6 +3566,7 @@ export type UserProfileCreateWithoutActivityEventsInput = {
   updatedAt?: Date | string;
   authUser: Prisma.UserCreateNestedOneWithoutProfileInput;
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutMentorInput;
@@ -3340,6 +3604,7 @@ export type UserProfileUncheckedCreateWithoutActivityEventsInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceUncheckedCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipUncheckedCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutMentorInput;
@@ -3405,6 +3670,7 @@ export type UserProfileUpdateWithoutActivityEventsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   authUser?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput;
   preferences?: Prisma.UserPreferenceUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUpdateManyWithoutMentorNestedInput;
@@ -3442,6 +3708,7 @@ export type UserProfileUncheckedUpdateWithoutActivityEventsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUncheckedUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUncheckedUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUncheckedUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutMentorNestedInput;
@@ -3479,6 +3746,7 @@ export type UserProfileCreateWithoutHelpPostsInput = {
   updatedAt?: Date | string;
   authUser: Prisma.UserCreateNestedOneWithoutProfileInput;
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutMentorInput;
@@ -3516,6 +3784,7 @@ export type UserProfileUncheckedCreateWithoutHelpPostsInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceUncheckedCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipUncheckedCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutMentorInput;
@@ -3581,6 +3850,7 @@ export type UserProfileUpdateWithoutHelpPostsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   authUser?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput;
   preferences?: Prisma.UserPreferenceUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUpdateManyWithoutMentorNestedInput;
@@ -3618,6 +3888,7 @@ export type UserProfileUncheckedUpdateWithoutHelpPostsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUncheckedUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUncheckedUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUncheckedUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutMentorNestedInput;
@@ -3655,6 +3926,7 @@ export type UserProfileCreateWithoutHelpResponsesInput = {
   updatedAt?: Date | string;
   authUser: Prisma.UserCreateNestedOneWithoutProfileInput;
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutMentorInput;
@@ -3692,6 +3964,7 @@ export type UserProfileUncheckedCreateWithoutHelpResponsesInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceUncheckedCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipUncheckedCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutMentorInput;
@@ -3757,6 +4030,7 @@ export type UserProfileUpdateWithoutHelpResponsesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   authUser?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput;
   preferences?: Prisma.UserPreferenceUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUpdateManyWithoutMentorNestedInput;
@@ -3794,6 +4068,7 @@ export type UserProfileUncheckedUpdateWithoutHelpResponsesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUncheckedUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUncheckedUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUncheckedUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutMentorNestedInput;
@@ -3831,6 +4106,7 @@ export type UserProfileCreateWithoutHelperLimitsInput = {
   updatedAt?: Date | string;
   authUser: Prisma.UserCreateNestedOneWithoutProfileInput;
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutMentorInput;
@@ -3868,6 +4144,7 @@ export type UserProfileUncheckedCreateWithoutHelperLimitsInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceUncheckedCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipUncheckedCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutMentorInput;
@@ -3933,6 +4210,7 @@ export type UserProfileUpdateWithoutHelperLimitsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   authUser?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput;
   preferences?: Prisma.UserPreferenceUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUpdateManyWithoutMentorNestedInput;
@@ -3970,6 +4248,7 @@ export type UserProfileUncheckedUpdateWithoutHelperLimitsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUncheckedUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUncheckedUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUncheckedUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutMentorNestedInput;
@@ -4007,6 +4286,7 @@ export type UserProfileCreateWithoutAwardedBadgesInput = {
   updatedAt?: Date | string;
   authUser: Prisma.UserCreateNestedOneWithoutProfileInput;
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutMentorInput;
@@ -4044,6 +4324,7 @@ export type UserProfileUncheckedCreateWithoutAwardedBadgesInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceUncheckedCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipUncheckedCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutMentorInput;
@@ -4089,6 +4370,7 @@ export type UserProfileCreateWithoutGivenBadgesInput = {
   updatedAt?: Date | string;
   authUser: Prisma.UserCreateNestedOneWithoutProfileInput;
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutMentorInput;
@@ -4126,6 +4408,7 @@ export type UserProfileUncheckedCreateWithoutGivenBadgesInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceUncheckedCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipUncheckedCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutMentorInput;
@@ -4191,6 +4474,7 @@ export type UserProfileUpdateWithoutAwardedBadgesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   authUser?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput;
   preferences?: Prisma.UserPreferenceUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUpdateManyWithoutMentorNestedInput;
@@ -4228,6 +4512,7 @@ export type UserProfileUncheckedUpdateWithoutAwardedBadgesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUncheckedUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUncheckedUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUncheckedUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutMentorNestedInput;
@@ -4285,6 +4570,7 @@ export type UserProfileUpdateWithoutGivenBadgesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   authUser?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput;
   preferences?: Prisma.UserPreferenceUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUpdateManyWithoutMentorNestedInput;
@@ -4322,6 +4608,7 @@ export type UserProfileUncheckedUpdateWithoutGivenBadgesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUncheckedUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUncheckedUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUncheckedUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutMentorNestedInput;
@@ -4359,6 +4646,7 @@ export type UserProfileCreateWithoutLeaderboardEntriesInput = {
   updatedAt?: Date | string;
   authUser: Prisma.UserCreateNestedOneWithoutProfileInput;
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutMentorInput;
@@ -4396,6 +4684,7 @@ export type UserProfileUncheckedCreateWithoutLeaderboardEntriesInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceUncheckedCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipUncheckedCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutMentorInput;
@@ -4461,6 +4750,7 @@ export type UserProfileUpdateWithoutLeaderboardEntriesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   authUser?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput;
   preferences?: Prisma.UserPreferenceUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUpdateManyWithoutMentorNestedInput;
@@ -4498,6 +4788,7 @@ export type UserProfileUncheckedUpdateWithoutLeaderboardEntriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUncheckedUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUncheckedUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUncheckedUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutMentorNestedInput;
@@ -4535,6 +4826,7 @@ export type UserProfileCreateWithoutReceivedNotificationsInput = {
   updatedAt?: Date | string;
   authUser: Prisma.UserCreateNestedOneWithoutProfileInput;
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutMentorInput;
@@ -4572,6 +4864,7 @@ export type UserProfileUncheckedCreateWithoutReceivedNotificationsInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceUncheckedCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipUncheckedCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutMentorInput;
@@ -4617,6 +4910,7 @@ export type UserProfileCreateWithoutActedNotificationsInput = {
   updatedAt?: Date | string;
   authUser: Prisma.UserCreateNestedOneWithoutProfileInput;
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutMentorInput;
@@ -4654,6 +4948,7 @@ export type UserProfileUncheckedCreateWithoutActedNotificationsInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceUncheckedCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipUncheckedCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutMentorInput;
@@ -4719,6 +5014,7 @@ export type UserProfileUpdateWithoutReceivedNotificationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   authUser?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput;
   preferences?: Prisma.UserPreferenceUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUpdateManyWithoutMentorNestedInput;
@@ -4756,6 +5052,7 @@ export type UserProfileUncheckedUpdateWithoutReceivedNotificationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUncheckedUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUncheckedUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUncheckedUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutMentorNestedInput;
@@ -4813,6 +5110,7 @@ export type UserProfileUpdateWithoutActedNotificationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   authUser?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput;
   preferences?: Prisma.UserPreferenceUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUpdateManyWithoutMentorNestedInput;
@@ -4850,6 +5148,7 @@ export type UserProfileUncheckedUpdateWithoutActedNotificationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUncheckedUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUncheckedUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUncheckedUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutMentorNestedInput;
@@ -4887,6 +5186,7 @@ export type UserProfileCreateWithoutStudyMaterialsInput = {
   updatedAt?: Date | string;
   authUser: Prisma.UserCreateNestedOneWithoutProfileInput;
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutMentorInput;
@@ -4924,6 +5224,7 @@ export type UserProfileUncheckedCreateWithoutStudyMaterialsInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceUncheckedCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipUncheckedCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutMentorInput;
@@ -4989,6 +5290,7 @@ export type UserProfileUpdateWithoutStudyMaterialsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   authUser?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput;
   preferences?: Prisma.UserPreferenceUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUpdateManyWithoutMentorNestedInput;
@@ -5026,6 +5328,7 @@ export type UserProfileUncheckedUpdateWithoutStudyMaterialsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUncheckedUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUncheckedUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUncheckedUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutMentorNestedInput;
@@ -5063,6 +5366,7 @@ export type UserProfileCreateWithoutStudentReportsInput = {
   updatedAt?: Date | string;
   authUser: Prisma.UserCreateNestedOneWithoutProfileInput;
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutMentorInput;
@@ -5100,6 +5404,7 @@ export type UserProfileUncheckedCreateWithoutStudentReportsInput = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceUncheckedCreateNestedOneWithoutProfileInput;
   ownedTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutOwnerInput;
   memberships?: Prisma.TeamMembershipUncheckedCreateNestedManyWithoutProfileInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutMentorInput;
@@ -5165,6 +5470,7 @@ export type UserProfileUpdateWithoutStudentReportsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   authUser?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput;
   preferences?: Prisma.UserPreferenceUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUpdateManyWithoutMentorNestedInput;
@@ -5202,6 +5508,7 @@ export type UserProfileUncheckedUpdateWithoutStudentReportsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUncheckedUpdateOneWithoutProfileNestedInput;
   ownedTeams?: Prisma.TeamUncheckedUpdateManyWithoutOwnerNestedInput;
   memberships?: Prisma.TeamMembershipUncheckedUpdateManyWithoutProfileNestedInput;
   mentorAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutMentorNestedInput;
@@ -5487,6 +5794,7 @@ export type UserProfileSelect<
     updatedAt?: boolean;
     authUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
     preferences?: boolean | Prisma.UserProfile$preferencesArgs<ExtArgs>;
+    presence?: boolean | Prisma.UserProfile$presenceArgs<ExtArgs>;
     ownedTeams?: boolean | Prisma.UserProfile$ownedTeamsArgs<ExtArgs>;
     memberships?: boolean | Prisma.UserProfile$membershipsArgs<ExtArgs>;
     mentorAssignments?: boolean | Prisma.UserProfile$mentorAssignmentsArgs<ExtArgs>;
@@ -5599,6 +5907,7 @@ export type UserProfileInclude<
 > = {
   authUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
   preferences?: boolean | Prisma.UserProfile$preferencesArgs<ExtArgs>;
+  presence?: boolean | Prisma.UserProfile$presenceArgs<ExtArgs>;
   ownedTeams?: boolean | Prisma.UserProfile$ownedTeamsArgs<ExtArgs>;
   memberships?: boolean | Prisma.UserProfile$membershipsArgs<ExtArgs>;
   mentorAssignments?: boolean | Prisma.UserProfile$mentorAssignmentsArgs<ExtArgs>;
@@ -5639,6 +5948,7 @@ export type $UserProfilePayload<
   objects: {
     authUser: Prisma.$UserPayload<ExtArgs>;
     preferences: Prisma.$UserPreferencePayload<ExtArgs> | null;
+    presence: Prisma.$PresencePayload<ExtArgs> | null;
     ownedTeams: Prisma.$TeamPayload<ExtArgs>[];
     memberships: Prisma.$TeamMembershipPayload<ExtArgs>[];
     mentorAssignments: Prisma.$MentorAssignmentPayload<ExtArgs>[];
@@ -6233,6 +6543,19 @@ export interface Prisma__UserProfileClient<
   ): Prisma.Prisma__UserPreferenceClient<
     runtime.Types.Result.GetResult<
       Prisma.$UserPreferencePayload<ExtArgs>,
+      T,
+      'findUniqueOrThrow',
+      GlobalOmitOptions
+    > | null,
+    null,
+    ExtArgs,
+    GlobalOmitOptions
+  >;
+  presence<T extends Prisma.UserProfile$presenceArgs<ExtArgs> = {}>(
+    args?: Prisma.Subset<T, Prisma.UserProfile$presenceArgs<ExtArgs>>
+  ): Prisma.Prisma__PresenceClient<
+    runtime.Types.Result.GetResult<
+      Prisma.$PresencePayload<ExtArgs>,
       T,
       'findUniqueOrThrow',
       GlobalOmitOptions
@@ -6949,6 +7272,27 @@ export type UserProfile$preferencesArgs<
    */
   include?: Prisma.UserPreferenceInclude<ExtArgs> | null;
   where?: Prisma.UserPreferenceWhereInput;
+};
+
+/**
+ * UserProfile.presence
+ */
+export type UserProfile$presenceArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+  /**
+   * Select specific fields to fetch from the Presence
+   */
+  select?: Prisma.PresenceSelect<ExtArgs> | null;
+  /**
+   * Omit specific fields from the Presence
+   */
+  omit?: Prisma.PresenceOmit<ExtArgs> | null;
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PresenceInclude<ExtArgs> | null;
+  where?: Prisma.PresenceWhereInput;
 };
 
 /**

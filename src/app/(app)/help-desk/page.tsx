@@ -1,25 +1,12 @@
-import { IconHelpCircle } from '@tabler/icons-react';
+import { HelpDeskBoard } from '@/components/help-desk/help-desk-board';
+import { LAYOUT_CONSTRAINTS } from '@/lib/layout-constraints';
+import { getHelpDeskData } from '@/lib/queries/help-desk';
 
-import { ModulePage } from '@/components/app/module-page';
-
-export default function HelpDeskPage() {
+export default async function HelpDeskPage() {
+  const data = await getHelpDeskData();
   return (
-    <ModulePage
-      title="Help Desk"
-      eyebrow="Peer support"
-      description="Ask for help, answer peer questions, award contributors, and track resolution outcomes."
-      icon={IconHelpCircle}
-      metrics={[
-        { label: 'Open posts', value: '14' },
-        { label: 'Resolved today', value: '7' },
-        { label: 'Helper points', value: '320' },
-      ]}
-      nextSteps={[
-        'Model help posts, responses, awarded contributors, status, and moderation hooks.',
-        'Add helper limits and point-award rules to prevent abuse.',
-        'Support tags for courses, teams, urgency, and topic categories.',
-        'Prepare moderator and mentor review states.',
-      ]}
-    />
+    <div className={`${LAYOUT_CONSTRAINTS.pageMaxWidth} ${LAYOUT_CONSTRAINTS.pagePadding} mx-auto`}>
+      <HelpDeskBoard data={data} />
+    </div>
   );
 }

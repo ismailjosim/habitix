@@ -75,6 +75,11 @@ export type UserProfile = Prisma.UserProfileModel;
  */
 export type UserPreference = Prisma.UserPreferenceModel;
 /**
+ * Model Presence
+ *
+ */
+export type Presence = Prisma.PresenceModel;
+/**
  * Model Team
  *
  */

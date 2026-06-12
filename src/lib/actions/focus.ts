@@ -5,6 +5,7 @@ import { z } from 'zod';
 
 import { prisma } from '@/lib/prisma';
 import { getCurrentUserProfile } from '@/lib/session';
+import { touchPresence } from '@/lib/presence';
 
 const durationOptions = [25, 45, 50] as const;
 const activityLabels = [
@@ -153,6 +154,7 @@ function revalidateFocus(taskId?: string | null) {
   revalidatePath('/focus-mode');
   revalidatePath('/dashboard');
   revalidatePath('/activity');
+  revalidatePath('/team');
   if (taskId) {
     revalidatePath(`/tasks/${taskId}`);
   }
@@ -249,6 +251,7 @@ export async function startFocusSession(
       });
     }
 
+    await touchPresence(profile.id);
     revalidateFocus(task?.id);
     return { success: true, message: 'Focus session started', data: session };
   } catch (error) {
@@ -283,6 +286,7 @@ export async function pauseFocusSession(
       include: { task: { select: { id: true, title: true } } },
     });
 
+    await touchPresence(profile.id);
     revalidateFocus(session.taskId);
     return { success: true, message: 'Focus session paused', data: paused };
   } catch (error) {
@@ -316,6 +320,7 @@ export async function resumeFocusSession(
       include: { task: { select: { id: true, title: true } } },
     });
 
+    await touchPresence(profile.id);
     revalidateFocus(session.taskId);
     return { success: true, message: 'Focus session resumed', data: resumed };
   } catch (error) {
@@ -362,6 +367,7 @@ export async function stopFocusSession(
       });
     }
 
+    await touchPresence(profile.id);
     revalidateFocus(session.taskId);
     return { success: true, message: 'Focus session stopped', data: stopped };
   } catch (error) {
@@ -453,6 +459,7 @@ export async function completeFocusSession(
       return updated;
     });
 
+    await touchPresence(profile.id);
     revalidateFocus(session.taskId);
     return { success: true, message: 'Focus session completed', data: completed };
   } catch (error) {

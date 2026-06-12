@@ -3,7 +3,7 @@ import { getCurrentSession } from '@/lib/session';
 import { WelcomeBanner } from '@/components/dashboard/welcome-banner';
 import { StatCard } from '@/components/dashboard/stat-card';
 import { NotificationPanel } from '@/components/dashboard/notification-panel';
-import { OnlinePeersPanel } from '@/components/dashboard/online-peers-panel';
+import { TeamPresencePanel } from '@/components/presence/team-presence-panel';
 import { ActivityHeatmap } from '@/components/dashboard/activity-heatmap';
 import { IconClock, IconFlame, IconCheck, IconTrophy } from '@tabler/icons-react';
 
@@ -51,7 +51,7 @@ export default async function DashboardPage() {
 
       {/* Peers and Notifications */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <OnlinePeersPanel peers={data.onlinePeers} />
+        <TeamPresencePanel members={data.onlinePeers} />
         <NotificationPanel notifications={data.notifications} />
       </div>
     </div>

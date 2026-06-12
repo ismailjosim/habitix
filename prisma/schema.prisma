@@ -191,6 +191,7 @@ model UserProfile {
   updatedAt             DateTime           @updatedAt
   authUser              User               @relation(fields: [authUserId], references: [id], onDelete: Cascade)
   preferences           UserPreference?
+  presence              Presence?
   ownedTeams            Team[]             @relation("TeamOwner")
   memberships           TeamMembership[]
   mentorAssignments     MentorAssignment[] @relation("MentorAssignments")
@@ -226,6 +227,17 @@ model UserPreference {
   createdAt            DateTime    @default(now())
   updatedAt            DateTime    @updatedAt
   profile              UserProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+}
+
+model Presence {
+  id         String      @id @default(cuid())
+  profileId  String      @unique
+  lastSeenAt DateTime    @default(now())
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  profile    UserProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([lastSeenAt])
 }
 
 model Team {

@@ -32,6 +32,7 @@ export interface TeamData {
   };
   memberCount: number;
   currentUserRole: string;
+  currentUserProfileId: string;
 }
 
 export async function getTeamData(): Promise<TeamData | null> {
@@ -116,5 +117,6 @@ export async function getTeamData(): Promise<TeamData | null> {
     roles,
     memberCount: members.length,
     currentUserRole: membership.role,
+    currentUserProfileId: profile.id,
   };
 }

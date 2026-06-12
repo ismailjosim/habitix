@@ -4,6 +4,8 @@ import { getTeamTasks } from '@/lib/queries/team-tasks';
 import { TeamHeader, TeamRoleCards, TeamMembers, TeamTasks } from '@/components/team';
 import { LAYOUT_CONSTRAINTS } from '@/lib/layout-constraints';
 import { LoadingState, PageHeader, EmptyState } from '@/components/shared';
+import { TeamPresencePanel } from '@/components/presence/team-presence-panel';
+import { getTeamPresence } from '@/lib/queries/presence';
 
 async function TeamContent() {
   const teamData = await getTeamData();
@@ -24,7 +26,13 @@ async function TeamContent() {
     );
   }
 
-  const tasks = await getTeamTasks(teamData.id);
+  const [tasks, presence] = await Promise.all([
+    getTeamTasks(teamData.id),
+    getTeamPresence({
+      teamId: teamData.id,
+      viewerProfileId: teamData.currentUserProfileId,
+    }),
+  ]);
 
   return (
     <>
@@ -43,7 +51,10 @@ async function TeamContent() {
               <TeamTasks tasks={tasks} />
             </div>
             <div>
-              <TeamMembers members={teamData.members} />
+              <div className="space-y-6">
+                <TeamPresencePanel members={presence} />
+                <TeamMembers members={teamData.members} />
+              </div>
             </div>
           </div>
         </div>

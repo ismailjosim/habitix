@@ -22,6 +22,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { SignOutMenuItem } from '@/components/app/sign-out-menu-item';
 import { ThemeToggle } from '@/components/app/theme-toggle';
+import { PresenceHeartbeat } from '@/components/app/presence-heartbeat';
 import { navigationItems } from '@/lib/navigation';
 import { cn } from '@/lib/utils';
 
@@ -55,6 +56,7 @@ function initialsForName(name: string) {
 export function AppShell({ children, user }: AppShellProps) {
   return (
     <div className="min-h-screen bg-canvas text-foreground">
+      <PresenceHeartbeat />
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-72 border-r border-white/10 bg-sidebar text-sidebar-foreground lg:block">
         <SidebarContent />
       </aside>

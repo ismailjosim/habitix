@@ -13,6 +13,7 @@ export type * from './models/Account';
 export type * from './models/Verification';
 export type * from './models/UserProfile';
 export type * from './models/UserPreference';
+export type * from './models/Presence';
 export type * from './models/Team';
 export type * from './models/TeamMembership';
 export type * from './models/MentorAssignment';

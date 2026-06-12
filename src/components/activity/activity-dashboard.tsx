@@ -127,7 +127,10 @@ export function ActivityDashboard({ data }: { data: ActivityData }) {
                     </div>
                     <p className="mt-1 truncate text-sm text-muted-foreground">
                       {session.task ? (
-                        <Link className="hover:text-foreground hover:underline" href={`/tasks/${session.task.id}`}>
+                        <Link
+                          className="hover:text-foreground hover:underline"
+                          href={`/tasks/${session.task.id}`}
+                        >
                           {session.task.title}
                         </Link>
                       ) : (
@@ -211,7 +214,11 @@ function MetricCard({
 }
 
 function EmptyMessage({ message }: { message: string }) {
-  return <div className="rounded-lg border border-dashed p-6 text-sm text-muted-foreground">{message}</div>;
+  return (
+    <div className="rounded-lg border border-dashed p-6 text-sm text-muted-foreground">
+      {message}
+    </div>
+  );
 }
 
 function getIntensity(minutes: number) {

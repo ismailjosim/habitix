@@ -54,6 +54,7 @@ export const ModelName = {
   Verification: 'Verification',
   UserProfile: 'UserProfile',
   UserPreference: 'UserPreference',
+  Presence: 'Presence',
   Team: 'Team',
   TeamMembership: 'TeamMembership',
   MentorAssignment: 'MentorAssignment',
@@ -184,6 +185,17 @@ export const UserPreferenceScalarFieldEnum = {
 
 export type UserPreferenceScalarFieldEnum =
   (typeof UserPreferenceScalarFieldEnum)[keyof typeof UserPreferenceScalarFieldEnum];
+
+export const PresenceScalarFieldEnum = {
+  id: 'id',
+  profileId: 'profileId',
+  lastSeenAt: 'lastSeenAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const;
+
+export type PresenceScalarFieldEnum =
+  (typeof PresenceScalarFieldEnum)[keyof typeof PresenceScalarFieldEnum];
 
 export const TeamScalarFieldEnum = {
   id: 'id',

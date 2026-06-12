@@ -381,6 +381,7 @@ export const ModelName = {
   Verification: 'Verification',
   UserProfile: 'UserProfile',
   UserPreference: 'UserPreference',
+  Presence: 'Presence',
   Team: 'Team',
   TeamMembership: 'TeamMembership',
   MentorAssignment: 'MentorAssignment',
@@ -429,6 +430,7 @@ export type TypeMap<
       | 'verification'
       | 'userProfile'
       | 'userPreference'
+      | 'presence'
       | 'team'
       | 'teamMembership'
       | 'mentorAssignment'
@@ -899,6 +901,80 @@ export type TypeMap<
           result:
             | runtime.Types.Utils.Optional<Prisma.UserPreferenceCountAggregateOutputType>
             | number;
+        };
+      };
+    };
+    Presence: {
+      payload: Prisma.$PresencePayload<ExtArgs>;
+      fields: Prisma.PresenceFieldRefs;
+      operations: {
+        findUnique: {
+          args: Prisma.PresenceFindUniqueArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PresencePayload> | null;
+        };
+        findUniqueOrThrow: {
+          args: Prisma.PresenceFindUniqueOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PresencePayload>;
+        };
+        findFirst: {
+          args: Prisma.PresenceFindFirstArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PresencePayload> | null;
+        };
+        findFirstOrThrow: {
+          args: Prisma.PresenceFindFirstOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PresencePayload>;
+        };
+        findMany: {
+          args: Prisma.PresenceFindManyArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PresencePayload>[];
+        };
+        create: {
+          args: Prisma.PresenceCreateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PresencePayload>;
+        };
+        createMany: {
+          args: Prisma.PresenceCreateManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        createManyAndReturn: {
+          args: Prisma.PresenceCreateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PresencePayload>[];
+        };
+        delete: {
+          args: Prisma.PresenceDeleteArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PresencePayload>;
+        };
+        update: {
+          args: Prisma.PresenceUpdateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PresencePayload>;
+        };
+        deleteMany: {
+          args: Prisma.PresenceDeleteManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        updateMany: {
+          args: Prisma.PresenceUpdateManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        updateManyAndReturn: {
+          args: Prisma.PresenceUpdateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PresencePayload>[];
+        };
+        upsert: {
+          args: Prisma.PresenceUpsertArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PresencePayload>;
+        };
+        aggregate: {
+          args: Prisma.PresenceAggregateArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePresence>;
+        };
+        groupBy: {
+          args: Prisma.PresenceGroupByArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.PresenceGroupByOutputType>[];
+        };
+        count: {
+          args: Prisma.PresenceCountArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.PresenceCountAggregateOutputType> | number;
         };
       };
     };
@@ -2686,6 +2762,17 @@ export const UserPreferenceScalarFieldEnum = {
 export type UserPreferenceScalarFieldEnum =
   (typeof UserPreferenceScalarFieldEnum)[keyof typeof UserPreferenceScalarFieldEnum];
 
+export const PresenceScalarFieldEnum = {
+  id: 'id',
+  profileId: 'profileId',
+  lastSeenAt: 'lastSeenAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const;
+
+export type PresenceScalarFieldEnum =
+  (typeof PresenceScalarFieldEnum)[keyof typeof PresenceScalarFieldEnum];
+
 export const TeamScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -3420,6 +3507,7 @@ export type GlobalOmitConfig = {
   verification?: Prisma.VerificationOmit;
   userProfile?: Prisma.UserProfileOmit;
   userPreference?: Prisma.UserPreferenceOmit;
+  presence?: Prisma.PresenceOmit;
   team?: Prisma.TeamOmit;
   teamMembership?: Prisma.TeamMembershipOmit;
   mentorAssignment?: Prisma.MentorAssignmentOmit;
