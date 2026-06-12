@@ -175,6 +175,11 @@ export type Notification = Prisma.NotificationModel;
  */
 export type StudyMaterial = Prisma.StudyMaterialModel;
 /**
+ * Model StudyMaterialView
+ *
+ */
+export type StudyMaterialView = Prisma.StudyMaterialViewModel;
+/**
  * Model StudyMaterialTag
  *
  */

@@ -401,6 +401,7 @@ export const ModelName = {
   LeaderboardEntry: 'LeaderboardEntry',
   Notification: 'Notification',
   StudyMaterial: 'StudyMaterial',
+  StudyMaterialView: 'StudyMaterialView',
   StudyMaterialTag: 'StudyMaterialTag',
   StudentReport: 'StudentReport',
   CorporateReportSnapshot: 'CorporateReportSnapshot',
@@ -450,6 +451,7 @@ export type TypeMap<
       | 'leaderboardEntry'
       | 'notification'
       | 'studyMaterial'
+      | 'studyMaterialView'
       | 'studyMaterialTag'
       | 'studentReport'
       | 'corporateReportSnapshot';
@@ -2404,6 +2406,82 @@ export type TypeMap<
         };
       };
     };
+    StudyMaterialView: {
+      payload: Prisma.$StudyMaterialViewPayload<ExtArgs>;
+      fields: Prisma.StudyMaterialViewFieldRefs;
+      operations: {
+        findUnique: {
+          args: Prisma.StudyMaterialViewFindUniqueArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyMaterialViewPayload> | null;
+        };
+        findUniqueOrThrow: {
+          args: Prisma.StudyMaterialViewFindUniqueOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyMaterialViewPayload>;
+        };
+        findFirst: {
+          args: Prisma.StudyMaterialViewFindFirstArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyMaterialViewPayload> | null;
+        };
+        findFirstOrThrow: {
+          args: Prisma.StudyMaterialViewFindFirstOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyMaterialViewPayload>;
+        };
+        findMany: {
+          args: Prisma.StudyMaterialViewFindManyArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyMaterialViewPayload>[];
+        };
+        create: {
+          args: Prisma.StudyMaterialViewCreateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyMaterialViewPayload>;
+        };
+        createMany: {
+          args: Prisma.StudyMaterialViewCreateManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        createManyAndReturn: {
+          args: Prisma.StudyMaterialViewCreateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyMaterialViewPayload>[];
+        };
+        delete: {
+          args: Prisma.StudyMaterialViewDeleteArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyMaterialViewPayload>;
+        };
+        update: {
+          args: Prisma.StudyMaterialViewUpdateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyMaterialViewPayload>;
+        };
+        deleteMany: {
+          args: Prisma.StudyMaterialViewDeleteManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        updateMany: {
+          args: Prisma.StudyMaterialViewUpdateManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        updateManyAndReturn: {
+          args: Prisma.StudyMaterialViewUpdateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyMaterialViewPayload>[];
+        };
+        upsert: {
+          args: Prisma.StudyMaterialViewUpsertArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyMaterialViewPayload>;
+        };
+        aggregate: {
+          args: Prisma.StudyMaterialViewAggregateArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.AggregateStudyMaterialView>;
+        };
+        groupBy: {
+          args: Prisma.StudyMaterialViewGroupByArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.StudyMaterialViewGroupByOutputType>[];
+        };
+        count: {
+          args: Prisma.StudyMaterialViewCountArgs<ExtArgs>;
+          result:
+            | runtime.Types.Utils.Optional<Prisma.StudyMaterialViewCountAggregateOutputType>
+            | number;
+        };
+      };
+    };
     StudyMaterialTag: {
       payload: Prisma.$StudyMaterialTagPayload<ExtArgs>;
       fields: Prisma.StudyMaterialTagFieldRefs;
@@ -3037,12 +3115,27 @@ export const StudyMaterialScalarFieldEnum = {
   ownerProfileId: 'ownerProfileId',
   teamId: 'teamId',
   visibility: 'visibility',
+  module: 'module',
+  milestone: 'milestone',
+  isPublished: 'isPublished',
+  publishedAt: 'publishedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
 } as const;
 
 export type StudyMaterialScalarFieldEnum =
   (typeof StudyMaterialScalarFieldEnum)[keyof typeof StudyMaterialScalarFieldEnum];
+
+export const StudyMaterialViewScalarFieldEnum = {
+  id: 'id',
+  materialId: 'materialId',
+  profileId: 'profileId',
+  action: 'action',
+  createdAt: 'createdAt',
+} as const;
+
+export type StudyMaterialViewScalarFieldEnum =
+  (typeof StudyMaterialViewScalarFieldEnum)[keyof typeof StudyMaterialViewScalarFieldEnum];
 
 export const StudyMaterialTagScalarFieldEnum = {
   id: 'id',
@@ -3528,6 +3621,7 @@ export type GlobalOmitConfig = {
   leaderboardEntry?: Prisma.LeaderboardEntryOmit;
   notification?: Prisma.NotificationOmit;
   studyMaterial?: Prisma.StudyMaterialOmit;
+  studyMaterialView?: Prisma.StudyMaterialViewOmit;
   studyMaterialTag?: Prisma.StudyMaterialTagOmit;
   studentReport?: Prisma.StudentReportOmit;
   corporateReportSnapshot?: Prisma.CorporateReportSnapshotOmit;

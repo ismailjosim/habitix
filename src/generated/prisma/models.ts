@@ -33,6 +33,7 @@ export type * from './models/LeaderboardSnapshot';
 export type * from './models/LeaderboardEntry';
 export type * from './models/Notification';
 export type * from './models/StudyMaterial';
+export type * from './models/StudyMaterialView';
 export type * from './models/StudyMaterialTag';
 export type * from './models/StudentReport';
 export type * from './models/CorporateReportSnapshot';

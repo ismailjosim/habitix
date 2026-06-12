@@ -1,25 +1,28 @@
-import { IconBell } from '@tabler/icons-react';
+import { NotificationsInbox } from '@/components/notifications/notifications-inbox';
+import { LAYOUT_CONSTRAINTS } from '@/lib/layout-constraints';
+import { getNotificationsData, type NotificationCategory } from '@/lib/queries/notifications';
 
-import { ModulePage } from '@/components/app/module-page';
-
-export default function NotificationsPage() {
+export default async function NotificationsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string }>;
+}) {
+  const params = await searchParams;
+  const allowed: NotificationCategory[] = [
+    'all',
+    'tasks',
+    'help',
+    'responses',
+    'mentorship',
+    'awards',
+  ];
+  const category = allowed.includes(params.category as NotificationCategory)
+    ? (params.category as NotificationCategory)
+    : 'all';
+  const data = await getNotificationsData({ category });
   return (
-    <ModulePage
-      title="Notifications"
-      eyebrow="Updates"
-      description="Centralize deadline reminders, mentor feedback, help desk responses, badge awards, and system notices."
-      icon={IconBell}
-      metrics={[
-        { label: 'Unread', value: '5' },
-        { label: 'Due soon', value: '2' },
-        { label: 'Mentor notes', value: '1' },
-      ]}
-      nextSteps={[
-        'Create typed notifications with read state, actor, target, and delivery metadata.',
-        'Plan notification preferences before adding email or push channels.',
-        'Link notifications to task, help desk, badge, and report records.',
-        'Add digest-friendly grouping for busy team activity.',
-      ]}
-    />
+    <div className={`${LAYOUT_CONSTRAINTS.pageMaxWidth} ${LAYOUT_CONSTRAINTS.pagePadding} mx-auto`}>
+      <NotificationsInbox data={data} category={category} />
+    </div>
   );
 }

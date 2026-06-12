@@ -33,6 +33,7 @@ type AppShellProps = {
     email: string;
     image?: string | null;
     role: string;
+    unreadNotificationCount: number;
   };
 };
 
@@ -100,9 +101,21 @@ function TopBar({ user }: Pick<AppShellProps, 'user'>) {
 
       <div className="ml-auto flex items-center gap-2">
         <ThemeToggle />
-        <Button variant="outline" size="icon" aria-label="Notifications" className="relative">
-          <IconBell />
-          <span className="absolute right-1.5 top-1.5 size-2 rounded-full bg-primary" />
+        <Button
+          asChild
+          variant="outline"
+          size="icon"
+          aria-label="Notifications"
+          className="relative"
+        >
+          <Link href="/notifications">
+            <IconBell />
+            {user.unreadNotificationCount > 0 && (
+              <span className="absolute -right-1 -top-1 grid min-w-4 place-items-center rounded-full bg-primary px-1 text-[10px] font-semibold text-primary-foreground">
+                {Math.min(user.unreadNotificationCount, 99)}
+              </span>
+            )}
+          </Link>
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

@@ -1,25 +1,19 @@
-import { IconNotebook } from '@tabler/icons-react';
+import { MaterialsLibrary } from '@/components/study-materials/materials-library';
+import { LAYOUT_CONSTRAINTS } from '@/lib/layout-constraints';
+import { getStudyMaterials } from '@/lib/queries/study-materials';
 
-import { ModulePage } from '@/components/app/module-page';
-
-export default function StudyMaterialsPage() {
+export default async function StudyMaterialsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ search?: string; module?: string }>;
+}) {
+  const params = await searchParams;
+  const search = params.search?.trim() ?? '';
+  const module = params.module ?? 'all';
+  const data = await getStudyMaterials({ search, module });
   return (
-    <ModulePage
-      title="Study Materials"
-      eyebrow="Resources"
-      description="Organize learning resources, attachments, links, and mentor-curated material collections."
-      icon={IconNotebook}
-      metrics={[
-        { label: 'Collections', value: '6' },
-        { label: 'New resources', value: '11' },
-        { label: 'Pinned items', value: '4' },
-      ]}
-      nextSteps={[
-        'Model study materials with owner, visibility, team scope, type, and attachment metadata.',
-        'Support mentor-curated and admin-published resource collections.',
-        'Connect materials to tasks, focus sessions, and help desk topics where useful.',
-        'Plan search and filtering by course, skill, team, and format.',
-      ]}
-    />
+    <div className={`${LAYOUT_CONSTRAINTS.pageMaxWidth} ${LAYOUT_CONSTRAINTS.pagePadding} mx-auto`}>
+      <MaterialsLibrary data={data} search={search} module={module} />
+    </div>
   );
 }

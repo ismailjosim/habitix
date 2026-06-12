@@ -324,6 +324,7 @@ export type UserProfileWhereInput = {
   receivedNotifications?: Prisma.NotificationListRelationFilter;
   actedNotifications?: Prisma.NotificationListRelationFilter;
   studyMaterials?: Prisma.StudyMaterialListRelationFilter;
+  materialViews?: Prisma.StudyMaterialViewListRelationFilter;
   studentReports?: Prisma.StudentReportListRelationFilter;
 };
 
@@ -364,6 +365,7 @@ export type UserProfileOrderByWithRelationInput = {
   receivedNotifications?: Prisma.NotificationOrderByRelationAggregateInput;
   actedNotifications?: Prisma.NotificationOrderByRelationAggregateInput;
   studyMaterials?: Prisma.StudyMaterialOrderByRelationAggregateInput;
+  materialViews?: Prisma.StudyMaterialViewOrderByRelationAggregateInput;
   studentReports?: Prisma.StudentReportOrderByRelationAggregateInput;
 };
 
@@ -414,6 +416,7 @@ export type UserProfileWhereUniqueInput = Prisma.AtLeast<
     receivedNotifications?: Prisma.NotificationListRelationFilter;
     actedNotifications?: Prisma.NotificationListRelationFilter;
     studyMaterials?: Prisma.StudyMaterialListRelationFilter;
+    materialViews?: Prisma.StudyMaterialViewListRelationFilter;
     studentReports?: Prisma.StudentReportListRelationFilter;
   },
   'id' | 'authUserId'
@@ -501,6 +504,7 @@ export type UserProfileCreateInput = {
   receivedNotifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportCreateNestedManyWithoutProfileInput;
 };
 
@@ -540,6 +544,7 @@ export type UserProfileUncheckedCreateInput = {
   receivedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportUncheckedCreateNestedManyWithoutProfileInput;
 };
 
@@ -579,6 +584,7 @@ export type UserProfileUpdateInput = {
   receivedNotifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUpdateManyWithoutProfileNestedInput;
 };
 
@@ -618,6 +624,7 @@ export type UserProfileUncheckedUpdateInput = {
   receivedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUncheckedUpdateManyWithoutProfileNestedInput;
 };
 
@@ -1364,6 +1371,32 @@ export type UserProfileUpdateOneRequiredWithoutStudyMaterialsNestedInput = {
   >;
 };
 
+export type UserProfileCreateNestedOneWithoutMaterialViewsInput = {
+  create?: Prisma.XOR<
+    Prisma.UserProfileCreateWithoutMaterialViewsInput,
+    Prisma.UserProfileUncheckedCreateWithoutMaterialViewsInput
+  >;
+  connectOrCreate?: Prisma.UserProfileCreateOrConnectWithoutMaterialViewsInput;
+  connect?: Prisma.UserProfileWhereUniqueInput;
+};
+
+export type UserProfileUpdateOneRequiredWithoutMaterialViewsNestedInput = {
+  create?: Prisma.XOR<
+    Prisma.UserProfileCreateWithoutMaterialViewsInput,
+    Prisma.UserProfileUncheckedCreateWithoutMaterialViewsInput
+  >;
+  connectOrCreate?: Prisma.UserProfileCreateOrConnectWithoutMaterialViewsInput;
+  upsert?: Prisma.UserProfileUpsertWithoutMaterialViewsInput;
+  connect?: Prisma.UserProfileWhereUniqueInput;
+  update?: Prisma.XOR<
+    Prisma.XOR<
+      Prisma.UserProfileUpdateToOneWithWhereWithoutMaterialViewsInput,
+      Prisma.UserProfileUpdateWithoutMaterialViewsInput
+    >,
+    Prisma.UserProfileUncheckedUpdateWithoutMaterialViewsInput
+  >;
+};
+
 export type UserProfileCreateNestedOneWithoutStudentReportsInput = {
   create?: Prisma.XOR<
     Prisma.UserProfileCreateWithoutStudentReportsInput,
@@ -1425,6 +1458,7 @@ export type UserProfileCreateWithoutAuthUserInput = {
   receivedNotifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportCreateNestedManyWithoutProfileInput;
 };
 
@@ -1463,6 +1497,7 @@ export type UserProfileUncheckedCreateWithoutAuthUserInput = {
   receivedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportUncheckedCreateNestedManyWithoutProfileInput;
 };
 
@@ -1529,6 +1564,7 @@ export type UserProfileUpdateWithoutAuthUserInput = {
   receivedNotifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUpdateManyWithoutProfileNestedInput;
 };
 
@@ -1567,6 +1603,7 @@ export type UserProfileUncheckedUpdateWithoutAuthUserInput = {
   receivedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUncheckedUpdateManyWithoutProfileNestedInput;
 };
 
@@ -1605,6 +1642,7 @@ export type UserProfileCreateWithoutPreferencesInput = {
   receivedNotifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportCreateNestedManyWithoutProfileInput;
 };
 
@@ -1643,6 +1681,7 @@ export type UserProfileUncheckedCreateWithoutPreferencesInput = {
   receivedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportUncheckedCreateNestedManyWithoutProfileInput;
 };
 
@@ -1709,6 +1748,7 @@ export type UserProfileUpdateWithoutPreferencesInput = {
   receivedNotifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUpdateManyWithoutProfileNestedInput;
 };
 
@@ -1747,6 +1787,7 @@ export type UserProfileUncheckedUpdateWithoutPreferencesInput = {
   receivedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUncheckedUpdateManyWithoutProfileNestedInput;
 };
 
@@ -1785,6 +1826,7 @@ export type UserProfileCreateWithoutPresenceInput = {
   receivedNotifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportCreateNestedManyWithoutProfileInput;
 };
 
@@ -1823,6 +1865,7 @@ export type UserProfileUncheckedCreateWithoutPresenceInput = {
   receivedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportUncheckedCreateNestedManyWithoutProfileInput;
 };
 
@@ -1889,6 +1932,7 @@ export type UserProfileUpdateWithoutPresenceInput = {
   receivedNotifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUpdateManyWithoutProfileNestedInput;
 };
 
@@ -1927,6 +1971,7 @@ export type UserProfileUncheckedUpdateWithoutPresenceInput = {
   receivedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUncheckedUpdateManyWithoutProfileNestedInput;
 };
 
@@ -1965,6 +2010,7 @@ export type UserProfileCreateWithoutOwnedTeamsInput = {
   receivedNotifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportCreateNestedManyWithoutProfileInput;
 };
 
@@ -2003,6 +2049,7 @@ export type UserProfileUncheckedCreateWithoutOwnedTeamsInput = {
   receivedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportUncheckedCreateNestedManyWithoutProfileInput;
 };
 
@@ -2069,6 +2116,7 @@ export type UserProfileUpdateWithoutOwnedTeamsInput = {
   receivedNotifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUpdateManyWithoutProfileNestedInput;
 };
 
@@ -2107,6 +2155,7 @@ export type UserProfileUncheckedUpdateWithoutOwnedTeamsInput = {
   receivedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUncheckedUpdateManyWithoutProfileNestedInput;
 };
 
@@ -2145,6 +2194,7 @@ export type UserProfileCreateWithoutMembershipsInput = {
   receivedNotifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportCreateNestedManyWithoutProfileInput;
 };
 
@@ -2183,6 +2233,7 @@ export type UserProfileUncheckedCreateWithoutMembershipsInput = {
   receivedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportUncheckedCreateNestedManyWithoutProfileInput;
 };
 
@@ -2249,6 +2300,7 @@ export type UserProfileUpdateWithoutMembershipsInput = {
   receivedNotifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUpdateManyWithoutProfileNestedInput;
 };
 
@@ -2287,6 +2339,7 @@ export type UserProfileUncheckedUpdateWithoutMembershipsInput = {
   receivedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUncheckedUpdateManyWithoutProfileNestedInput;
 };
 
@@ -2325,6 +2378,7 @@ export type UserProfileCreateWithoutMentorAssignmentsInput = {
   receivedNotifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportCreateNestedManyWithoutProfileInput;
 };
 
@@ -2363,6 +2417,7 @@ export type UserProfileUncheckedCreateWithoutMentorAssignmentsInput = {
   receivedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportUncheckedCreateNestedManyWithoutProfileInput;
 };
 
@@ -2409,6 +2464,7 @@ export type UserProfileCreateWithoutStudentAssignmentsInput = {
   receivedNotifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportCreateNestedManyWithoutProfileInput;
 };
 
@@ -2447,6 +2503,7 @@ export type UserProfileUncheckedCreateWithoutStudentAssignmentsInput = {
   receivedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportUncheckedCreateNestedManyWithoutProfileInput;
 };
 
@@ -2513,6 +2570,7 @@ export type UserProfileUpdateWithoutMentorAssignmentsInput = {
   receivedNotifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUpdateManyWithoutProfileNestedInput;
 };
 
@@ -2551,6 +2609,7 @@ export type UserProfileUncheckedUpdateWithoutMentorAssignmentsInput = {
   receivedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUncheckedUpdateManyWithoutProfileNestedInput;
 };
 
@@ -2609,6 +2668,7 @@ export type UserProfileUpdateWithoutStudentAssignmentsInput = {
   receivedNotifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUpdateManyWithoutProfileNestedInput;
 };
 
@@ -2647,6 +2707,7 @@ export type UserProfileUncheckedUpdateWithoutStudentAssignmentsInput = {
   receivedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUncheckedUpdateManyWithoutProfileNestedInput;
 };
 
@@ -2685,6 +2746,7 @@ export type UserProfileCreateWithoutCreatedTasksInput = {
   receivedNotifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportCreateNestedManyWithoutProfileInput;
 };
 
@@ -2723,6 +2785,7 @@ export type UserProfileUncheckedCreateWithoutCreatedTasksInput = {
   receivedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportUncheckedCreateNestedManyWithoutProfileInput;
 };
 
@@ -2769,6 +2832,7 @@ export type UserProfileCreateWithoutAssignedTasksInput = {
   receivedNotifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportCreateNestedManyWithoutProfileInput;
 };
 
@@ -2807,6 +2871,7 @@ export type UserProfileUncheckedCreateWithoutAssignedTasksInput = {
   receivedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportUncheckedCreateNestedManyWithoutProfileInput;
 };
 
@@ -2873,6 +2938,7 @@ export type UserProfileUpdateWithoutCreatedTasksInput = {
   receivedNotifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUpdateManyWithoutProfileNestedInput;
 };
 
@@ -2911,6 +2977,7 @@ export type UserProfileUncheckedUpdateWithoutCreatedTasksInput = {
   receivedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUncheckedUpdateManyWithoutProfileNestedInput;
 };
 
@@ -2969,6 +3036,7 @@ export type UserProfileUpdateWithoutAssignedTasksInput = {
   receivedNotifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUpdateManyWithoutProfileNestedInput;
 };
 
@@ -3007,6 +3075,7 @@ export type UserProfileUncheckedUpdateWithoutAssignedTasksInput = {
   receivedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUncheckedUpdateManyWithoutProfileNestedInput;
 };
 
@@ -3045,6 +3114,7 @@ export type UserProfileCreateWithoutTaskCommentsInput = {
   receivedNotifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportCreateNestedManyWithoutProfileInput;
 };
 
@@ -3083,6 +3153,7 @@ export type UserProfileUncheckedCreateWithoutTaskCommentsInput = {
   receivedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportUncheckedCreateNestedManyWithoutProfileInput;
 };
 
@@ -3149,6 +3220,7 @@ export type UserProfileUpdateWithoutTaskCommentsInput = {
   receivedNotifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUpdateManyWithoutProfileNestedInput;
 };
 
@@ -3187,6 +3259,7 @@ export type UserProfileUncheckedUpdateWithoutTaskCommentsInput = {
   receivedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUncheckedUpdateManyWithoutProfileNestedInput;
 };
 
@@ -3225,6 +3298,7 @@ export type UserProfileCreateWithoutTaskActivitiesInput = {
   receivedNotifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportCreateNestedManyWithoutProfileInput;
 };
 
@@ -3263,6 +3337,7 @@ export type UserProfileUncheckedCreateWithoutTaskActivitiesInput = {
   receivedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportUncheckedCreateNestedManyWithoutProfileInput;
 };
 
@@ -3329,6 +3404,7 @@ export type UserProfileUpdateWithoutTaskActivitiesInput = {
   receivedNotifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUpdateManyWithoutProfileNestedInput;
 };
 
@@ -3367,6 +3443,7 @@ export type UserProfileUncheckedUpdateWithoutTaskActivitiesInput = {
   receivedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUncheckedUpdateManyWithoutProfileNestedInput;
 };
 
@@ -3405,6 +3482,7 @@ export type UserProfileCreateWithoutFocusSessionsInput = {
   receivedNotifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportCreateNestedManyWithoutProfileInput;
 };
 
@@ -3443,6 +3521,7 @@ export type UserProfileUncheckedCreateWithoutFocusSessionsInput = {
   receivedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportUncheckedCreateNestedManyWithoutProfileInput;
 };
 
@@ -3509,6 +3588,7 @@ export type UserProfileUpdateWithoutFocusSessionsInput = {
   receivedNotifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUpdateManyWithoutProfileNestedInput;
 };
 
@@ -3547,6 +3627,7 @@ export type UserProfileUncheckedUpdateWithoutFocusSessionsInput = {
   receivedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUncheckedUpdateManyWithoutProfileNestedInput;
 };
 
@@ -3585,6 +3666,7 @@ export type UserProfileCreateWithoutActivityEventsInput = {
   receivedNotifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportCreateNestedManyWithoutProfileInput;
 };
 
@@ -3623,6 +3705,7 @@ export type UserProfileUncheckedCreateWithoutActivityEventsInput = {
   receivedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportUncheckedCreateNestedManyWithoutProfileInput;
 };
 
@@ -3689,6 +3772,7 @@ export type UserProfileUpdateWithoutActivityEventsInput = {
   receivedNotifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUpdateManyWithoutProfileNestedInput;
 };
 
@@ -3727,6 +3811,7 @@ export type UserProfileUncheckedUpdateWithoutActivityEventsInput = {
   receivedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUncheckedUpdateManyWithoutProfileNestedInput;
 };
 
@@ -3765,6 +3850,7 @@ export type UserProfileCreateWithoutHelpPostsInput = {
   receivedNotifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportCreateNestedManyWithoutProfileInput;
 };
 
@@ -3803,6 +3889,7 @@ export type UserProfileUncheckedCreateWithoutHelpPostsInput = {
   receivedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportUncheckedCreateNestedManyWithoutProfileInput;
 };
 
@@ -3869,6 +3956,7 @@ export type UserProfileUpdateWithoutHelpPostsInput = {
   receivedNotifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUpdateManyWithoutProfileNestedInput;
 };
 
@@ -3907,6 +3995,7 @@ export type UserProfileUncheckedUpdateWithoutHelpPostsInput = {
   receivedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUncheckedUpdateManyWithoutProfileNestedInput;
 };
 
@@ -3945,6 +4034,7 @@ export type UserProfileCreateWithoutHelpResponsesInput = {
   receivedNotifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportCreateNestedManyWithoutProfileInput;
 };
 
@@ -3983,6 +4073,7 @@ export type UserProfileUncheckedCreateWithoutHelpResponsesInput = {
   receivedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportUncheckedCreateNestedManyWithoutProfileInput;
 };
 
@@ -4049,6 +4140,7 @@ export type UserProfileUpdateWithoutHelpResponsesInput = {
   receivedNotifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUpdateManyWithoutProfileNestedInput;
 };
 
@@ -4087,6 +4179,7 @@ export type UserProfileUncheckedUpdateWithoutHelpResponsesInput = {
   receivedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUncheckedUpdateManyWithoutProfileNestedInput;
 };
 
@@ -4125,6 +4218,7 @@ export type UserProfileCreateWithoutHelperLimitsInput = {
   receivedNotifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportCreateNestedManyWithoutProfileInput;
 };
 
@@ -4163,6 +4257,7 @@ export type UserProfileUncheckedCreateWithoutHelperLimitsInput = {
   receivedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportUncheckedCreateNestedManyWithoutProfileInput;
 };
 
@@ -4229,6 +4324,7 @@ export type UserProfileUpdateWithoutHelperLimitsInput = {
   receivedNotifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUpdateManyWithoutProfileNestedInput;
 };
 
@@ -4267,6 +4363,7 @@ export type UserProfileUncheckedUpdateWithoutHelperLimitsInput = {
   receivedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUncheckedUpdateManyWithoutProfileNestedInput;
 };
 
@@ -4305,6 +4402,7 @@ export type UserProfileCreateWithoutAwardedBadgesInput = {
   receivedNotifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportCreateNestedManyWithoutProfileInput;
 };
 
@@ -4343,6 +4441,7 @@ export type UserProfileUncheckedCreateWithoutAwardedBadgesInput = {
   receivedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportUncheckedCreateNestedManyWithoutProfileInput;
 };
 
@@ -4389,6 +4488,7 @@ export type UserProfileCreateWithoutGivenBadgesInput = {
   receivedNotifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportCreateNestedManyWithoutProfileInput;
 };
 
@@ -4427,6 +4527,7 @@ export type UserProfileUncheckedCreateWithoutGivenBadgesInput = {
   receivedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportUncheckedCreateNestedManyWithoutProfileInput;
 };
 
@@ -4493,6 +4594,7 @@ export type UserProfileUpdateWithoutAwardedBadgesInput = {
   receivedNotifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUpdateManyWithoutProfileNestedInput;
 };
 
@@ -4531,6 +4633,7 @@ export type UserProfileUncheckedUpdateWithoutAwardedBadgesInput = {
   receivedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUncheckedUpdateManyWithoutProfileNestedInput;
 };
 
@@ -4589,6 +4692,7 @@ export type UserProfileUpdateWithoutGivenBadgesInput = {
   receivedNotifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUpdateManyWithoutProfileNestedInput;
 };
 
@@ -4627,6 +4731,7 @@ export type UserProfileUncheckedUpdateWithoutGivenBadgesInput = {
   receivedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUncheckedUpdateManyWithoutProfileNestedInput;
 };
 
@@ -4665,6 +4770,7 @@ export type UserProfileCreateWithoutLeaderboardEntriesInput = {
   receivedNotifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportCreateNestedManyWithoutProfileInput;
 };
 
@@ -4703,6 +4809,7 @@ export type UserProfileUncheckedCreateWithoutLeaderboardEntriesInput = {
   receivedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportUncheckedCreateNestedManyWithoutProfileInput;
 };
 
@@ -4769,6 +4876,7 @@ export type UserProfileUpdateWithoutLeaderboardEntriesInput = {
   receivedNotifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUpdateManyWithoutProfileNestedInput;
 };
 
@@ -4807,6 +4915,7 @@ export type UserProfileUncheckedUpdateWithoutLeaderboardEntriesInput = {
   receivedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUncheckedUpdateManyWithoutProfileNestedInput;
 };
 
@@ -4845,6 +4954,7 @@ export type UserProfileCreateWithoutReceivedNotificationsInput = {
   leaderboardEntries?: Prisma.LeaderboardEntryCreateNestedManyWithoutProfileInput;
   actedNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportCreateNestedManyWithoutProfileInput;
 };
 
@@ -4883,6 +4993,7 @@ export type UserProfileUncheckedCreateWithoutReceivedNotificationsInput = {
   leaderboardEntries?: Prisma.LeaderboardEntryUncheckedCreateNestedManyWithoutProfileInput;
   actedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportUncheckedCreateNestedManyWithoutProfileInput;
 };
 
@@ -4929,6 +5040,7 @@ export type UserProfileCreateWithoutActedNotificationsInput = {
   leaderboardEntries?: Prisma.LeaderboardEntryCreateNestedManyWithoutProfileInput;
   receivedNotifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput;
   studyMaterials?: Prisma.StudyMaterialCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportCreateNestedManyWithoutProfileInput;
 };
 
@@ -4967,6 +5079,7 @@ export type UserProfileUncheckedCreateWithoutActedNotificationsInput = {
   leaderboardEntries?: Prisma.LeaderboardEntryUncheckedCreateNestedManyWithoutProfileInput;
   receivedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportUncheckedCreateNestedManyWithoutProfileInput;
 };
 
@@ -5033,6 +5146,7 @@ export type UserProfileUpdateWithoutReceivedNotificationsInput = {
   leaderboardEntries?: Prisma.LeaderboardEntryUpdateManyWithoutProfileNestedInput;
   actedNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUpdateManyWithoutProfileNestedInput;
 };
 
@@ -5071,6 +5185,7 @@ export type UserProfileUncheckedUpdateWithoutReceivedNotificationsInput = {
   leaderboardEntries?: Prisma.LeaderboardEntryUncheckedUpdateManyWithoutProfileNestedInput;
   actedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUncheckedUpdateManyWithoutProfileNestedInput;
 };
 
@@ -5129,6 +5244,7 @@ export type UserProfileUpdateWithoutActedNotificationsInput = {
   leaderboardEntries?: Prisma.LeaderboardEntryUpdateManyWithoutProfileNestedInput;
   receivedNotifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput;
   studyMaterials?: Prisma.StudyMaterialUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUpdateManyWithoutProfileNestedInput;
 };
 
@@ -5167,6 +5283,7 @@ export type UserProfileUncheckedUpdateWithoutActedNotificationsInput = {
   leaderboardEntries?: Prisma.LeaderboardEntryUncheckedUpdateManyWithoutProfileNestedInput;
   receivedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUncheckedUpdateManyWithoutProfileNestedInput;
 };
 
@@ -5205,6 +5322,7 @@ export type UserProfileCreateWithoutStudyMaterialsInput = {
   leaderboardEntries?: Prisma.LeaderboardEntryCreateNestedManyWithoutProfileInput;
   receivedNotifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput;
+  materialViews?: Prisma.StudyMaterialViewCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportCreateNestedManyWithoutProfileInput;
 };
 
@@ -5243,6 +5361,7 @@ export type UserProfileUncheckedCreateWithoutStudyMaterialsInput = {
   leaderboardEntries?: Prisma.LeaderboardEntryUncheckedCreateNestedManyWithoutProfileInput;
   receivedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedCreateNestedManyWithoutProfileInput;
   studentReports?: Prisma.StudentReportUncheckedCreateNestedManyWithoutProfileInput;
 };
 
@@ -5309,6 +5428,7 @@ export type UserProfileUpdateWithoutStudyMaterialsInput = {
   leaderboardEntries?: Prisma.LeaderboardEntryUpdateManyWithoutProfileNestedInput;
   receivedNotifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUpdateManyWithoutProfileNestedInput;
   studentReports?: Prisma.StudentReportUpdateManyWithoutProfileNestedInput;
 };
 
@@ -5347,6 +5467,191 @@ export type UserProfileUncheckedUpdateWithoutStudyMaterialsInput = {
   leaderboardEntries?: Prisma.LeaderboardEntryUncheckedUpdateManyWithoutProfileNestedInput;
   receivedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedUpdateManyWithoutProfileNestedInput;
+  studentReports?: Prisma.StudentReportUncheckedUpdateManyWithoutProfileNestedInput;
+};
+
+export type UserProfileCreateWithoutMaterialViewsInput = {
+  id?: string;
+  displayName: string;
+  avatarUrl?: string | null;
+  role?: $Enums.AppRole;
+  bio?: string | null;
+  timezone?: string;
+  institution?: string | null;
+  department?: string | null;
+  currentStreak?: number;
+  totalFocusMinutes?: number;
+  helpPoints?: number;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  authUser: Prisma.UserCreateNestedOneWithoutProfileInput;
+  preferences?: Prisma.UserPreferenceCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceCreateNestedOneWithoutProfileInput;
+  ownedTeams?: Prisma.TeamCreateNestedManyWithoutOwnerInput;
+  memberships?: Prisma.TeamMembershipCreateNestedManyWithoutProfileInput;
+  mentorAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutMentorInput;
+  studentAssignments?: Prisma.MentorAssignmentCreateNestedManyWithoutStudentInput;
+  createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
+  assignedTasks?: Prisma.TaskCreateNestedManyWithoutAssignedToInput;
+  taskComments?: Prisma.TaskCommentCreateNestedManyWithoutAuthorInput;
+  taskActivities?: Prisma.TaskActivityCreateNestedManyWithoutActorInput;
+  focusSessions?: Prisma.FocusSessionCreateNestedManyWithoutProfileInput;
+  activityEvents?: Prisma.ActivityEventCreateNestedManyWithoutProfileInput;
+  helpPosts?: Prisma.HelpPostCreateNestedManyWithoutAuthorInput;
+  helpResponses?: Prisma.HelpResponseCreateNestedManyWithoutAuthorInput;
+  helperLimits?: Prisma.HelperLimitCreateNestedManyWithoutProfileInput;
+  awardedBadges?: Prisma.BadgeAwardCreateNestedManyWithoutProfileInput;
+  givenBadges?: Prisma.BadgeAwardCreateNestedManyWithoutAwardedByInput;
+  leaderboardEntries?: Prisma.LeaderboardEntryCreateNestedManyWithoutProfileInput;
+  receivedNotifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput;
+  actedNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput;
+  studyMaterials?: Prisma.StudyMaterialCreateNestedManyWithoutOwnerInput;
+  studentReports?: Prisma.StudentReportCreateNestedManyWithoutProfileInput;
+};
+
+export type UserProfileUncheckedCreateWithoutMaterialViewsInput = {
+  id?: string;
+  authUserId: string;
+  displayName: string;
+  avatarUrl?: string | null;
+  role?: $Enums.AppRole;
+  bio?: string | null;
+  timezone?: string;
+  institution?: string | null;
+  department?: string | null;
+  currentStreak?: number;
+  totalFocusMinutes?: number;
+  helpPoints?: number;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutProfileInput;
+  presence?: Prisma.PresenceUncheckedCreateNestedOneWithoutProfileInput;
+  ownedTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutOwnerInput;
+  memberships?: Prisma.TeamMembershipUncheckedCreateNestedManyWithoutProfileInput;
+  mentorAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutMentorInput;
+  studentAssignments?: Prisma.MentorAssignmentUncheckedCreateNestedManyWithoutStudentInput;
+  createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
+  assignedTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssignedToInput;
+  taskComments?: Prisma.TaskCommentUncheckedCreateNestedManyWithoutAuthorInput;
+  taskActivities?: Prisma.TaskActivityUncheckedCreateNestedManyWithoutActorInput;
+  focusSessions?: Prisma.FocusSessionUncheckedCreateNestedManyWithoutProfileInput;
+  activityEvents?: Prisma.ActivityEventUncheckedCreateNestedManyWithoutProfileInput;
+  helpPosts?: Prisma.HelpPostUncheckedCreateNestedManyWithoutAuthorInput;
+  helpResponses?: Prisma.HelpResponseUncheckedCreateNestedManyWithoutAuthorInput;
+  helperLimits?: Prisma.HelperLimitUncheckedCreateNestedManyWithoutProfileInput;
+  awardedBadges?: Prisma.BadgeAwardUncheckedCreateNestedManyWithoutProfileInput;
+  givenBadges?: Prisma.BadgeAwardUncheckedCreateNestedManyWithoutAwardedByInput;
+  leaderboardEntries?: Prisma.LeaderboardEntryUncheckedCreateNestedManyWithoutProfileInput;
+  receivedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput;
+  actedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
+  studyMaterials?: Prisma.StudyMaterialUncheckedCreateNestedManyWithoutOwnerInput;
+  studentReports?: Prisma.StudentReportUncheckedCreateNestedManyWithoutProfileInput;
+};
+
+export type UserProfileCreateOrConnectWithoutMaterialViewsInput = {
+  where: Prisma.UserProfileWhereUniqueInput;
+  create: Prisma.XOR<
+    Prisma.UserProfileCreateWithoutMaterialViewsInput,
+    Prisma.UserProfileUncheckedCreateWithoutMaterialViewsInput
+  >;
+};
+
+export type UserProfileUpsertWithoutMaterialViewsInput = {
+  update: Prisma.XOR<
+    Prisma.UserProfileUpdateWithoutMaterialViewsInput,
+    Prisma.UserProfileUncheckedUpdateWithoutMaterialViewsInput
+  >;
+  create: Prisma.XOR<
+    Prisma.UserProfileCreateWithoutMaterialViewsInput,
+    Prisma.UserProfileUncheckedCreateWithoutMaterialViewsInput
+  >;
+  where?: Prisma.UserProfileWhereInput;
+};
+
+export type UserProfileUpdateToOneWithWhereWithoutMaterialViewsInput = {
+  where?: Prisma.UserProfileWhereInput;
+  data: Prisma.XOR<
+    Prisma.UserProfileUpdateWithoutMaterialViewsInput,
+    Prisma.UserProfileUncheckedUpdateWithoutMaterialViewsInput
+  >;
+};
+
+export type UserProfileUpdateWithoutMaterialViewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string;
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string;
+  institution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  currentStreak?: Prisma.IntFieldUpdateOperationsInput | number;
+  totalFocusMinutes?: Prisma.IntFieldUpdateOperationsInput | number;
+  helpPoints?: Prisma.IntFieldUpdateOperationsInput | number;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  authUser?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput;
+  preferences?: Prisma.UserPreferenceUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUpdateOneWithoutProfileNestedInput;
+  ownedTeams?: Prisma.TeamUpdateManyWithoutOwnerNestedInput;
+  memberships?: Prisma.TeamMembershipUpdateManyWithoutProfileNestedInput;
+  mentorAssignments?: Prisma.MentorAssignmentUpdateManyWithoutMentorNestedInput;
+  studentAssignments?: Prisma.MentorAssignmentUpdateManyWithoutStudentNestedInput;
+  createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
+  assignedTasks?: Prisma.TaskUpdateManyWithoutAssignedToNestedInput;
+  taskComments?: Prisma.TaskCommentUpdateManyWithoutAuthorNestedInput;
+  taskActivities?: Prisma.TaskActivityUpdateManyWithoutActorNestedInput;
+  focusSessions?: Prisma.FocusSessionUpdateManyWithoutProfileNestedInput;
+  activityEvents?: Prisma.ActivityEventUpdateManyWithoutProfileNestedInput;
+  helpPosts?: Prisma.HelpPostUpdateManyWithoutAuthorNestedInput;
+  helpResponses?: Prisma.HelpResponseUpdateManyWithoutAuthorNestedInput;
+  helperLimits?: Prisma.HelperLimitUpdateManyWithoutProfileNestedInput;
+  awardedBadges?: Prisma.BadgeAwardUpdateManyWithoutProfileNestedInput;
+  givenBadges?: Prisma.BadgeAwardUpdateManyWithoutAwardedByNestedInput;
+  leaderboardEntries?: Prisma.LeaderboardEntryUpdateManyWithoutProfileNestedInput;
+  receivedNotifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput;
+  actedNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
+  studyMaterials?: Prisma.StudyMaterialUpdateManyWithoutOwnerNestedInput;
+  studentReports?: Prisma.StudentReportUpdateManyWithoutProfileNestedInput;
+};
+
+export type UserProfileUncheckedUpdateWithoutMaterialViewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  authUserId?: Prisma.StringFieldUpdateOperationsInput | string;
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string;
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string;
+  institution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  currentStreak?: Prisma.IntFieldUpdateOperationsInput | number;
+  totalFocusMinutes?: Prisma.IntFieldUpdateOperationsInput | number;
+  helpPoints?: Prisma.IntFieldUpdateOperationsInput | number;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutProfileNestedInput;
+  presence?: Prisma.PresenceUncheckedUpdateOneWithoutProfileNestedInput;
+  ownedTeams?: Prisma.TeamUncheckedUpdateManyWithoutOwnerNestedInput;
+  memberships?: Prisma.TeamMembershipUncheckedUpdateManyWithoutProfileNestedInput;
+  mentorAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutMentorNestedInput;
+  studentAssignments?: Prisma.MentorAssignmentUncheckedUpdateManyWithoutStudentNestedInput;
+  createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
+  assignedTasks?: Prisma.TaskUncheckedUpdateManyWithoutAssignedToNestedInput;
+  taskComments?: Prisma.TaskCommentUncheckedUpdateManyWithoutAuthorNestedInput;
+  taskActivities?: Prisma.TaskActivityUncheckedUpdateManyWithoutActorNestedInput;
+  focusSessions?: Prisma.FocusSessionUncheckedUpdateManyWithoutProfileNestedInput;
+  activityEvents?: Prisma.ActivityEventUncheckedUpdateManyWithoutProfileNestedInput;
+  helpPosts?: Prisma.HelpPostUncheckedUpdateManyWithoutAuthorNestedInput;
+  helpResponses?: Prisma.HelpResponseUncheckedUpdateManyWithoutAuthorNestedInput;
+  helperLimits?: Prisma.HelperLimitUncheckedUpdateManyWithoutProfileNestedInput;
+  awardedBadges?: Prisma.BadgeAwardUncheckedUpdateManyWithoutProfileNestedInput;
+  givenBadges?: Prisma.BadgeAwardUncheckedUpdateManyWithoutAwardedByNestedInput;
+  leaderboardEntries?: Prisma.LeaderboardEntryUncheckedUpdateManyWithoutProfileNestedInput;
+  receivedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput;
+  actedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
+  studyMaterials?: Prisma.StudyMaterialUncheckedUpdateManyWithoutOwnerNestedInput;
   studentReports?: Prisma.StudentReportUncheckedUpdateManyWithoutProfileNestedInput;
 };
 
@@ -5386,6 +5691,7 @@ export type UserProfileCreateWithoutStudentReportsInput = {
   receivedNotifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewCreateNestedManyWithoutProfileInput;
 };
 
 export type UserProfileUncheckedCreateWithoutStudentReportsInput = {
@@ -5424,6 +5730,7 @@ export type UserProfileUncheckedCreateWithoutStudentReportsInput = {
   receivedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput;
   actedNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedCreateNestedManyWithoutOwnerInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedCreateNestedManyWithoutProfileInput;
 };
 
 export type UserProfileCreateOrConnectWithoutStudentReportsInput = {
@@ -5490,6 +5797,7 @@ export type UserProfileUpdateWithoutStudentReportsInput = {
   receivedNotifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUpdateManyWithoutProfileNestedInput;
 };
 
 export type UserProfileUncheckedUpdateWithoutStudentReportsInput = {
@@ -5528,6 +5836,7 @@ export type UserProfileUncheckedUpdateWithoutStudentReportsInput = {
   receivedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput;
   actedNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
   studyMaterials?: Prisma.StudyMaterialUncheckedUpdateManyWithoutOwnerNestedInput;
+  materialViews?: Prisma.StudyMaterialViewUncheckedUpdateManyWithoutProfileNestedInput;
 };
 
 /**
@@ -5554,6 +5863,7 @@ export type UserProfileCountOutputType = {
   receivedNotifications: number;
   actedNotifications: number;
   studyMaterials: number;
+  materialViews: number;
   studentReports: number;
 };
 
@@ -5579,6 +5889,7 @@ export type UserProfileCountOutputTypeSelect<
   receivedNotifications?: boolean | UserProfileCountOutputTypeCountReceivedNotificationsArgs;
   actedNotifications?: boolean | UserProfileCountOutputTypeCountActedNotificationsArgs;
   studyMaterials?: boolean | UserProfileCountOutputTypeCountStudyMaterialsArgs;
+  materialViews?: boolean | UserProfileCountOutputTypeCountMaterialViewsArgs;
   studentReports?: boolean | UserProfileCountOutputTypeCountStudentReportsArgs;
 };
 
@@ -5768,6 +6079,15 @@ export type UserProfileCountOutputTypeCountStudyMaterialsArgs<
 /**
  * UserProfileCountOutputType without action
  */
+export type UserProfileCountOutputTypeCountMaterialViewsArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+  where?: Prisma.StudyMaterialViewWhereInput;
+};
+
+/**
+ * UserProfileCountOutputType without action
+ */
 export type UserProfileCountOutputTypeCountStudentReportsArgs<
   ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
@@ -5814,6 +6134,7 @@ export type UserProfileSelect<
     receivedNotifications?: boolean | Prisma.UserProfile$receivedNotificationsArgs<ExtArgs>;
     actedNotifications?: boolean | Prisma.UserProfile$actedNotificationsArgs<ExtArgs>;
     studyMaterials?: boolean | Prisma.UserProfile$studyMaterialsArgs<ExtArgs>;
+    materialViews?: boolean | Prisma.UserProfile$materialViewsArgs<ExtArgs>;
     studentReports?: boolean | Prisma.UserProfile$studentReportsArgs<ExtArgs>;
     _count?: boolean | Prisma.UserProfileCountOutputTypeDefaultArgs<ExtArgs>;
   },
@@ -5927,6 +6248,7 @@ export type UserProfileInclude<
   receivedNotifications?: boolean | Prisma.UserProfile$receivedNotificationsArgs<ExtArgs>;
   actedNotifications?: boolean | Prisma.UserProfile$actedNotificationsArgs<ExtArgs>;
   studyMaterials?: boolean | Prisma.UserProfile$studyMaterialsArgs<ExtArgs>;
+  materialViews?: boolean | Prisma.UserProfile$materialViewsArgs<ExtArgs>;
   studentReports?: boolean | Prisma.UserProfile$studentReportsArgs<ExtArgs>;
   _count?: boolean | Prisma.UserProfileCountOutputTypeDefaultArgs<ExtArgs>;
 };
@@ -5968,6 +6290,7 @@ export type $UserProfilePayload<
     receivedNotifications: Prisma.$NotificationPayload<ExtArgs>[];
     actedNotifications: Prisma.$NotificationPayload<ExtArgs>[];
     studyMaterials: Prisma.$StudyMaterialPayload<ExtArgs>[];
+    materialViews: Prisma.$StudyMaterialViewPayload<ExtArgs>[];
     studentReports: Prisma.$StudentReportPayload<ExtArgs>[];
   };
   scalars: runtime.Types.Extensions.GetPayloadResult<
@@ -6752,6 +7075,17 @@ export interface Prisma__UserProfileClient<
   ): Prisma.PrismaPromise<
     | runtime.Types.Result.GetResult<
         Prisma.$StudyMaterialPayload<ExtArgs>,
+        T,
+        'findMany',
+        GlobalOmitOptions
+      >
+    | Null
+  >;
+  materialViews<T extends Prisma.UserProfile$materialViewsArgs<ExtArgs> = {}>(
+    args?: Prisma.Subset<T, Prisma.UserProfile$materialViewsArgs<ExtArgs>>
+  ): Prisma.PrismaPromise<
+    | runtime.Types.Result.GetResult<
+        Prisma.$StudyMaterialViewPayload<ExtArgs>,
         T,
         'findMany',
         GlobalOmitOptions
@@ -7813,6 +8147,34 @@ export type UserProfile$studyMaterialsArgs<
   take?: number;
   skip?: number;
   distinct?: Prisma.StudyMaterialScalarFieldEnum | Prisma.StudyMaterialScalarFieldEnum[];
+};
+
+/**
+ * UserProfile.materialViews
+ */
+export type UserProfile$materialViewsArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+  /**
+   * Select specific fields to fetch from the StudyMaterialView
+   */
+  select?: Prisma.StudyMaterialViewSelect<ExtArgs> | null;
+  /**
+   * Omit specific fields from the StudyMaterialView
+   */
+  omit?: Prisma.StudyMaterialViewOmit<ExtArgs> | null;
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StudyMaterialViewInclude<ExtArgs> | null;
+  where?: Prisma.StudyMaterialViewWhereInput;
+  orderBy?:
+    | Prisma.StudyMaterialViewOrderByWithRelationInput
+    | Prisma.StudyMaterialViewOrderByWithRelationInput[];
+  cursor?: Prisma.StudyMaterialViewWhereUniqueInput;
+  take?: number;
+  skip?: number;
+  distinct?: Prisma.StudyMaterialViewScalarFieldEnum | Prisma.StudyMaterialViewScalarFieldEnum[];
 };
 
 /**

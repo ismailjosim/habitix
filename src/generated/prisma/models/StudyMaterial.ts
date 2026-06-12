@@ -34,6 +34,10 @@ export type StudyMaterialMinAggregateOutputType = {
   ownerProfileId: string | null;
   teamId: string | null;
   visibility: $Enums.Visibility | null;
+  module: string | null;
+  milestone: string | null;
+  isPublished: boolean | null;
+  publishedAt: Date | null;
   createdAt: Date | null;
   updatedAt: Date | null;
 };
@@ -48,6 +52,10 @@ export type StudyMaterialMaxAggregateOutputType = {
   ownerProfileId: string | null;
   teamId: string | null;
   visibility: $Enums.Visibility | null;
+  module: string | null;
+  milestone: string | null;
+  isPublished: boolean | null;
+  publishedAt: Date | null;
   createdAt: Date | null;
   updatedAt: Date | null;
 };
@@ -62,6 +70,10 @@ export type StudyMaterialCountAggregateOutputType = {
   ownerProfileId: number;
   teamId: number;
   visibility: number;
+  module: number;
+  milestone: number;
+  isPublished: number;
+  publishedAt: number;
   createdAt: number;
   updatedAt: number;
   _all: number;
@@ -77,6 +89,10 @@ export type StudyMaterialMinAggregateInputType = {
   ownerProfileId?: true;
   teamId?: true;
   visibility?: true;
+  module?: true;
+  milestone?: true;
+  isPublished?: true;
+  publishedAt?: true;
   createdAt?: true;
   updatedAt?: true;
 };
@@ -91,6 +107,10 @@ export type StudyMaterialMaxAggregateInputType = {
   ownerProfileId?: true;
   teamId?: true;
   visibility?: true;
+  module?: true;
+  milestone?: true;
+  isPublished?: true;
+  publishedAt?: true;
   createdAt?: true;
   updatedAt?: true;
 };
@@ -105,6 +125,10 @@ export type StudyMaterialCountAggregateInputType = {
   ownerProfileId?: true;
   teamId?: true;
   visibility?: true;
+  module?: true;
+  milestone?: true;
+  isPublished?: true;
+  publishedAt?: true;
   createdAt?: true;
   updatedAt?: true;
   _all?: true;
@@ -197,6 +221,10 @@ export type StudyMaterialGroupByOutputType = {
   ownerProfileId: string;
   teamId: string | null;
   visibility: $Enums.Visibility;
+  module: string | null;
+  milestone: string | null;
+  isPublished: boolean;
+  publishedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
   _count: StudyMaterialCountAggregateOutputType | null;
@@ -230,11 +258,16 @@ export type StudyMaterialWhereInput = {
   ownerProfileId?: Prisma.StringFilter<'StudyMaterial'> | string;
   teamId?: Prisma.StringNullableFilter<'StudyMaterial'> | string | null;
   visibility?: Prisma.EnumVisibilityFilter<'StudyMaterial'> | $Enums.Visibility;
+  module?: Prisma.StringNullableFilter<'StudyMaterial'> | string | null;
+  milestone?: Prisma.StringNullableFilter<'StudyMaterial'> | string | null;
+  isPublished?: Prisma.BoolFilter<'StudyMaterial'> | boolean;
+  publishedAt?: Prisma.DateTimeNullableFilter<'StudyMaterial'> | Date | string | null;
   createdAt?: Prisma.DateTimeFilter<'StudyMaterial'> | Date | string;
   updatedAt?: Prisma.DateTimeFilter<'StudyMaterial'> | Date | string;
   owner?: Prisma.XOR<Prisma.UserProfileScalarRelationFilter, Prisma.UserProfileWhereInput>;
   team?: Prisma.XOR<Prisma.TeamNullableScalarRelationFilter, Prisma.TeamWhereInput> | null;
   tags?: Prisma.StudyMaterialTagListRelationFilter;
+  views?: Prisma.StudyMaterialViewListRelationFilter;
 };
 
 export type StudyMaterialOrderByWithRelationInput = {
@@ -247,11 +280,16 @@ export type StudyMaterialOrderByWithRelationInput = {
   ownerProfileId?: Prisma.SortOrder;
   teamId?: Prisma.SortOrderInput | Prisma.SortOrder;
   visibility?: Prisma.SortOrder;
+  module?: Prisma.SortOrderInput | Prisma.SortOrder;
+  milestone?: Prisma.SortOrderInput | Prisma.SortOrder;
+  isPublished?: Prisma.SortOrder;
+  publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
   owner?: Prisma.UserProfileOrderByWithRelationInput;
   team?: Prisma.TeamOrderByWithRelationInput;
   tags?: Prisma.StudyMaterialTagOrderByRelationAggregateInput;
+  views?: Prisma.StudyMaterialViewOrderByRelationAggregateInput;
 };
 
 export type StudyMaterialWhereUniqueInput = Prisma.AtLeast<
@@ -268,11 +306,16 @@ export type StudyMaterialWhereUniqueInput = Prisma.AtLeast<
     ownerProfileId?: Prisma.StringFilter<'StudyMaterial'> | string;
     teamId?: Prisma.StringNullableFilter<'StudyMaterial'> | string | null;
     visibility?: Prisma.EnumVisibilityFilter<'StudyMaterial'> | $Enums.Visibility;
+    module?: Prisma.StringNullableFilter<'StudyMaterial'> | string | null;
+    milestone?: Prisma.StringNullableFilter<'StudyMaterial'> | string | null;
+    isPublished?: Prisma.BoolFilter<'StudyMaterial'> | boolean;
+    publishedAt?: Prisma.DateTimeNullableFilter<'StudyMaterial'> | Date | string | null;
     createdAt?: Prisma.DateTimeFilter<'StudyMaterial'> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<'StudyMaterial'> | Date | string;
     owner?: Prisma.XOR<Prisma.UserProfileScalarRelationFilter, Prisma.UserProfileWhereInput>;
     team?: Prisma.XOR<Prisma.TeamNullableScalarRelationFilter, Prisma.TeamWhereInput> | null;
     tags?: Prisma.StudyMaterialTagListRelationFilter;
+    views?: Prisma.StudyMaterialViewListRelationFilter;
   },
   'id'
 >;
@@ -287,6 +330,10 @@ export type StudyMaterialOrderByWithAggregationInput = {
   ownerProfileId?: Prisma.SortOrder;
   teamId?: Prisma.SortOrderInput | Prisma.SortOrder;
   visibility?: Prisma.SortOrder;
+  module?: Prisma.SortOrderInput | Prisma.SortOrder;
+  milestone?: Prisma.SortOrderInput | Prisma.SortOrder;
+  isPublished?: Prisma.SortOrder;
+  publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
   _count?: Prisma.StudyMaterialCountOrderByAggregateInput;
@@ -313,6 +360,10 @@ export type StudyMaterialScalarWhereWithAggregatesInput = {
   ownerProfileId?: Prisma.StringWithAggregatesFilter<'StudyMaterial'> | string;
   teamId?: Prisma.StringNullableWithAggregatesFilter<'StudyMaterial'> | string | null;
   visibility?: Prisma.EnumVisibilityWithAggregatesFilter<'StudyMaterial'> | $Enums.Visibility;
+  module?: Prisma.StringNullableWithAggregatesFilter<'StudyMaterial'> | string | null;
+  milestone?: Prisma.StringNullableWithAggregatesFilter<'StudyMaterial'> | string | null;
+  isPublished?: Prisma.BoolWithAggregatesFilter<'StudyMaterial'> | boolean;
+  publishedAt?: Prisma.DateTimeNullableWithAggregatesFilter<'StudyMaterial'> | Date | string | null;
   createdAt?: Prisma.DateTimeWithAggregatesFilter<'StudyMaterial'> | Date | string;
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<'StudyMaterial'> | Date | string;
 };
@@ -325,11 +376,16 @@ export type StudyMaterialCreateInput = {
   url?: string | null;
   fileKey?: string | null;
   visibility?: $Enums.Visibility;
+  module?: string | null;
+  milestone?: string | null;
+  isPublished?: boolean;
+  publishedAt?: Date | string | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
   owner: Prisma.UserProfileCreateNestedOneWithoutStudyMaterialsInput;
   team?: Prisma.TeamCreateNestedOneWithoutStudyMaterialsInput;
   tags?: Prisma.StudyMaterialTagCreateNestedManyWithoutMaterialInput;
+  views?: Prisma.StudyMaterialViewCreateNestedManyWithoutMaterialInput;
 };
 
 export type StudyMaterialUncheckedCreateInput = {
@@ -342,9 +398,14 @@ export type StudyMaterialUncheckedCreateInput = {
   ownerProfileId: string;
   teamId?: string | null;
   visibility?: $Enums.Visibility;
+  module?: string | null;
+  milestone?: string | null;
+  isPublished?: boolean;
+  publishedAt?: Date | string | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
   tags?: Prisma.StudyMaterialTagUncheckedCreateNestedManyWithoutMaterialInput;
+  views?: Prisma.StudyMaterialViewUncheckedCreateNestedManyWithoutMaterialInput;
 };
 
 export type StudyMaterialUpdateInput = {
@@ -355,11 +416,16 @@ export type StudyMaterialUpdateInput = {
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   fileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility;
+  module?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  milestone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   owner?: Prisma.UserProfileUpdateOneRequiredWithoutStudyMaterialsNestedInput;
   team?: Prisma.TeamUpdateOneWithoutStudyMaterialsNestedInput;
   tags?: Prisma.StudyMaterialTagUpdateManyWithoutMaterialNestedInput;
+  views?: Prisma.StudyMaterialViewUpdateManyWithoutMaterialNestedInput;
 };
 
 export type StudyMaterialUncheckedUpdateInput = {
@@ -372,9 +438,14 @@ export type StudyMaterialUncheckedUpdateInput = {
   ownerProfileId?: Prisma.StringFieldUpdateOperationsInput | string;
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility;
+  module?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  milestone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   tags?: Prisma.StudyMaterialTagUncheckedUpdateManyWithoutMaterialNestedInput;
+  views?: Prisma.StudyMaterialViewUncheckedUpdateManyWithoutMaterialNestedInput;
 };
 
 export type StudyMaterialCreateManyInput = {
@@ -387,6 +458,10 @@ export type StudyMaterialCreateManyInput = {
   ownerProfileId: string;
   teamId?: string | null;
   visibility?: $Enums.Visibility;
+  module?: string | null;
+  milestone?: string | null;
+  isPublished?: boolean;
+  publishedAt?: Date | string | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
 };
@@ -399,6 +474,10 @@ export type StudyMaterialUpdateManyMutationInput = {
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   fileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility;
+  module?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  milestone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -413,6 +492,10 @@ export type StudyMaterialUncheckedUpdateManyInput = {
   ownerProfileId?: Prisma.StringFieldUpdateOperationsInput | string;
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility;
+  module?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  milestone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -437,6 +520,10 @@ export type StudyMaterialCountOrderByAggregateInput = {
   ownerProfileId?: Prisma.SortOrder;
   teamId?: Prisma.SortOrder;
   visibility?: Prisma.SortOrder;
+  module?: Prisma.SortOrder;
+  milestone?: Prisma.SortOrder;
+  isPublished?: Prisma.SortOrder;
+  publishedAt?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
 };
@@ -451,6 +538,10 @@ export type StudyMaterialMaxOrderByAggregateInput = {
   ownerProfileId?: Prisma.SortOrder;
   teamId?: Prisma.SortOrder;
   visibility?: Prisma.SortOrder;
+  module?: Prisma.SortOrder;
+  milestone?: Prisma.SortOrder;
+  isPublished?: Prisma.SortOrder;
+  publishedAt?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
 };
@@ -465,6 +556,10 @@ export type StudyMaterialMinOrderByAggregateInput = {
   ownerProfileId?: Prisma.SortOrder;
   teamId?: Prisma.SortOrder;
   visibility?: Prisma.SortOrder;
+  module?: Prisma.SortOrder;
+  milestone?: Prisma.SortOrder;
+  isPublished?: Prisma.SortOrder;
+  publishedAt?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
 };
@@ -654,6 +749,32 @@ export type EnumVisibilityFieldUpdateOperationsInput = {
   set?: $Enums.Visibility;
 };
 
+export type StudyMaterialCreateNestedOneWithoutViewsInput = {
+  create?: Prisma.XOR<
+    Prisma.StudyMaterialCreateWithoutViewsInput,
+    Prisma.StudyMaterialUncheckedCreateWithoutViewsInput
+  >;
+  connectOrCreate?: Prisma.StudyMaterialCreateOrConnectWithoutViewsInput;
+  connect?: Prisma.StudyMaterialWhereUniqueInput;
+};
+
+export type StudyMaterialUpdateOneRequiredWithoutViewsNestedInput = {
+  create?: Prisma.XOR<
+    Prisma.StudyMaterialCreateWithoutViewsInput,
+    Prisma.StudyMaterialUncheckedCreateWithoutViewsInput
+  >;
+  connectOrCreate?: Prisma.StudyMaterialCreateOrConnectWithoutViewsInput;
+  upsert?: Prisma.StudyMaterialUpsertWithoutViewsInput;
+  connect?: Prisma.StudyMaterialWhereUniqueInput;
+  update?: Prisma.XOR<
+    Prisma.XOR<
+      Prisma.StudyMaterialUpdateToOneWithWhereWithoutViewsInput,
+      Prisma.StudyMaterialUpdateWithoutViewsInput
+    >,
+    Prisma.StudyMaterialUncheckedUpdateWithoutViewsInput
+  >;
+};
+
 export type StudyMaterialCreateNestedOneWithoutTagsInput = {
   create?: Prisma.XOR<
     Prisma.StudyMaterialCreateWithoutTagsInput,
@@ -688,10 +809,15 @@ export type StudyMaterialCreateWithoutOwnerInput = {
   url?: string | null;
   fileKey?: string | null;
   visibility?: $Enums.Visibility;
+  module?: string | null;
+  milestone?: string | null;
+  isPublished?: boolean;
+  publishedAt?: Date | string | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
   team?: Prisma.TeamCreateNestedOneWithoutStudyMaterialsInput;
   tags?: Prisma.StudyMaterialTagCreateNestedManyWithoutMaterialInput;
+  views?: Prisma.StudyMaterialViewCreateNestedManyWithoutMaterialInput;
 };
 
 export type StudyMaterialUncheckedCreateWithoutOwnerInput = {
@@ -703,9 +829,14 @@ export type StudyMaterialUncheckedCreateWithoutOwnerInput = {
   fileKey?: string | null;
   teamId?: string | null;
   visibility?: $Enums.Visibility;
+  module?: string | null;
+  milestone?: string | null;
+  isPublished?: boolean;
+  publishedAt?: Date | string | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
   tags?: Prisma.StudyMaterialTagUncheckedCreateNestedManyWithoutMaterialInput;
+  views?: Prisma.StudyMaterialViewUncheckedCreateNestedManyWithoutMaterialInput;
 };
 
 export type StudyMaterialCreateOrConnectWithoutOwnerInput = {
@@ -762,6 +893,10 @@ export type StudyMaterialScalarWhereInput = {
   ownerProfileId?: Prisma.StringFilter<'StudyMaterial'> | string;
   teamId?: Prisma.StringNullableFilter<'StudyMaterial'> | string | null;
   visibility?: Prisma.EnumVisibilityFilter<'StudyMaterial'> | $Enums.Visibility;
+  module?: Prisma.StringNullableFilter<'StudyMaterial'> | string | null;
+  milestone?: Prisma.StringNullableFilter<'StudyMaterial'> | string | null;
+  isPublished?: Prisma.BoolFilter<'StudyMaterial'> | boolean;
+  publishedAt?: Prisma.DateTimeNullableFilter<'StudyMaterial'> | Date | string | null;
   createdAt?: Prisma.DateTimeFilter<'StudyMaterial'> | Date | string;
   updatedAt?: Prisma.DateTimeFilter<'StudyMaterial'> | Date | string;
 };
@@ -774,10 +909,15 @@ export type StudyMaterialCreateWithoutTeamInput = {
   url?: string | null;
   fileKey?: string | null;
   visibility?: $Enums.Visibility;
+  module?: string | null;
+  milestone?: string | null;
+  isPublished?: boolean;
+  publishedAt?: Date | string | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
   owner: Prisma.UserProfileCreateNestedOneWithoutStudyMaterialsInput;
   tags?: Prisma.StudyMaterialTagCreateNestedManyWithoutMaterialInput;
+  views?: Prisma.StudyMaterialViewCreateNestedManyWithoutMaterialInput;
 };
 
 export type StudyMaterialUncheckedCreateWithoutTeamInput = {
@@ -789,9 +929,14 @@ export type StudyMaterialUncheckedCreateWithoutTeamInput = {
   fileKey?: string | null;
   ownerProfileId: string;
   visibility?: $Enums.Visibility;
+  module?: string | null;
+  milestone?: string | null;
+  isPublished?: boolean;
+  publishedAt?: Date | string | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
   tags?: Prisma.StudyMaterialTagUncheckedCreateNestedManyWithoutMaterialInput;
+  views?: Prisma.StudyMaterialViewUncheckedCreateNestedManyWithoutMaterialInput;
 };
 
 export type StudyMaterialCreateOrConnectWithoutTeamInput = {
@@ -835,6 +980,110 @@ export type StudyMaterialUpdateManyWithWhereWithoutTeamInput = {
   >;
 };
 
+export type StudyMaterialCreateWithoutViewsInput = {
+  id?: string;
+  title: string;
+  description?: string | null;
+  type: $Enums.StudyMaterialType;
+  url?: string | null;
+  fileKey?: string | null;
+  visibility?: $Enums.Visibility;
+  module?: string | null;
+  milestone?: string | null;
+  isPublished?: boolean;
+  publishedAt?: Date | string | null;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  owner: Prisma.UserProfileCreateNestedOneWithoutStudyMaterialsInput;
+  team?: Prisma.TeamCreateNestedOneWithoutStudyMaterialsInput;
+  tags?: Prisma.StudyMaterialTagCreateNestedManyWithoutMaterialInput;
+};
+
+export type StudyMaterialUncheckedCreateWithoutViewsInput = {
+  id?: string;
+  title: string;
+  description?: string | null;
+  type: $Enums.StudyMaterialType;
+  url?: string | null;
+  fileKey?: string | null;
+  ownerProfileId: string;
+  teamId?: string | null;
+  visibility?: $Enums.Visibility;
+  module?: string | null;
+  milestone?: string | null;
+  isPublished?: boolean;
+  publishedAt?: Date | string | null;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  tags?: Prisma.StudyMaterialTagUncheckedCreateNestedManyWithoutMaterialInput;
+};
+
+export type StudyMaterialCreateOrConnectWithoutViewsInput = {
+  where: Prisma.StudyMaterialWhereUniqueInput;
+  create: Prisma.XOR<
+    Prisma.StudyMaterialCreateWithoutViewsInput,
+    Prisma.StudyMaterialUncheckedCreateWithoutViewsInput
+  >;
+};
+
+export type StudyMaterialUpsertWithoutViewsInput = {
+  update: Prisma.XOR<
+    Prisma.StudyMaterialUpdateWithoutViewsInput,
+    Prisma.StudyMaterialUncheckedUpdateWithoutViewsInput
+  >;
+  create: Prisma.XOR<
+    Prisma.StudyMaterialCreateWithoutViewsInput,
+    Prisma.StudyMaterialUncheckedCreateWithoutViewsInput
+  >;
+  where?: Prisma.StudyMaterialWhereInput;
+};
+
+export type StudyMaterialUpdateToOneWithWhereWithoutViewsInput = {
+  where?: Prisma.StudyMaterialWhereInput;
+  data: Prisma.XOR<
+    Prisma.StudyMaterialUpdateWithoutViewsInput,
+    Prisma.StudyMaterialUncheckedUpdateWithoutViewsInput
+  >;
+};
+
+export type StudyMaterialUpdateWithoutViewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  title?: Prisma.StringFieldUpdateOperationsInput | string;
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  type?: Prisma.EnumStudyMaterialTypeFieldUpdateOperationsInput | $Enums.StudyMaterialType;
+  url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  fileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility;
+  module?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  milestone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  owner?: Prisma.UserProfileUpdateOneRequiredWithoutStudyMaterialsNestedInput;
+  team?: Prisma.TeamUpdateOneWithoutStudyMaterialsNestedInput;
+  tags?: Prisma.StudyMaterialTagUpdateManyWithoutMaterialNestedInput;
+};
+
+export type StudyMaterialUncheckedUpdateWithoutViewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  title?: Prisma.StringFieldUpdateOperationsInput | string;
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  type?: Prisma.EnumStudyMaterialTypeFieldUpdateOperationsInput | $Enums.StudyMaterialType;
+  url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  fileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  ownerProfileId?: Prisma.StringFieldUpdateOperationsInput | string;
+  teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility;
+  module?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  milestone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  tags?: Prisma.StudyMaterialTagUncheckedUpdateManyWithoutMaterialNestedInput;
+};
+
 export type StudyMaterialCreateWithoutTagsInput = {
   id?: string;
   title: string;
@@ -843,10 +1092,15 @@ export type StudyMaterialCreateWithoutTagsInput = {
   url?: string | null;
   fileKey?: string | null;
   visibility?: $Enums.Visibility;
+  module?: string | null;
+  milestone?: string | null;
+  isPublished?: boolean;
+  publishedAt?: Date | string | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
   owner: Prisma.UserProfileCreateNestedOneWithoutStudyMaterialsInput;
   team?: Prisma.TeamCreateNestedOneWithoutStudyMaterialsInput;
+  views?: Prisma.StudyMaterialViewCreateNestedManyWithoutMaterialInput;
 };
 
 export type StudyMaterialUncheckedCreateWithoutTagsInput = {
@@ -859,8 +1113,13 @@ export type StudyMaterialUncheckedCreateWithoutTagsInput = {
   ownerProfileId: string;
   teamId?: string | null;
   visibility?: $Enums.Visibility;
+  module?: string | null;
+  milestone?: string | null;
+  isPublished?: boolean;
+  publishedAt?: Date | string | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
+  views?: Prisma.StudyMaterialViewUncheckedCreateNestedManyWithoutMaterialInput;
 };
 
 export type StudyMaterialCreateOrConnectWithoutTagsInput = {
@@ -899,10 +1158,15 @@ export type StudyMaterialUpdateWithoutTagsInput = {
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   fileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility;
+  module?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  milestone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   owner?: Prisma.UserProfileUpdateOneRequiredWithoutStudyMaterialsNestedInput;
   team?: Prisma.TeamUpdateOneWithoutStudyMaterialsNestedInput;
+  views?: Prisma.StudyMaterialViewUpdateManyWithoutMaterialNestedInput;
 };
 
 export type StudyMaterialUncheckedUpdateWithoutTagsInput = {
@@ -915,8 +1179,13 @@ export type StudyMaterialUncheckedUpdateWithoutTagsInput = {
   ownerProfileId?: Prisma.StringFieldUpdateOperationsInput | string;
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility;
+  module?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  milestone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  views?: Prisma.StudyMaterialViewUncheckedUpdateManyWithoutMaterialNestedInput;
 };
 
 export type StudyMaterialCreateManyOwnerInput = {
@@ -928,6 +1197,10 @@ export type StudyMaterialCreateManyOwnerInput = {
   fileKey?: string | null;
   teamId?: string | null;
   visibility?: $Enums.Visibility;
+  module?: string | null;
+  milestone?: string | null;
+  isPublished?: boolean;
+  publishedAt?: Date | string | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
 };
@@ -940,10 +1213,15 @@ export type StudyMaterialUpdateWithoutOwnerInput = {
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   fileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility;
+  module?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  milestone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   team?: Prisma.TeamUpdateOneWithoutStudyMaterialsNestedInput;
   tags?: Prisma.StudyMaterialTagUpdateManyWithoutMaterialNestedInput;
+  views?: Prisma.StudyMaterialViewUpdateManyWithoutMaterialNestedInput;
 };
 
 export type StudyMaterialUncheckedUpdateWithoutOwnerInput = {
@@ -955,9 +1233,14 @@ export type StudyMaterialUncheckedUpdateWithoutOwnerInput = {
   fileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility;
+  module?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  milestone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   tags?: Prisma.StudyMaterialTagUncheckedUpdateManyWithoutMaterialNestedInput;
+  views?: Prisma.StudyMaterialViewUncheckedUpdateManyWithoutMaterialNestedInput;
 };
 
 export type StudyMaterialUncheckedUpdateManyWithoutOwnerInput = {
@@ -969,6 +1252,10 @@ export type StudyMaterialUncheckedUpdateManyWithoutOwnerInput = {
   fileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility;
+  module?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  milestone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -982,6 +1269,10 @@ export type StudyMaterialCreateManyTeamInput = {
   fileKey?: string | null;
   ownerProfileId: string;
   visibility?: $Enums.Visibility;
+  module?: string | null;
+  milestone?: string | null;
+  isPublished?: boolean;
+  publishedAt?: Date | string | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
 };
@@ -994,10 +1285,15 @@ export type StudyMaterialUpdateWithoutTeamInput = {
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   fileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility;
+  module?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  milestone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   owner?: Prisma.UserProfileUpdateOneRequiredWithoutStudyMaterialsNestedInput;
   tags?: Prisma.StudyMaterialTagUpdateManyWithoutMaterialNestedInput;
+  views?: Prisma.StudyMaterialViewUpdateManyWithoutMaterialNestedInput;
 };
 
 export type StudyMaterialUncheckedUpdateWithoutTeamInput = {
@@ -1009,9 +1305,14 @@ export type StudyMaterialUncheckedUpdateWithoutTeamInput = {
   fileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   ownerProfileId?: Prisma.StringFieldUpdateOperationsInput | string;
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility;
+  module?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  milestone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   tags?: Prisma.StudyMaterialTagUncheckedUpdateManyWithoutMaterialNestedInput;
+  views?: Prisma.StudyMaterialViewUncheckedUpdateManyWithoutMaterialNestedInput;
 };
 
 export type StudyMaterialUncheckedUpdateManyWithoutTeamInput = {
@@ -1023,6 +1324,10 @@ export type StudyMaterialUncheckedUpdateManyWithoutTeamInput = {
   fileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   ownerProfileId?: Prisma.StringFieldUpdateOperationsInput | string;
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility;
+  module?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  milestone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -1033,12 +1338,14 @@ export type StudyMaterialUncheckedUpdateManyWithoutTeamInput = {
 
 export type StudyMaterialCountOutputType = {
   tags: number;
+  views: number;
 };
 
 export type StudyMaterialCountOutputTypeSelect<
   ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
   tags?: boolean | StudyMaterialCountOutputTypeCountTagsArgs;
+  views?: boolean | StudyMaterialCountOutputTypeCountViewsArgs;
 };
 
 /**
@@ -1062,6 +1369,15 @@ export type StudyMaterialCountOutputTypeCountTagsArgs<
   where?: Prisma.StudyMaterialTagWhereInput;
 };
 
+/**
+ * StudyMaterialCountOutputType without action
+ */
+export type StudyMaterialCountOutputTypeCountViewsArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+  where?: Prisma.StudyMaterialViewWhereInput;
+};
+
 export type StudyMaterialSelect<
   ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = runtime.Types.Extensions.GetSelect<
@@ -1075,11 +1391,16 @@ export type StudyMaterialSelect<
     ownerProfileId?: boolean;
     teamId?: boolean;
     visibility?: boolean;
+    module?: boolean;
+    milestone?: boolean;
+    isPublished?: boolean;
+    publishedAt?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
     owner?: boolean | Prisma.UserProfileDefaultArgs<ExtArgs>;
     team?: boolean | Prisma.StudyMaterial$teamArgs<ExtArgs>;
     tags?: boolean | Prisma.StudyMaterial$tagsArgs<ExtArgs>;
+    views?: boolean | Prisma.StudyMaterial$viewsArgs<ExtArgs>;
     _count?: boolean | Prisma.StudyMaterialCountOutputTypeDefaultArgs<ExtArgs>;
   },
   ExtArgs['result']['studyMaterial']
@@ -1098,6 +1419,10 @@ export type StudyMaterialSelectCreateManyAndReturn<
     ownerProfileId?: boolean;
     teamId?: boolean;
     visibility?: boolean;
+    module?: boolean;
+    milestone?: boolean;
+    isPublished?: boolean;
+    publishedAt?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
     owner?: boolean | Prisma.UserProfileDefaultArgs<ExtArgs>;
@@ -1119,6 +1444,10 @@ export type StudyMaterialSelectUpdateManyAndReturn<
     ownerProfileId?: boolean;
     teamId?: boolean;
     visibility?: boolean;
+    module?: boolean;
+    milestone?: boolean;
+    isPublished?: boolean;
+    publishedAt?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
     owner?: boolean | Prisma.UserProfileDefaultArgs<ExtArgs>;
@@ -1137,6 +1466,10 @@ export type StudyMaterialSelectScalar = {
   ownerProfileId?: boolean;
   teamId?: boolean;
   visibility?: boolean;
+  module?: boolean;
+  milestone?: boolean;
+  isPublished?: boolean;
+  publishedAt?: boolean;
   createdAt?: boolean;
   updatedAt?: boolean;
 };
@@ -1153,6 +1486,10 @@ export type StudyMaterialOmit<
   | 'ownerProfileId'
   | 'teamId'
   | 'visibility'
+  | 'module'
+  | 'milestone'
+  | 'isPublished'
+  | 'publishedAt'
   | 'createdAt'
   | 'updatedAt',
   ExtArgs['result']['studyMaterial']
@@ -1163,6 +1500,7 @@ export type StudyMaterialInclude<
   owner?: boolean | Prisma.UserProfileDefaultArgs<ExtArgs>;
   team?: boolean | Prisma.StudyMaterial$teamArgs<ExtArgs>;
   tags?: boolean | Prisma.StudyMaterial$tagsArgs<ExtArgs>;
+  views?: boolean | Prisma.StudyMaterial$viewsArgs<ExtArgs>;
   _count?: boolean | Prisma.StudyMaterialCountOutputTypeDefaultArgs<ExtArgs>;
 };
 export type StudyMaterialIncludeCreateManyAndReturn<
@@ -1186,6 +1524,7 @@ export type $StudyMaterialPayload<
     owner: Prisma.$UserProfilePayload<ExtArgs>;
     team: Prisma.$TeamPayload<ExtArgs> | null;
     tags: Prisma.$StudyMaterialTagPayload<ExtArgs>[];
+    views: Prisma.$StudyMaterialViewPayload<ExtArgs>[];
   };
   scalars: runtime.Types.Extensions.GetPayloadResult<
     {
@@ -1198,6 +1537,10 @@ export type $StudyMaterialPayload<
       ownerProfileId: string;
       teamId: string | null;
       visibility: $Enums.Visibility;
+      module: string | null;
+      milestone: string | null;
+      isPublished: boolean;
+      publishedAt: Date | null;
       createdAt: Date;
       updatedAt: Date;
     },
@@ -1777,6 +2120,17 @@ export interface Prisma__StudyMaterialClient<
       >
     | Null
   >;
+  views<T extends Prisma.StudyMaterial$viewsArgs<ExtArgs> = {}>(
+    args?: Prisma.Subset<T, Prisma.StudyMaterial$viewsArgs<ExtArgs>>
+  ): Prisma.PrismaPromise<
+    | runtime.Types.Result.GetResult<
+        Prisma.$StudyMaterialViewPayload<ExtArgs>,
+        T,
+        'findMany',
+        GlobalOmitOptions
+      >
+    | Null
+  >;
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1817,6 +2171,10 @@ export interface StudyMaterialFieldRefs {
   readonly ownerProfileId: Prisma.FieldRef<'StudyMaterial', 'String'>;
   readonly teamId: Prisma.FieldRef<'StudyMaterial', 'String'>;
   readonly visibility: Prisma.FieldRef<'StudyMaterial', 'Visibility'>;
+  readonly module: Prisma.FieldRef<'StudyMaterial', 'String'>;
+  readonly milestone: Prisma.FieldRef<'StudyMaterial', 'String'>;
+  readonly isPublished: Prisma.FieldRef<'StudyMaterial', 'Boolean'>;
+  readonly publishedAt: Prisma.FieldRef<'StudyMaterial', 'DateTime'>;
   readonly createdAt: Prisma.FieldRef<'StudyMaterial', 'DateTime'>;
   readonly updatedAt: Prisma.FieldRef<'StudyMaterial', 'DateTime'>;
 }
@@ -2305,6 +2663,34 @@ export type StudyMaterial$tagsArgs<
   take?: number;
   skip?: number;
   distinct?: Prisma.StudyMaterialTagScalarFieldEnum | Prisma.StudyMaterialTagScalarFieldEnum[];
+};
+
+/**
+ * StudyMaterial.views
+ */
+export type StudyMaterial$viewsArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+  /**
+   * Select specific fields to fetch from the StudyMaterialView
+   */
+  select?: Prisma.StudyMaterialViewSelect<ExtArgs> | null;
+  /**
+   * Omit specific fields from the StudyMaterialView
+   */
+  omit?: Prisma.StudyMaterialViewOmit<ExtArgs> | null;
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StudyMaterialViewInclude<ExtArgs> | null;
+  where?: Prisma.StudyMaterialViewWhereInput;
+  orderBy?:
+    | Prisma.StudyMaterialViewOrderByWithRelationInput
+    | Prisma.StudyMaterialViewOrderByWithRelationInput[];
+  cursor?: Prisma.StudyMaterialViewWhereUniqueInput;
+  take?: number;
+  skip?: number;
+  distinct?: Prisma.StudyMaterialViewScalarFieldEnum | Prisma.StudyMaterialViewScalarFieldEnum[];
 };
 
 /**

@@ -175,29 +175,29 @@ model Verification {
 }
 
 model UserProfile {
-  id                    String             @id @default(cuid())
-  authUserId            String             @unique
+  id                    String              @id @default(cuid())
+  authUserId            String              @unique
   displayName           String
   avatarUrl             String?
-  role                  AppRole            @default(STUDENT)
+  role                  AppRole             @default(STUDENT)
   bio                   String?
-  timezone              String             @default("UTC")
+  timezone              String              @default("UTC")
   institution           String?
   department            String?
-  currentStreak         Int                @default(0)
-  totalFocusMinutes     Int                @default(0)
-  helpPoints            Int                @default(0)
-  createdAt             DateTime           @default(now())
-  updatedAt             DateTime           @updatedAt
-  authUser              User               @relation(fields: [authUserId], references: [id], onDelete: Cascade)
+  currentStreak         Int                 @default(0)
+  totalFocusMinutes     Int                 @default(0)
+  helpPoints            Int                 @default(0)
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+  authUser              User                @relation(fields: [authUserId], references: [id], onDelete: Cascade)
   preferences           UserPreference?
   presence              Presence?
-  ownedTeams            Team[]             @relation("TeamOwner")
+  ownedTeams            Team[]              @relation("TeamOwner")
   memberships           TeamMembership[]
-  mentorAssignments     MentorAssignment[] @relation("MentorAssignments")
-  studentAssignments    MentorAssignment[] @relation("StudentAssignments")
-  createdTasks          Task[]             @relation("TaskCreator")
-  assignedTasks         Task[]             @relation("TaskAssignee")
+  mentorAssignments     MentorAssignment[]  @relation("MentorAssignments")
+  studentAssignments    MentorAssignment[]  @relation("StudentAssignments")
+  createdTasks          Task[]              @relation("TaskCreator")
+  assignedTasks         Task[]              @relation("TaskAssignee")
   taskComments          TaskComment[]
   taskActivities        TaskActivity[]
   focusSessions         FocusSession[]
@@ -205,12 +205,13 @@ model UserProfile {
   helpPosts             HelpPost[]
   helpResponses         HelpResponse[]
   helperLimits          HelperLimit[]
-  awardedBadges         BadgeAward[]       @relation("BadgeRecipient")
-  givenBadges           BadgeAward[]       @relation("BadgeAwarder")
+  awardedBadges         BadgeAward[]        @relation("BadgeRecipient")
+  givenBadges           BadgeAward[]        @relation("BadgeAwarder")
   leaderboardEntries    LeaderboardEntry[]
-  receivedNotifications Notification[]     @relation("NotificationRecipient")
-  actedNotifications    Notification[]     @relation("NotificationActor")
+  receivedNotifications Notification[]      @relation("NotificationRecipient")
+  actedNotifications    Notification[]      @relation("NotificationActor")
   studyMaterials        StudyMaterial[]
+  materialViews         StudyMaterialView[]
   studentReports        StudentReport[]
 
   @@index([role])
@@ -554,7 +555,7 @@ model Notification {
 }
 
 model StudyMaterial {
-  id             String             @id @default(cuid())
+  id             String              @id @default(cuid())
   title          String
   description    String?
   type           StudyMaterialType
@@ -562,16 +563,35 @@ model StudyMaterial {
   fileKey        String?
   ownerProfileId String
   teamId         String?
-  visibility     Visibility         @default(PRIVATE)
-  createdAt      DateTime           @default(now())
-  updatedAt      DateTime           @updatedAt
-  owner          UserProfile        @relation(fields: [ownerProfileId], references: [id], onDelete: Cascade)
-  team           Team?              @relation(fields: [teamId], references: [id], onDelete: SetNull)
+  visibility     Visibility          @default(PRIVATE)
+  module         String?
+  milestone      String?
+  isPublished    Boolean             @default(false)
+  publishedAt    DateTime?
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  owner          UserProfile         @relation(fields: [ownerProfileId], references: [id], onDelete: Cascade)
+  team           Team?               @relation(fields: [teamId], references: [id], onDelete: SetNull)
   tags           StudyMaterialTag[]
+  views          StudyMaterialView[]
 
   @@index([ownerProfileId, createdAt])
   @@index([teamId, visibility])
   @@index([type])
+  @@index([isPublished, module])
+}
+
+model StudyMaterialView {
+  id         String        @id @default(cuid())
+  materialId String
+  profileId  String
+  action     String        @default("view")
+  createdAt  DateTime      @default(now())
+  material   StudyMaterial @relation(fields: [materialId], references: [id], onDelete: Cascade)
+  profile    UserProfile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([materialId, createdAt])
+  @@index([profileId, createdAt])
 }
 
 model StudyMaterialTag {

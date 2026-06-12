@@ -1,6 +1,7 @@
 import { AppShell } from '@/components/app/app-shell';
 import { getCurrentUserProfile } from '@/lib/session';
 import { redirect } from 'next/navigation';
+import { getUnreadNotificationCount } from '@/lib/queries/notifications';
 
 export default async function ProtectedAppLayout({ children }: { children: React.ReactNode }) {
   const currentUser = await getCurrentUserProfile();
@@ -9,6 +10,8 @@ export default async function ProtectedAppLayout({ children }: { children: React
     redirect('/sign-in');
   }
 
+  const unreadNotificationCount = await getUnreadNotificationCount(currentUser.profile.id);
+
   return (
     <AppShell
       user={{
@@ -16,6 +19,7 @@ export default async function ProtectedAppLayout({ children }: { children: React
         email: currentUser.session.user.email,
         image: currentUser.session.user.image,
         role: currentUser.profile.role,
+        unreadNotificationCount,
       }}
     >
       {children}

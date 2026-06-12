@@ -74,6 +74,7 @@ export const ModelName = {
   LeaderboardEntry: 'LeaderboardEntry',
   Notification: 'Notification',
   StudyMaterial: 'StudyMaterial',
+  StudyMaterialView: 'StudyMaterialView',
   StudyMaterialTag: 'StudyMaterialTag',
   StudentReport: 'StudentReport',
   CorporateReportSnapshot: 'CorporateReportSnapshot',
@@ -461,12 +462,27 @@ export const StudyMaterialScalarFieldEnum = {
   ownerProfileId: 'ownerProfileId',
   teamId: 'teamId',
   visibility: 'visibility',
+  module: 'module',
+  milestone: 'milestone',
+  isPublished: 'isPublished',
+  publishedAt: 'publishedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
 } as const;
 
 export type StudyMaterialScalarFieldEnum =
   (typeof StudyMaterialScalarFieldEnum)[keyof typeof StudyMaterialScalarFieldEnum];
+
+export const StudyMaterialViewScalarFieldEnum = {
+  id: 'id',
+  materialId: 'materialId',
+  profileId: 'profileId',
+  action: 'action',
+  createdAt: 'createdAt',
+} as const;
+
+export type StudyMaterialViewScalarFieldEnum =
+  (typeof StudyMaterialViewScalarFieldEnum)[keyof typeof StudyMaterialViewScalarFieldEnum];
 
 export const StudyMaterialTagScalarFieldEnum = {
   id: 'id',
