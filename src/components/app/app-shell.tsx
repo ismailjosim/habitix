@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
@@ -13,8 +12,7 @@ import {
   IconSearch,
 } from '@tabler/icons-react';
 
-import habitixMark from '@/assets/Habitix-logo.png';
-import habitixLogo from '@/assets/Habitix-logo-with-text.png';
+import { BrandLogo } from '@/components/app/brand-logo';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -259,12 +257,17 @@ function SidebarContent({
           collapsed ? 'justify-center px-2' : 'px-5'
         )}
       >
-        <Image
-          src={collapsed ? habitixMark : habitixLogo}
-          alt="Habitix"
-          className={cn('object-contain', collapsed ? 'size-9' : 'h-9 w-auto')}
-          priority
-        />
+        {collapsed ? (
+          <BrandLogo compact priority className="size-10 rounded-xl bg-white p-1" />
+        ) : (
+          <Link
+            href="/dashboard"
+            aria-label="Habitix dashboard"
+            className="flex h-11 w-full items-center rounded-xl bg-white px-3 shadow-sm ring-1 ring-white/15"
+          >
+            <BrandLogo priority className="h-8 w-auto max-w-full" />
+          </Link>
+        )}
       </div>
 
       <ScrollArea className={cn('flex-1 py-5', collapsed ? 'px-2' : 'px-3')}>

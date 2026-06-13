@@ -20,6 +20,7 @@ import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
 import { formatDate, formatDuration, getStatusLabel } from '@/lib/display-helpers';
 import type { getCorporateReportData } from '@/lib/queries/corporate-report';
+import { BrandLogo } from '@/components/app/brand-logo';
 
 type ReportData = Awaited<ReturnType<typeof getCorporateReportData>>;
 
@@ -31,6 +32,7 @@ export function CorporateReportView({ data }: { data: ReportData }) {
     <main className="mx-auto max-w-7xl space-y-6 print:max-w-none print:space-y-4">
       <header className="flex flex-col gap-4 border-b pb-5 sm:flex-row sm:items-end sm:justify-between print:pb-3">
         <div>
+          <BrandLogo className="mb-4 hidden h-9 w-auto print:block" />
           <p className="text-sm font-medium text-primary">Learner performance report</p>
           <h1 className="text-3xl font-bold">Corporate Student Report</h1>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -295,6 +297,7 @@ function AggregateReport({ data }: { data: Extract<ReportData, { mode: 'aggregat
     <main className="mx-auto max-w-6xl space-y-6 print:max-w-none">
       <header className="flex flex-col gap-4 border-b pb-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
+          <BrandLogo className="mb-4 hidden h-9 w-auto print:block" />
           <p className="text-sm font-medium text-primary">Approved aggregate reporting</p>
           <h1 className="text-3xl font-bold">Corporate Program Report</h1>
           <p className="mt-1 text-sm text-muted-foreground">
