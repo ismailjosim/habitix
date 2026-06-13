@@ -73,6 +73,7 @@ export function AppShell({ children, user }: AppShellProps) {
 }
 
 function TopBar({ user }: Pick<AppShellProps, 'user'>) {
+  const pathname = usePathname();
   const roleLabel = formatRole(user.role);
   const initials = initialsForName(user.name) || 'HX';
 
@@ -93,13 +94,14 @@ function TopBar({ user }: Pick<AppShellProps, 'user'>) {
         </SheetContent>
       </Sheet>
 
-      <div className="relative hidden w-full max-w-md sm:block">
+      <form action={searchTarget(pathname)} className="relative hidden w-full max-w-md sm:block">
         <IconSearch className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
         <Input
+          name={pathname.startsWith('/study-materials') ? 'search' : 'q'}
           className="h-9 border-border bg-secondary/70 pl-9"
           placeholder="Search tasks, teammates, reports..."
         />
-      </div>
+      </form>
 
       <div className="ml-auto flex items-center gap-2">
         <ThemeToggle />
@@ -204,4 +206,10 @@ function SidebarContent({ role }: { role: string }) {
 function toNavigationRole(role: string): UserRole {
   if (role === 'CORPORATE_VIEWER') return 'corporate';
   return role.toLowerCase() as UserRole;
+}
+
+function searchTarget(pathname: string) {
+  if (pathname.startsWith('/help-desk')) return '/help-desk';
+  if (pathname.startsWith('/study-materials')) return '/study-materials';
+  return '/tasks';
 }

@@ -5,12 +5,13 @@ import { getStudyMaterials } from '@/lib/queries/study-materials';
 export default async function StudyMaterialsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ search?: string; module?: string }>;
+  searchParams: Promise<{ search?: string; module?: string; page?: string }>;
 }) {
   const params = await searchParams;
   const search = params.search?.trim() ?? '';
   const selectedModule = params.module ?? 'all';
-  const data = await getStudyMaterials({ search, module: selectedModule });
+  const page = Math.max(1, Number(params.page) || 1);
+  const data = await getStudyMaterials({ search, module: selectedModule, page });
   return (
     <div className={`${LAYOUT_CONSTRAINTS.pageMaxWidth} ${LAYOUT_CONSTRAINTS.pagePadding} mx-auto`}>
       <MaterialsLibrary data={data} search={search} module={selectedModule} />

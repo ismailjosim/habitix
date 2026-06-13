@@ -12,6 +12,7 @@ import type { ActivityData } from '@/lib/queries/activity';
 import { formatDate, formatDateTime, formatDuration } from '@/lib/display-helpers';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
 const heatmapTones = [
   'bg-muted',
@@ -35,6 +36,18 @@ export function ActivityDashboard({ data }: { data: ActivityData }) {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
+          {[30, 90, 180, 365].map((days) => (
+            <Button
+              key={days}
+              asChild
+              size="sm"
+              variant={data.rangeDays === days ? 'secondary' : 'outline'}
+            >
+              <Link href={`/activity?days=${days}`}>
+                {days === 365 ? '1 year' : `${days} days`}
+              </Link>
+            </Button>
+          ))}
           <Badge variant="outline" className="gap-1.5 px-3 py-1.5">
             <IconFlame className="size-4 text-orange-500" />
             {stats.currentStreak} day streak
@@ -67,7 +80,8 @@ export function ActivityDashboard({ data }: { data: ActivityData }) {
           <div>
             <CardTitle>Yearly activity</CardTitle>
             <p className="mt-1 text-sm text-muted-foreground">
-              Daily focus time plus help credit. Each help point contributes 10 minutes.
+              Daily focus time plus help credit for the selected period. Each help point contributes
+              10 minutes.
             </p>
           </div>
           <div className="hidden items-center gap-1 text-xs text-muted-foreground sm:flex">
@@ -83,7 +97,7 @@ export function ActivityDashboard({ data }: { data: ActivityData }) {
             <div
               className="grid w-max grid-flow-col grid-rows-7 gap-1"
               role="img"
-              aria-label="Daily activity heatmap for the last 365 days"
+              aria-label={`Daily activity heatmap for the last ${data.rangeDays} days`}
             >
               {data.heatmap.map((day) => (
                 <span
@@ -96,7 +110,7 @@ export function ActivityDashboard({ data }: { data: ActivityData }) {
             </div>
           </div>
           <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground">
-            <span>Last 365 days</span>
+            <span>Last {data.rangeDays} days</span>
             <span>
               {stats.bestDay
                 ? `Best focus day: ${formatDuration(stats.bestDay.focusMinutes)} on ${formatDate(stats.bestDay.date)}`

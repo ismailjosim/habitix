@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { getCurrentUserProfile } from '@/lib/session';
+import type { HelpPostStatus, Prisma } from '@/generated/prisma/client';
 
 export const MAX_PEER_HELPERS = 4;
 
@@ -38,9 +39,23 @@ export type HelpDeskData = {
     averageFirstResponseMinutes: number | null;
     averageResolutionMinutes: number | null;
   };
+  total: number;
+  page: number;
+  pageSize: number;
+  topics: string[];
 };
 
-export async function getHelpDeskData(): Promise<HelpDeskData> {
+export async function getHelpDeskData({
+  q = '',
+  status = 'all',
+  topic = 'all',
+  page = 1,
+}: {
+  q?: string;
+  status?: string;
+  topic?: string;
+  page?: number;
+} = {}): Promise<HelpDeskData> {
   const current = await getCurrentUserProfile();
   if (!current) return emptyData();
 
@@ -57,20 +72,73 @@ export async function getHelpDeskData(): Promise<HelpDeskData> {
     };
   }
 
-  const posts = await prisma.helpPost.findMany({
-    where: { teamId: membership.teamId, status: { notIn: ['CLOSED', 'FLAGGED'] } },
-    include: {
-      author: { select: { id: true, displayName: true, avatarUrl: true } },
-      tags: { select: { tag: true }, orderBy: { tag: 'asc' } },
-      responses: {
-        include: {
-          author: { select: { id: true, displayName: true, avatarUrl: true, role: true } },
+  const safePage = Math.max(1, page);
+  const pageSize = 10;
+  const search = q.trim().slice(0, 100);
+  const allowedStatuses = ['OPEN', 'ANSWERED', 'RESOLVED'];
+  const filteredStatus = allowedStatuses.includes(status) ? (status as HelpPostStatus) : undefined;
+  const filteredTopic = topic !== 'all' ? topic.trim().slice(0, 80) : undefined;
+  const baseWhere: Prisma.HelpPostWhereInput = {
+    teamId: membership.teamId,
+    status: { notIn: ['CLOSED', 'FLAGGED'] },
+  };
+  const where: Prisma.HelpPostWhereInput = {
+    AND: [
+      baseWhere,
+      ...(filteredStatus ? [{ status: filteredStatus }] : []),
+      ...(filteredTopic ? [{ topic: filteredTopic }] : []),
+      ...(search
+        ? [
+            {
+              OR: [
+                { title: { contains: search, mode: 'insensitive' as const } },
+                { body: { contains: search, mode: 'insensitive' as const } },
+                { topic: { contains: search, mode: 'insensitive' as const } },
+                { tags: { some: { tag: { contains: search, mode: 'insensitive' as const } } } },
+              ],
+            },
+          ]
+        : []),
+    ],
+  };
+
+  const [posts, allPosts, total, topicRows] = await Promise.all([
+    prisma.helpPost.findMany({
+      where,
+      include: {
+        author: { select: { id: true, displayName: true, avatarUrl: true } },
+        tags: { select: { tag: true }, orderBy: { tag: 'asc' } },
+        responses: {
+          include: {
+            author: { select: { id: true, displayName: true, avatarUrl: true, role: true } },
+          },
+          orderBy: { createdAt: 'asc' },
         },
-        orderBy: { createdAt: 'asc' },
       },
-    },
-    orderBy: [{ status: 'asc' }, { createdAt: 'desc' }],
-  });
+      orderBy: [{ status: 'asc' }, { createdAt: 'desc' }],
+      skip: (safePage - 1) * pageSize,
+      take: pageSize,
+    }),
+    prisma.helpPost.findMany({
+      where: baseWhere,
+      select: {
+        status: true,
+        createdAt: true,
+        resolvedAt: true,
+        responses: {
+          select: { pointsAwarded: true, createdAt: true, authorProfileId: true },
+          orderBy: { createdAt: 'asc' },
+        },
+      },
+    }),
+    prisma.helpPost.count({ where }),
+    prisma.helpPost.findMany({
+      where: { ...baseWhere, topic: { not: null } },
+      distinct: ['topic'],
+      select: { topic: true },
+      orderBy: { topic: 'asc' },
+    }),
+  ]);
 
   const formatted = posts.map((post) => ({
     ...post,
@@ -88,27 +156,32 @@ export async function getHelpDeskData(): Promise<HelpDeskData> {
     currentRole: current.profile.role,
     teamName: membership.team.name,
     stats: {
-      open: formatted.filter((post) => post.status !== 'RESOLVED').length,
-      resolved: formatted.filter((post) => post.status === 'RESOLVED').length,
-      helpers: new Set(formatted.flatMap((post) => post.responses.map((item) => item.author.id)))
-        .size,
-      awardedPoints: formatted.reduce(
+      open: allPosts.filter((post) => post.status !== 'RESOLVED').length,
+      resolved: allPosts.filter((post) => post.status === 'RESOLVED').length,
+      helpers: new Set(
+        allPosts.flatMap((post) => post.responses.map((item) => item.authorProfileId))
+      ).size,
+      awardedPoints: allPosts.reduce(
         (total, post) => total + post.responses.reduce((sum, item) => sum + item.pointsAwarded, 0),
         0
       ),
       averageFirstResponseMinutes: averageMinutes(
-        formatted.flatMap((post) =>
+        allPosts.flatMap((post) =>
           post.responses[0]
             ? [post.responses[0].createdAt.getTime() - post.createdAt.getTime()]
             : []
         )
       ),
       averageResolutionMinutes: averageMinutes(
-        formatted.flatMap((post) =>
+        allPosts.flatMap((post) =>
           post.resolvedAt ? [post.resolvedAt.getTime() - post.createdAt.getTime()] : []
         )
       ),
     },
+    total,
+    page: safePage,
+    pageSize,
+    topics: topicRows.flatMap(({ topic }) => (topic ? [topic] : [])),
   };
 }
 
@@ -126,6 +199,10 @@ function emptyData(): HelpDeskData {
       averageFirstResponseMinutes: null,
       averageResolutionMinutes: null,
     },
+    total: 0,
+    page: 1,
+    pageSize: 10,
+    topics: [],
   };
 }
 

@@ -1,5 +1,13 @@
 import { prisma } from '@/lib/prisma';
 import { getCurrentUserProfile } from '@/lib/session';
+import type { Prisma, TaskStatus } from '@/generated/prisma/client';
+
+export type TaskFilters = {
+  q?: string;
+  status?: string;
+  category?: string;
+  page?: number;
+};
 
 export type BoardTask = {
   id: string;
@@ -36,6 +44,10 @@ export type TaskBoardData = {
   currentRole: string | null;
   currentProfileId: string | null;
   canAssignTasks: boolean;
+  total: number;
+  page: number;
+  pageSize: number;
+  categories: string[];
 };
 
 export type AssignableStudent = {
@@ -51,7 +63,7 @@ export type AssignableTeam = {
   memberCount: number;
 };
 
-export async function getTaskBoardData(): Promise<TaskBoardData> {
+export async function getTaskBoardData(filters: TaskFilters = {}): Promise<TaskBoardData> {
   const current = await getCurrentUserProfile();
 
   if (!current) {
@@ -63,41 +75,64 @@ export async function getTaskBoardData(): Promise<TaskBoardData> {
       currentRole: null,
       currentProfileId: null,
       canAssignTasks: false,
+      total: 0,
+      page: 1,
+      pageSize: 30,
+      categories: [],
     };
   }
 
   const { profile } = current;
   const isPlatformAdmin = profile.role === 'ADMIN' || profile.role === 'MODERATOR';
   const canAssignTasks = profile.role === 'MENTOR' || isPlatformAdmin;
-
-  const [tasks, assignmentTargets] = await Promise.all([
-    prisma.task.findMany({
-      where: {
-        status: { not: 'ARCHIVED' },
+  const pageSize = 30;
+  const page = Math.max(1, filters.page ?? 1);
+  const q = filters.q?.trim().slice(0, 100) ?? '';
+  const allowedStatuses = ['TODO', 'IN_PROGRESS', 'BLOCKED', 'IN_REVIEW', 'DONE'];
+  const status = allowedStatuses.includes(filters.status ?? '') ? filters.status : undefined;
+  const category =
+    filters.category && filters.category !== 'all'
+      ? filters.category.trim().slice(0, 80)
+      : undefined;
+  const visibilityWhere: Prisma.TaskWhereInput = {
+    status: { not: 'ARCHIVED' },
+    OR: [
+      {
+        type: 'PERSONAL',
+        OR: [{ createdByProfileId: profile.id }, { assignedToProfileId: profile.id }],
+      },
+      {
+        type: { in: ['MENTOR_ASSIGNED', 'ADMIN_ASSIGNED', 'TEAM'] },
         OR: [
-          {
-            type: 'PERSONAL',
-            OR: [{ createdByProfileId: profile.id }, { assignedToProfileId: profile.id }],
-          },
-          {
-            type: { in: ['MENTOR_ASSIGNED', 'ADMIN_ASSIGNED', 'TEAM'] },
-            OR: [
-              { createdByProfileId: profile.id },
-              { assignedToProfileId: profile.id },
-              {
-                team: {
-                  memberships: {
-                    some: {
-                      profileId: profile.id,
-                      leftAt: null,
-                    },
-                  },
-                },
-              },
-            ],
-          },
+          { createdByProfileId: profile.id },
+          { assignedToProfileId: profile.id },
+          { team: { memberships: { some: { profileId: profile.id, leftAt: null } } } },
         ],
       },
+    ],
+  };
+  const where: Prisma.TaskWhereInput = {
+    AND: [
+      visibilityWhere,
+      ...(q
+        ? [
+            {
+              OR: [
+                { title: { contains: q, mode: 'insensitive' as const } },
+                { description: { contains: q, mode: 'insensitive' as const } },
+                { category: { contains: q, mode: 'insensitive' as const } },
+              ],
+            },
+          ]
+        : []),
+      ...(status ? [{ status: status as TaskStatus }] : []),
+      ...(category ? [{ category }] : []),
+    ],
+  };
+
+  const [tasks, total, categoryRows, assignmentTargets] = await Promise.all([
+    prisma.task.findMany({
+      where,
       include: {
         createdBy: { select: { id: true, displayName: true, avatarUrl: true } },
         assignedTo: { select: { id: true, displayName: true, avatarUrl: true } },
@@ -107,6 +142,15 @@ export async function getTaskBoardData(): Promise<TaskBoardData> {
         },
       },
       orderBy: [{ dueAt: 'asc' }, { createdAt: 'desc' }],
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    }),
+    prisma.task.count({ where }),
+    prisma.task.findMany({
+      where: { AND: [visibilityWhere, { category: { not: null } }] },
+      distinct: ['category'],
+      select: { category: true },
+      orderBy: { category: 'asc' },
     }),
     canAssignTasks
       ? getAssignmentTargets(profile.id, isPlatformAdmin)
@@ -121,6 +165,10 @@ export async function getTaskBoardData(): Promise<TaskBoardData> {
     currentRole: profile.role,
     currentProfileId: profile.id,
     canAssignTasks,
+    total,
+    page,
+    pageSize,
+    categories: categoryRows.flatMap(({ category }) => (category ? [category] : [])),
   };
 }
 

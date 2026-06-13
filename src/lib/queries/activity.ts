@@ -2,7 +2,7 @@ import { prisma } from '@/lib/prisma';
 import { getCurrentUserProfile } from '@/lib/session';
 
 const HELP_CREDIT_MINUTES_PER_POINT = 10;
-const HEATMAP_DAYS = 365;
+const DEFAULT_DAYS = 365;
 
 type DailyActivity = {
   date: string;
@@ -12,6 +12,7 @@ type DailyActivity = {
 };
 
 export type ActivityData = {
+  rangeDays: number;
   stats: {
     totalSessions: number;
     totalFocusMinutes: number;
@@ -46,21 +47,22 @@ type SessionRow = {
   task: { id: string; title: string } | null;
 };
 
-export async function getActivityData(): Promise<ActivityData> {
+export async function getActivityData(rangeDays = DEFAULT_DAYS): Promise<ActivityData> {
   const current = await getCurrentUserProfile();
 
   if (!current) return emptyActivityData();
 
   const { profile } = current;
+  const safeDays = [30, 90, 180, 365].includes(rangeDays) ? rangeDays : DEFAULT_DAYS;
   const heatmapStart = startOfDay(new Date());
-  heatmapStart.setDate(heatmapStart.getDate() - (HEATMAP_DAYS - 1));
+  heatmapStart.setDate(heatmapStart.getDate() - (safeDays - 1));
 
   const [sessions, tasksCompleted, awardedHelp] = await Promise.all([
     prisma.focusSession.findMany({
       where: {
         profileId: profile.id,
         status: 'COMPLETED',
-        completedAt: { not: null },
+        completedAt: { gte: heatmapStart },
       },
       select: {
         id: true,
@@ -75,11 +77,16 @@ export async function getActivityData(): Promise<ActivityData> {
     prisma.task.count({
       where: {
         status: 'DONE',
+        completedAt: { gte: heatmapStart },
         OR: [{ assignedToProfileId: profile.id }, { createdByProfileId: profile.id }],
       },
     }),
     prisma.helpResponse.findMany({
-      where: { authorProfileId: profile.id, pointsAwarded: { gt: 0 } },
+      where: {
+        authorProfileId: profile.id,
+        pointsAwarded: { gt: 0 },
+        updatedAt: { gte: heatmapStart },
+      },
       select: { pointsAwarded: true, updatedAt: true },
     }),
   ]);
@@ -109,6 +116,7 @@ export async function getActivityData(): Promise<ActivityData> {
   const breakdown = buildBreakdown(sessions, totalFocusMinutes);
 
   return {
+    rangeDays: safeDays,
     stats: {
       totalSessions: sessions.length,
       totalFocusMinutes,
@@ -118,7 +126,7 @@ export async function getActivityData(): Promise<ActivityData> {
       currentStreak: calculateCurrentStreak(new Set(focusDays.map((day) => day.date))),
       bestDay: focusDays.sort((a, b) => b.focusMinutes - a.focusMinutes)[0] ?? null,
     },
-    heatmap: buildHeatmap(dailyMap, heatmapStart, HEATMAP_DAYS),
+    heatmap: buildHeatmap(dailyMap, heatmapStart, safeDays),
     recentSessions: sessions.slice(0, 8).flatMap((session) =>
       session.completedAt
         ? [
@@ -223,9 +231,10 @@ function dateKey(date: Date) {
 
 function emptyActivityData(): ActivityData {
   const start = startOfDay(new Date());
-  start.setDate(start.getDate() - (HEATMAP_DAYS - 1));
+  start.setDate(start.getDate() - (DEFAULT_DAYS - 1));
 
   return {
+    rangeDays: DEFAULT_DAYS,
     stats: {
       totalSessions: 0,
       totalFocusMinutes: 0,
@@ -235,7 +244,7 @@ function emptyActivityData(): ActivityData {
       currentStreak: 0,
       bestDay: null,
     },
-    heatmap: buildHeatmap(new Map(), start, HEATMAP_DAYS),
+    heatmap: buildHeatmap(new Map(), start, DEFAULT_DAYS),
     recentSessions: [],
     breakdown: [],
   };

@@ -29,6 +29,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { EmptyState, PaginationLinks } from '@/components/shared';
 
 const topics = [
   'Coding',
@@ -41,7 +42,13 @@ const topics = [
 ] as const;
 const urgencies = ['LOW', 'MEDIUM', 'HIGH', 'URGENT'] as const;
 
-export function HelpDeskBoard({ data }: { data: HelpDeskData }) {
+export function HelpDeskBoard({
+  data,
+  filters,
+}: {
+  data: HelpDeskData;
+  filters: { q: string; status: string; topic: string };
+}) {
   const router = useRouter();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(data.posts[0]?.id ?? null);
@@ -173,15 +180,47 @@ export function HelpDeskBoard({ data }: { data: HelpDeskData }) {
         />
       </section>
 
+      <form className="grid gap-2 rounded-xl border bg-card p-3 sm:grid-cols-[minmax(12rem,1fr)_11rem_11rem_auto_auto]">
+        <Input name="q" defaultValue={filters.q} placeholder="Search requests, topics, or tags" />
+        <select
+          name="status"
+          defaultValue={filters.status}
+          className="h-8 rounded-lg border bg-background px-3 text-sm"
+        >
+          <option value="all">All statuses</option>
+          {['OPEN', 'ANSWERED', 'RESOLVED'].map((status) => (
+            <option key={status} value={status}>
+              {label(status)}
+            </option>
+          ))}
+        </select>
+        <select
+          name="topic"
+          defaultValue={filters.topic}
+          className="h-8 rounded-lg border bg-background px-3 text-sm"
+        >
+          <option value="all">All topics</option>
+          {data.topics.map((topic) => (
+            <option key={topic}>{topic}</option>
+          ))}
+        </select>
+        <Button type="submit" variant="outline">
+          Filter
+        </Button>
+        <Button asChild type="button" variant="ghost">
+          <a href="/help-desk">Reset</a>
+        </Button>
+      </form>
+
       {error && !dialogOpen && <ErrorMessage message={error} />}
 
       <section className="space-y-4">
         {data.posts.length === 0 ? (
-          <Card>
-            <CardContent className="p-8 text-center text-sm text-muted-foreground">
-              No help requests yet. Start the first conversation.
-            </CardContent>
-          </Card>
+          <EmptyState
+            icon={<IconHelp className="size-10" />}
+            title="No matching help requests"
+            description="Try clearing a filter or start a new conversation."
+          />
         ) : (
           data.posts.map((post) => (
             <HelpPostCard
@@ -198,6 +237,16 @@ export function HelpDeskBoard({ data }: { data: HelpDeskData }) {
           ))
         )}
       </section>
+      <PaginationLinks
+        page={data.page}
+        pageSize={data.pageSize}
+        total={data.total}
+        params={{
+          q: filters.q || undefined,
+          status: filters.status === 'all' ? undefined : filters.status,
+          topic: filters.topic === 'all' ? undefined : filters.topic,
+        }}
+      />
     </div>
   );
 }

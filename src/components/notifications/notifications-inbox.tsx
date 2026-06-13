@@ -21,6 +21,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { EmptyState, PaginationLinks } from '@/components/shared';
 
 const categories: { value: NotificationCategory; label: string }[] = [
   { value: 'all', label: 'All' },
@@ -78,7 +79,7 @@ export function NotificationsInbox({
             variant={category === item.value ? 'secondary' : 'outline'}
             size="sm"
           >
-            <Link href={`/notifications?category=${item.value}`}>{item.label}</Link>
+            <Link href={`/notifications?category=${item.value}&page=1`}>{item.label}</Link>
           </Button>
         ))}
       </div>
@@ -90,11 +91,11 @@ export function NotificationsInbox({
 
       <section className="space-y-3">
         {data.notifications.length === 0 ? (
-          <Card>
-            <CardContent className="p-8 text-center text-sm text-muted-foreground">
-              No notifications match this filter.
-            </CardContent>
-          </Card>
+          <EmptyState
+            icon={<IconBell className="size-10" />}
+            title="No matching notifications"
+            description="Updates in this category will appear here."
+          />
         ) : (
           data.notifications.map((notification) => {
             const Icon = notificationIcon(notification.type);
@@ -144,6 +145,12 @@ export function NotificationsInbox({
           })
         )}
       </section>
+      <PaginationLinks
+        page={data.page}
+        pageSize={data.pageSize}
+        total={data.total}
+        params={{ category }}
+      />
     </div>
   );
 }

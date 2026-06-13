@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { EmptyState, PaginationLinks } from '@/components/shared';
 
 type LibraryData = Awaited<
   ReturnType<typeof import('@/lib/queries/study-materials').getStudyMaterials>
@@ -118,11 +119,11 @@ export function MaterialsLibrary({
         </Button>
       </form>
       {data.materials.length === 0 ? (
-        <Card>
-          <CardContent className="p-10 text-center text-sm text-muted-foreground">
-            No materials match this view.
-          </CardContent>
-        </Card>
+        <EmptyState
+          icon={<IconBook2 className="size-10" />}
+          title="No matching materials"
+          description="Try another search or module filter."
+        />
       ) : (
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {data.materials.map((item) => (
@@ -168,6 +169,12 @@ export function MaterialsLibrary({
           ))}
         </div>
       )}
+      <PaginationLinks
+        page={data.page}
+        pageSize={data.pageSize}
+        total={data.total}
+        params={{ search: search || undefined, module: module === 'all' ? undefined : module }}
+      />
     </div>
   );
 }

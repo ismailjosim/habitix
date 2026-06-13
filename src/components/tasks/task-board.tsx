@@ -18,7 +18,7 @@ import { createTask, changeTaskStatus } from '@/lib/actions/tasks';
 import type { AssignableStudent, AssignableTeam, BoardTask } from '@/lib/queries/tasks';
 import { formatDate, getStatusLabel } from '@/lib/display-helpers';
 import { cn } from '@/lib/utils';
-import { EmptyState } from '@/components/shared';
+import { EmptyState, PaginationLinks } from '@/components/shared';
 import { PriorityBadge } from '@/components/shared/badge-variants';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -94,6 +94,11 @@ interface TaskBoardProps {
   currentRole: string | null;
   currentProfileId: string | null;
   canAssignTasks: boolean;
+  filters: { q?: string; status?: string; category?: string };
+  total: number;
+  page: number;
+  pageSize: number;
+  categories: string[];
 }
 
 export function TaskBoard({
@@ -104,6 +109,11 @@ export function TaskBoard({
   currentRole,
   currentProfileId,
   canAssignTasks,
+  filters,
+  total,
+  page,
+  pageSize,
+  categories: filterCategories,
 }: TaskBoardProps) {
   const router = useRouter();
   const [activeSection, setActiveSection] = useState<BoardSection>('personal');
@@ -334,6 +344,42 @@ export function TaskBoard({
         </div>
       )}
 
+      <form className="grid gap-2 rounded-xl border bg-card p-3 sm:grid-cols-[minmax(12rem,1fr)_12rem_12rem_auto_auto]">
+        <Input
+          name="q"
+          defaultValue={filters.q}
+          placeholder="Search task title, details, or category"
+        />
+        <select
+          name="status"
+          defaultValue={filters.status ?? 'all'}
+          className="h-8 rounded-lg border bg-background px-3 text-sm"
+        >
+          <option value="all">All statuses</option>
+          {['TODO', 'IN_PROGRESS', 'BLOCKED', 'IN_REVIEW', 'DONE'].map((status) => (
+            <option key={status} value={status}>
+              {getStatusLabel(status)}
+            </option>
+          ))}
+        </select>
+        <select
+          name="category"
+          defaultValue={filters.category ?? 'all'}
+          className="h-8 rounded-lg border bg-background px-3 text-sm"
+        >
+          <option value="all">All categories</option>
+          {filterCategories.map((category) => (
+            <option key={category}>{category}</option>
+          ))}
+        </select>
+        <Button type="submit" variant="outline">
+          Filter
+        </Button>
+        <Button asChild type="button" variant="ghost">
+          <Link href="/tasks">Reset</Link>
+        </Button>
+      </form>
+
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="inline-flex w-full rounded-lg border bg-background p-1 sm:w-fit">
           <Button
@@ -408,6 +454,17 @@ export function TaskBoard({
           );
         })}
       </div>
+
+      <PaginationLinks
+        page={page}
+        pageSize={pageSize}
+        total={total}
+        params={{
+          q: filters.q,
+          status: normalizedFilter(filters.status),
+          category: normalizedFilter(filters.category),
+        }}
+      />
     </div>
   );
 }
@@ -615,4 +672,8 @@ function groupTasks(tasks: BoardTask[]): Record<BoardStatus, BoardTask[]> {
     ),
     DONE: tasks.filter((task) => task.status === 'DONE'),
   };
+}
+
+function normalizedFilter(value?: string) {
+  return value && value !== 'all' ? value : undefined;
 }
