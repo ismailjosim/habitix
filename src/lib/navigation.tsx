@@ -12,14 +12,13 @@ import {
   IconUsers,
   IconUserSquareRounded,
 } from '@tabler/icons-react';
-
-export type UserRole = 'student' | 'mentor' | 'admin' | 'moderator' | 'corporate';
+import type { AppModule } from '@/lib/permissions';
 
 export type NavItem = {
   title: string;
   href: string;
   icon: Icon;
-  roles: UserRole[];
+  module: AppModule;
 };
 
 export const navigationItems: NavItem[] = [
@@ -27,66 +26,66 @@ export const navigationItems: NavItem[] = [
     title: 'Dashboard',
     href: '/dashboard',
     icon: IconHome,
-    roles: ['student', 'mentor', 'admin', 'moderator', 'corporate'],
+    module: 'dashboard',
   },
   {
     title: 'Activity',
     href: '/activity',
     icon: IconChartBar,
-    roles: ['student', 'mentor', 'admin'],
+    module: 'activity',
   },
   {
     title: 'Focus Mode',
     href: '/focus-mode',
     icon: IconTargetArrow,
-    roles: ['student', 'mentor'],
+    module: 'focus',
   },
   {
     title: 'Tasks',
     href: '/tasks',
     icon: IconChecklist,
-    roles: ['student', 'mentor', 'admin'],
+    module: 'tasks',
   },
   {
     title: 'Help Desk',
     href: '/help-desk',
     icon: IconHelpCircle,
-    roles: ['student', 'mentor', 'moderator', 'admin'],
+    module: 'help',
   },
   {
     title: 'Leaderboard',
     href: '/leaderboard',
     icon: IconMedal,
-    roles: ['student', 'mentor', 'admin'],
+    module: 'leaderboard',
   },
   {
     title: 'Team',
     href: '/team',
     icon: IconUsers,
-    roles: ['student', 'mentor', 'admin', 'corporate'],
+    module: 'team',
   },
   {
     title: 'Notifications',
     href: '/notifications',
     icon: IconBell,
-    roles: ['student', 'mentor', 'admin', 'moderator', 'corporate'],
+    module: 'notifications',
   },
   {
     title: 'Profile',
     href: '/profile',
     icon: IconUserSquareRounded,
-    roles: ['student', 'mentor', 'admin', 'moderator', 'corporate'],
+    module: 'profile',
   },
   {
     title: 'Study Materials',
     href: '/study-materials',
     icon: IconNotebook,
-    roles: ['student', 'mentor', 'admin'],
+    module: 'materials',
   },
   {
     title: 'Corporate Report',
     href: '/corporate-report',
     icon: IconBriefcase,
-    roles: ['mentor', 'admin', 'corporate'],
+    module: 'corporateReport',
   },
 ];

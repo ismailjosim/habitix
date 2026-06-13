@@ -1,12 +1,11 @@
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
-import { getCurrentUserProfile } from '@/lib/session';
+import { requireModuleAccess } from '@/lib/authorization';
+import { canEditStudyMaterial, canManageStudyMaterials } from '@/lib/permissions';
 
 export async function getStudyMaterials({ search = '', module = 'all', page = 1 } = {}) {
-  const current = await getCurrentUserProfile();
-  if (!current)
-    return { materials: [], modules: [], canManage: false, total: 0, page: 1, pageSize: 12 };
-  const canManage = ['MENTOR', 'ADMIN', 'MODERATOR'].includes(current.profile.role);
+  const current = await requireModuleAccess('materials');
+  const canManage = canManageStudyMaterials(current.profile.role);
   const memberships = await prisma.teamMembership.findMany({
     where: { profileId: current.profile.id, leftAt: null },
     select: { teamId: true },
@@ -69,14 +68,13 @@ export async function getStudyMaterials({ search = '', module = 'all', page = 1 
 }
 
 export async function getStudyMaterial(id: string) {
-  const current = await getCurrentUserProfile();
-  if (!current) notFound();
+  const current = await requireModuleAccess('materials');
   const memberships = await prisma.teamMembership.findMany({
     where: { profileId: current.profile.id, leftAt: null },
     select: { teamId: true },
   });
   const teamIds = memberships.map(({ teamId }) => teamId);
-  const canManage = ['MENTOR', 'ADMIN', 'MODERATOR'].includes(current.profile.role);
+  const canManage = canManageStudyMaterials(current.profile.role);
   const material = await prisma.studyMaterial.findUnique({
     where: { id },
     include: {
@@ -94,8 +92,10 @@ export async function getStudyMaterial(id: string) {
       Boolean(material.teamId && teamIds.includes(material.teamId))) ||
     isOwner;
   if (!isVisible || (!material.isPublished && !canManage && !isOwner)) notFound();
-  const canEdit =
-    ['ADMIN', 'MODERATOR'].includes(current.profile.role) ||
-    (current.profile.role === 'MENTOR' && material.ownerProfileId === current.profile.id);
+  const canEdit = canEditStudyMaterial(
+    current.profile.role,
+    current.profile.id,
+    material.ownerProfileId
+  );
   return { material, canManage, canEdit };
 }

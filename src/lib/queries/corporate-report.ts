@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 
 import { prisma } from '@/lib/prisma';
 import { getCurrentUserProfile } from '@/lib/session';
+import { canAccessModule } from '@/lib/permissions';
 
 type ReportFilters = {
   studentId?: string;
@@ -14,7 +15,7 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 
 export async function getCorporateReportData(filters: ReportFilters = {}) {
   const current = await getCurrentUserProfile();
-  if (!current || !['ADMIN', 'MENTOR', 'CORPORATE_VIEWER'].includes(current.profile.role)) {
+  if (!current || !canAccessModule(current.profile.role, 'corporateReport')) {
     notFound();
   }
 

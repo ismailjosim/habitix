@@ -20,6 +20,9 @@ export async function getDashboardData() {
   if (!userProfile) {
     throw new Error('User profile not found');
   }
+  if (userProfile.role === 'CORPORATE_VIEWER') {
+    throw new Error('Corporate viewers must use approved aggregate reports');
+  }
 
   const profileId = userProfile.id;
 

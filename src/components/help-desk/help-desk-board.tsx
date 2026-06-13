@@ -106,7 +106,7 @@ export function HelpDeskBoard({
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button disabled={!data.teamName}>
+            <Button disabled={!data.canCreatePost}>
               <IconPlus /> Ask for help
             </Button>
           </DialogTrigger>
@@ -229,6 +229,7 @@ export function HelpDeskBoard({
               expanded={expandedId === post.id}
               currentProfileId={data.currentProfileId}
               currentRole={data.currentRole}
+              canParticipate={data.canParticipate}
               disabled={isPending}
               onToggle={() => setExpandedId(expandedId === post.id ? null : post.id)}
               onRespond={submitResponse}
@@ -256,6 +257,7 @@ function HelpPostCard({
   expanded,
   currentProfileId,
   currentRole,
+  canParticipate,
   disabled,
   onToggle,
   onRespond,
@@ -265,12 +267,14 @@ function HelpPostCard({
   expanded: boolean;
   currentProfileId: string | null;
   currentRole: string | null;
+  canParticipate: boolean;
   disabled: boolean;
   onToggle: () => void;
   onRespond: (postId: string, formData: FormData) => void;
   onResolve: (postId: string, responseId?: string) => void;
 }) {
-  const canRespond = post.author.id !== currentProfileId && post.status !== 'RESOLVED';
+  const canRespond =
+    canParticipate && post.author.id !== currentProfileId && post.status !== 'RESOLVED';
   const canResolve =
     post.status !== 'RESOLVED' &&
     (post.author.id === currentProfileId ||

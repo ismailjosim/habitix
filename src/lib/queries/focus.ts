@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import { getCurrentUserProfile } from '@/lib/session';
+import { requireModuleAccess } from '@/lib/authorization';
 
 export type FocusTaskOption = {
   id: string;
@@ -54,11 +54,7 @@ type FocusSessionWithTask = {
 };
 
 export async function getFocusModeData(): Promise<FocusModeData> {
-  const current = await getCurrentUserProfile();
-
-  if (!current) {
-    return { tasks: [], todaySessions: [], activeSession: null, todayFocusMinutes: 0 };
-  }
+  const current = await requireModuleAccess('focus');
 
   const { profile } = current;
   const today = new Date();

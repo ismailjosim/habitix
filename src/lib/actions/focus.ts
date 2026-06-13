@@ -7,6 +7,7 @@ import { prisma } from '@/lib/prisma';
 import { getCurrentUserProfile } from '@/lib/session';
 import { touchPresence } from '@/lib/presence';
 import { awardEligibleBadges } from '@/lib/badges';
+import { canAccessModule } from '@/lib/permissions';
 
 const durationOptions = [25, 45, 50] as const;
 const activityLabels = [
@@ -52,6 +53,9 @@ async function requireCurrentProfile() {
 
   if (!current) {
     throw new Error('Unauthorized');
+  }
+  if (!canAccessModule(current.profile.role, 'focus')) {
+    throw new Error('You do not have permission to use focus mode');
   }
 
   return current.profile;

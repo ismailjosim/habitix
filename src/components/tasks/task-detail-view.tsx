@@ -118,23 +118,25 @@ export function TaskDetailView({ task }: TaskDetailViewProps) {
                 {doneSubtasks} of {totalSubtasks} subtasks complete
               </p>
             </div>
-            <div className="grid grid-cols-3 gap-2">
-              {completionStatuses.map((status) => (
-                <Button
-                  key={status}
-                  type="button"
-                  variant={task.status === status ? 'secondary' : 'outline'}
-                  size="sm"
-                  disabled={isPending || task.status === status}
-                  onClick={() => runAction(() => changeTaskStatus({ taskId: task.id, status }))}
-                >
-                  {status === 'DONE' ? <IconCheck /> : null}
-                  {status === 'IN_PROGRESS' ? <IconClockHour4 /> : null}
-                  {status === 'TODO' ? <IconUserCircle /> : null}
-                  {getStatusLabel(status)}
-                </Button>
-              ))}
-            </div>
+            {task.canManage && (
+              <div className="grid grid-cols-3 gap-2">
+                {completionStatuses.map((status) => (
+                  <Button
+                    key={status}
+                    type="button"
+                    variant={task.status === status ? 'secondary' : 'outline'}
+                    size="sm"
+                    disabled={isPending || task.status === status}
+                    onClick={() => runAction(() => changeTaskStatus({ taskId: task.id, status }))}
+                  >
+                    {status === 'DONE' ? <IconCheck /> : null}
+                    {status === 'IN_PROGRESS' ? <IconClockHour4 /> : null}
+                    {status === 'TODO' ? <IconUserCircle /> : null}
+                    {getStatusLabel(status)}
+                  </Button>
+                ))}
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
@@ -187,7 +189,7 @@ export function TaskDetailView({ task }: TaskDetailViewProps) {
                       <input
                         type="checkbox"
                         checked={subtask.isDone}
-                        disabled={isPending}
+                        disabled={isPending || !task.canManage}
                         onChange={(event) =>
                           runAction(() =>
                             toggleSubtask({
@@ -204,13 +206,15 @@ export function TaskDetailView({ task }: TaskDetailViewProps) {
                 </div>
               )}
 
-              <form action={handleCreateSubtask} className="flex gap-2">
-                <Input name="title" placeholder="Add subtask" required />
-                <Button type="submit" disabled={isPending}>
-                  <IconPlus />
-                  Add
-                </Button>
-              </form>
+              {task.canManage && (
+                <form action={handleCreateSubtask} className="flex gap-2">
+                  <Input name="title" placeholder="Add subtask" required />
+                  <Button type="submit" disabled={isPending}>
+                    <IconPlus />
+                    Add
+                  </Button>
+                </form>
+              )}
             </CardContent>
           </Card>
 

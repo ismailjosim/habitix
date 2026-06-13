@@ -23,7 +23,9 @@ import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/s
 import { SignOutMenuItem } from '@/components/app/sign-out-menu-item';
 import { ThemeToggle } from '@/components/app/theme-toggle';
 import { PresenceHeartbeat } from '@/components/app/presence-heartbeat';
-import { navigationItems, type UserRole } from '@/lib/navigation';
+import { navigationItems } from '@/lib/navigation';
+import { canAccessModule } from '@/lib/permissions';
+import type { AppRole } from '@/generated/prisma/client';
 import { cn } from '@/lib/utils';
 
 type AppShellProps = {
@@ -156,8 +158,9 @@ function TopBar({ user }: Pick<AppShellProps, 'user'>) {
 
 function SidebarContent({ role }: { role: string }) {
   const pathname = usePathname();
-  const navigationRole = toNavigationRole(role);
-  const visibleItems = navigationItems.filter((item) => item.roles.includes(navigationRole));
+  const visibleItems = navigationItems.filter((item) =>
+    canAccessModule(role as AppRole, item.module)
+  );
 
   return (
     <div className="flex h-full flex-col">
@@ -201,11 +204,6 @@ function SidebarContent({ role }: { role: string }) {
       </div>
     </div>
   );
-}
-
-function toNavigationRole(role: string): UserRole {
-  if (role === 'CORPORATE_VIEWER') return 'corporate';
-  return role.toLowerCase() as UserRole;
 }
 
 function searchTarget(pathname: string) {

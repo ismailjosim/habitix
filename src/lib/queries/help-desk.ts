@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import { getCurrentUserProfile } from '@/lib/session';
+import { requireModuleAccess } from '@/lib/authorization';
 import type { HelpPostStatus, Prisma } from '@/generated/prisma/client';
 
 export const MAX_PEER_HELPERS = 4;
@@ -43,6 +43,8 @@ export type HelpDeskData = {
   page: number;
   pageSize: number;
   topics: string[];
+  canCreatePost: boolean;
+  canParticipate: boolean;
 };
 
 export async function getHelpDeskData({
@@ -56,15 +58,14 @@ export async function getHelpDeskData({
   topic?: string;
   page?: number;
 } = {}): Promise<HelpDeskData> {
-  const current = await getCurrentUserProfile();
-  if (!current) return emptyData();
+  const current = await requireModuleAccess('help');
 
   const membership = await prisma.teamMembership.findFirst({
     where: { profileId: current.profile.id, leftAt: null },
     select: { teamId: true, team: { select: { name: true } } },
   });
 
-  if (!membership) {
+  if (!membership && !['ADMIN', 'MODERATOR'].includes(current.profile.role)) {
     return {
       ...emptyData(),
       currentProfileId: current.profile.id,
@@ -79,7 +80,7 @@ export async function getHelpDeskData({
   const filteredStatus = allowedStatuses.includes(status) ? (status as HelpPostStatus) : undefined;
   const filteredTopic = topic !== 'all' ? topic.trim().slice(0, 80) : undefined;
   const baseWhere: Prisma.HelpPostWhereInput = {
-    teamId: membership.teamId,
+    ...(membership ? { teamId: membership.teamId } : {}),
     status: { notIn: ['CLOSED', 'FLAGGED'] },
   };
   const where: Prisma.HelpPostWhereInput = {
@@ -154,7 +155,7 @@ export async function getHelpDeskData({
     posts: formatted,
     currentProfileId: current.profile.id,
     currentRole: current.profile.role,
-    teamName: membership.team.name,
+    teamName: membership?.team.name ?? 'Organization moderation',
     stats: {
       open: allPosts.filter((post) => post.status !== 'RESOLVED').length,
       resolved: allPosts.filter((post) => post.status === 'RESOLVED').length,
@@ -182,6 +183,8 @@ export async function getHelpDeskData({
     page: safePage,
     pageSize,
     topics: topicRows.flatMap(({ topic }) => (topic ? [topic] : [])),
+    canCreatePost: Boolean(membership),
+    canParticipate: Boolean(membership),
   };
 }
 
@@ -203,6 +206,8 @@ function emptyData(): HelpDeskData {
     page: 1,
     pageSize: 10,
     topics: [],
+    canCreatePost: false,
+    canParticipate: false,
   };
 }
 

@@ -1,16 +1,13 @@
 import { notFound } from 'next/navigation';
 
 import { prisma } from '@/lib/prisma';
-import { getCurrentUserProfile } from '@/lib/session';
+import { requireModuleAccess } from '@/lib/authorization';
+import { canManageTask, canViewTask } from '@/lib/permissions';
 
 export type TaskDetail = NonNullable<Awaited<ReturnType<typeof getTaskDetail>>>;
 
 export async function getTaskDetail(taskId: string) {
-  const current = await getCurrentUserProfile();
-
-  if (!current) {
-    notFound();
-  }
+  const current = await requireModuleAccess('tasks');
 
   const { profile } = current;
 
@@ -74,14 +71,22 @@ export async function getTaskDetail(taskId: string) {
     notFound();
   }
 
-  const isPlatformAdmin = profile.role === 'ADMIN' || profile.role === 'MODERATOR';
-  const isDirectUser =
-    task.createdByProfileId === profile.id || task.assignedToProfileId === profile.id;
   const isTeamMember = Boolean(
     task.team?.memberships.some((membership) => membership.profileId === profile.id)
   );
+  const currentMembership = task.team?.memberships.find(
+    (membership) => membership.profileId === profile.id
+  );
 
-  if (!isDirectUser && !isTeamMember && !isPlatformAdmin) {
+  if (
+    !canViewTask({
+      role: profile.role,
+      profileId: profile.id,
+      createdByProfileId: task.createdByProfileId,
+      assignedToProfileId: task.assignedToProfileId,
+      isActiveTeamMember: isTeamMember,
+    })
+  ) {
     notFound();
   }
 
@@ -105,5 +110,12 @@ export async function getTaskDetail(taskId: string) {
     focusMinutes,
     assignedMembers,
     currentProfileId: profile.id,
+    canManage: canManageTask({
+      role: profile.role,
+      profileId: profile.id,
+      createdByProfileId: task.createdByProfileId,
+      assignedToProfileId: task.assignedToProfileId,
+      teamRole: currentMembership?.role,
+    }),
   };
 }

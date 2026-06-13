@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import { getCurrentSession } from '@/lib/session';
+import { requireModuleAccess } from '@/lib/authorization';
 import { notFound } from 'next/navigation';
 
 export interface TeamTask {
@@ -21,18 +21,12 @@ export interface TeamTask {
 }
 
 export async function getTeamTasks(teamId: string): Promise<TeamTask[]> {
-  const session = await getCurrentSession();
-  if (!session) {
-    notFound();
-  }
-
-  const profile = await prisma.userProfile.findUnique({
-    where: { authUserId: session.user.id },
+  const { profile } = await requireModuleAccess('team');
+  const membership = await prisma.teamMembership.findUnique({
+    where: { teamId_profileId: { teamId, profileId: profile.id } },
+    select: { leftAt: true },
   });
-
-  if (!profile) {
-    notFound();
-  }
+  if (!membership || membership.leftAt) notFound();
 
   // Get team-assigned tasks (where team is set)
   const teamTasks = await prisma.task.findMany({

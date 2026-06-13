@@ -1,14 +1,16 @@
 import { getDashboardData } from '@/lib/queries/dashboard';
-import { getCurrentSession } from '@/lib/session';
 import { WelcomeBanner } from '@/components/dashboard/welcome-banner';
 import { StatCard } from '@/components/dashboard/stat-card';
 import { NotificationPanel } from '@/components/dashboard/notification-panel';
 import { TeamPresencePanel } from '@/components/presence/team-presence-panel';
 import { ActivityHeatmap } from '@/components/dashboard/activity-heatmap';
 import { IconClock, IconFlame, IconCheck, IconTrophy } from '@tabler/icons-react';
+import { redirect } from 'next/navigation';
+import { getCurrentUserProfile } from '@/lib/session';
 
 export default async function DashboardPage() {
-  const session = await getCurrentSession();
+  const current = await getCurrentUserProfile();
+  if (current?.profile.role === 'CORPORATE_VIEWER') redirect('/corporate-report');
   const data = await getDashboardData();
 
   const formatFocusTime = (minutes: number) => {
@@ -20,7 +22,7 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-6">
       {/* Welcome Banner */}
-      <WelcomeBanner userName={session?.user?.name || 'Student'} />
+      <WelcomeBanner userName={current?.session.user.name || 'Student'} />
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">

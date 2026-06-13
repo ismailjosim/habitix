@@ -3,6 +3,7 @@ import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUserProfile } from '@/lib/session';
+import { canAccessModule, canEditStudyMaterial, canManageStudyMaterials } from '@/lib/permissions';
 
 const createSchema = z.object({
   title: z.string().trim().min(3).max(180),
@@ -18,7 +19,7 @@ const createSchema = z.object({
 export async function createStudyMaterial(input: z.input<typeof createSchema>) {
   try {
     const current = await getCurrentUserProfile();
-    if (!current || !['MENTOR', 'ADMIN', 'MODERATOR'].includes(current.profile.role))
+    if (!current || !canManageStudyMaterials(current.profile.role))
       throw new Error('Only mentors and admins can create materials');
     const data = createSchema.parse(input);
     const membership = await prisma.teamMembership.findFirst({
@@ -59,7 +60,7 @@ const updateSchema = createSchema.extend({
 export async function updateStudyMaterial(input: z.input<typeof updateSchema>) {
   try {
     const current = await getCurrentUserProfile();
-    if (!current || !['MENTOR', 'ADMIN', 'MODERATOR'].includes(current.profile.role))
+    if (!current || !canManageStudyMaterials(current.profile.role))
       throw new Error('Only mentors and admins can edit materials');
     const data = updateSchema.parse(input);
     const existing = await prisma.studyMaterial.findUnique({
@@ -67,8 +68,7 @@ export async function updateStudyMaterial(input: z.input<typeof updateSchema>) {
       select: { ownerProfileId: true, isPublished: true },
     });
     if (!existing) throw new Error('Material not found');
-    const canEditAny = ['ADMIN', 'MODERATOR'].includes(current.profile.role);
-    if (!canEditAny && existing.ownerProfileId !== current.profile.id)
+    if (!canEditStudyMaterial(current.profile.role, current.profile.id, existing.ownerProfileId))
       throw new Error('You can only edit materials you created');
 
     await prisma.studyMaterial.update({
@@ -104,13 +104,15 @@ export async function trackStudyMaterial(input: {
   action: 'view' | 'download';
 }) {
   const current = await getCurrentUserProfile();
-  if (!current) return { success: false as const };
+  if (!current || !canAccessModule(current.profile.role, 'materials')) {
+    return { success: false as const };
+  }
   const memberships = await prisma.teamMembership.findMany({
     where: { profileId: current.profile.id, leftAt: null },
     select: { teamId: true },
   });
   const teamIds = memberships.map(({ teamId }) => teamId);
-  const canManage = ['MENTOR', 'ADMIN', 'MODERATOR'].includes(current.profile.role);
+  const canManage = canManageStudyMaterials(current.profile.role);
   const material = await prisma.studyMaterial.findFirst({
     where: {
       id: input.materialId,

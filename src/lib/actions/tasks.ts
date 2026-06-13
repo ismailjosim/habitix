@@ -7,6 +7,13 @@ import type { Prisma } from '@/generated/prisma/client';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUserProfile } from '@/lib/session';
 import { awardEligibleBadges } from '@/lib/badges';
+import {
+  canAssignTask,
+  canAccessModule,
+  canEditTaskDefinition,
+  canManageTask,
+  canViewTask,
+} from '@/lib/permissions';
 
 const taskStatuses = ['TODO', 'IN_PROGRESS', 'BLOCKED', 'IN_REVIEW', 'DONE', 'ARCHIVED'] as const;
 const taskTypes = ['PERSONAL', 'MENTOR_ASSIGNED', 'ADMIN_ASSIGNED', 'TEAM'] as const;
@@ -161,16 +168,19 @@ async function requireCurrentProfile() {
   if (!current) {
     throw new Error('Unauthorized');
   }
+  if (!canAccessModule(current.profile.role, 'tasks')) {
+    throw new Error('You do not have permission to use tasks');
+  }
 
   return current.profile;
 }
 
 function isPlatformAdmin(profile: CurrentProfile) {
-  return profile.role === 'ADMIN' || profile.role === 'MODERATOR';
+  return profile.role === 'ADMIN';
 }
 
 function canCreateMentorTask(profile: CurrentProfile) {
-  return profile.role === 'MENTOR' || isPlatformAdmin(profile);
+  return canAssignTask(profile.role);
 }
 
 function canCreateAdminTask(profile: CurrentProfile) {
@@ -307,7 +317,7 @@ async function canAccessTask(taskId: string, profile: CurrentProfile) {
         include: {
           memberships: {
             where: { profileId: profile.id, leftAt: null },
-            select: { id: true },
+            select: { id: true, role: true },
           },
         },
       },
@@ -318,15 +328,38 @@ async function canAccessTask(taskId: string, profile: CurrentProfile) {
     throw new Error('Task was not found');
   }
 
-  const isDirectUser =
-    task.createdByProfileId === profile.id || task.assignedToProfileId === profile.id;
   const isTeamMember = Boolean(task.team?.memberships.length);
 
-  if (!isDirectUser && !isTeamMember && !isPlatformAdmin(profile)) {
+  if (
+    !canViewTask({
+      role: profile.role,
+      profileId: profile.id,
+      createdByProfileId: task.createdByProfileId,
+      assignedToProfileId: task.assignedToProfileId,
+      isActiveTeamMember: isTeamMember,
+    })
+  ) {
     throw new Error('You do not have access to this task');
   }
 
   return task;
+}
+
+function requireTaskManagement(
+  task: Awaited<ReturnType<typeof canAccessTask>>,
+  profile: CurrentProfile
+) {
+  if (
+    !canManageTask({
+      role: profile.role,
+      profileId: profile.id,
+      createdByProfileId: task.createdByProfileId,
+      assignedToProfileId: task.assignedToProfileId,
+      teamRole: task.team?.memberships[0]?.role,
+    })
+  ) {
+    throw new Error('You may view this task but cannot modify it');
+  }
 }
 
 async function recordActivity({
@@ -626,9 +659,13 @@ export async function updateTask(input: z.input<typeof updateTaskSchema>): Promi
     const profile = await requireCurrentProfile();
     const data = updateTaskSchema.parse(input);
     const existing = await canAccessTask(data.taskId, profile);
-    const canManageTask = existing.createdByProfileId === profile.id || isPlatformAdmin(profile);
+    const canManageDefinition = canEditTaskDefinition(
+      profile.role,
+      profile.id,
+      existing.createdByProfileId
+    );
 
-    if (!canManageTask) {
+    if (!canManageDefinition) {
       throw new Error('Only the assigner or an admin can update task assignment details');
     }
 
@@ -724,6 +761,13 @@ export async function changeTaskStatus(
     const profile = await requireCurrentProfile();
     const data = statusChangeSchema.parse(input);
     const existing = await canAccessTask(data.taskId, profile);
+    if (data.status === 'ARCHIVED') {
+      if (!canEditTaskDefinition(profile.role, profile.id, existing.createdByProfileId)) {
+        throw new Error('Only the task creator or an admin can archive this task');
+      }
+    } else {
+      requireTaskManagement(existing, profile);
+    }
 
     const task = await prisma.task.update({
       where: { id: data.taskId },
@@ -767,7 +811,7 @@ export async function deleteTask(input: z.input<typeof taskIdSchema>): Promise<A
     const data = taskIdSchema.parse(input);
     const task = await canAccessTask(data.taskId, profile);
 
-    if (task.createdByProfileId !== profile.id && !isPlatformAdmin(profile)) {
+    if (!canEditTaskDefinition(profile.role, profile.id, task.createdByProfileId)) {
       throw new Error('Only the creator or an admin can delete a task');
     }
 
@@ -787,6 +831,7 @@ export async function createSubtask(
     const profile = await requireCurrentProfile();
     const data = subtaskCreateSchema.parse(input);
     const task = await canAccessTask(data.taskId, profile);
+    requireTaskManagement(task, profile);
     const count = await prisma.subtask.count({ where: { taskId: task.id } });
 
     const subtask = await prisma.subtask.create({
@@ -825,7 +870,8 @@ export async function updateSubtask(
       throw new Error('Subtask was not found');
     }
 
-    await canAccessTask(existing.taskId, profile);
+    const task = await canAccessTask(existing.taskId, profile);
+    requireTaskManagement(task, profile);
 
     const subtask = await prisma.subtask.update({
       where: { id: data.subtaskId },
@@ -870,7 +916,8 @@ export async function toggleSubtask(
       throw new Error('Subtask was not found');
     }
 
-    await canAccessTask(existing.taskId, profile);
+    const task = await canAccessTask(existing.taskId, profile);
+    requireTaskManagement(task, profile);
 
     const isDone = data.isDone ?? !existing.isDone;
     const subtask = await prisma.subtask.update({

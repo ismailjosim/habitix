@@ -1,5 +1,7 @@
 import { prisma } from '@/lib/prisma';
-import { getCurrentUserProfile } from '@/lib/session';
+import { requireModuleAccess } from '@/lib/authorization';
+import { canAssignTask } from '@/lib/permissions';
+import { canManageTask } from '@/lib/permissions';
 import type { Prisma, TaskStatus } from '@/generated/prisma/client';
 
 export type TaskFilters = {
@@ -19,6 +21,7 @@ export type BoardTask = {
   category: string | null;
   dueAt: Date | null;
   createdAt: Date;
+  canManage: boolean;
   assignedTo: {
     id: string;
     displayName: string;
@@ -64,27 +67,11 @@ export type AssignableTeam = {
 };
 
 export async function getTaskBoardData(filters: TaskFilters = {}): Promise<TaskBoardData> {
-  const current = await getCurrentUserProfile();
-
-  if (!current) {
-    return {
-      personalTasks: [],
-      assignedTasks: [],
-      assignableStudents: [],
-      assignableTeams: [],
-      currentRole: null,
-      currentProfileId: null,
-      canAssignTasks: false,
-      total: 0,
-      page: 1,
-      pageSize: 30,
-      categories: [],
-    };
-  }
+  const current = await requireModuleAccess('tasks');
 
   const { profile } = current;
-  const isPlatformAdmin = profile.role === 'ADMIN' || profile.role === 'MODERATOR';
-  const canAssignTasks = profile.role === 'MENTOR' || isPlatformAdmin;
+  const isPlatformAdmin = profile.role === 'ADMIN';
+  const canAssignTasks = canAssignTask(profile.role);
   const pageSize = 30;
   const page = Math.max(1, filters.page ?? 1);
   const q = filters.q?.trim().slice(0, 100) ?? '';
@@ -140,6 +127,14 @@ export async function getTaskBoardData(filters: TaskFilters = {}): Promise<TaskB
           select: { id: true, title: true, isDone: true },
           orderBy: { position: 'asc' },
         },
+        team: {
+          select: {
+            memberships: {
+              where: { profileId: profile.id, leftAt: null },
+              select: { role: true },
+            },
+          },
+        },
       },
       orderBy: [{ dueAt: 'asc' }, { createdAt: 'desc' }],
       skip: (page - 1) * pageSize,
@@ -157,9 +152,20 @@ export async function getTaskBoardData(filters: TaskFilters = {}): Promise<TaskB
       : Promise.resolve({ assignableStudents: [], assignableTeams: [] }),
   ]);
 
+  const authorizedTasks = tasks.map((task) => ({
+    ...task,
+    canManage: canManageTask({
+      role: profile.role,
+      profileId: profile.id,
+      createdByProfileId: task.createdByProfileId,
+      assignedToProfileId: task.assignedToProfileId,
+      teamRole: task.team?.memberships[0]?.role,
+    }),
+  }));
+
   return {
-    personalTasks: tasks.filter((task) => task.type === 'PERSONAL'),
-    assignedTasks: tasks.filter((task) => task.type !== 'PERSONAL'),
+    personalTasks: authorizedTasks.filter((task) => task.type === 'PERSONAL'),
+    assignedTasks: authorizedTasks.filter((task) => task.type !== 'PERSONAL'),
     assignableStudents: assignmentTargets.assignableStudents,
     assignableTeams: assignmentTargets.assignableTeams,
     currentRole: profile.role,

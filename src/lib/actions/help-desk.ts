@@ -7,6 +7,7 @@ import { prisma } from '@/lib/prisma';
 import { getCurrentUserProfile } from '@/lib/session';
 import { MAX_PEER_HELPERS } from '@/lib/queries/help-desk';
 import { awardEligibleBadges } from '@/lib/badges';
+import { canAccessModule, canResolveHelpPost } from '@/lib/permissions';
 
 const topics = [
   'Coding',
@@ -166,12 +167,18 @@ export async function resolveHelpPost(input: z.input<typeof resolveSchema>): Pro
     });
 
     if (!post || !post.teamId) throw new Error('Help request was not found');
-    const membership = await requireTeamMembership(current.profile.id, post.teamId);
-    const canResolve =
-      post.authorProfileId === current.profile.id ||
-      ['ADMIN', 'MODERATOR', 'MENTOR'].includes(current.profile.role) ||
-      ['ADMIN', 'MENTOR', 'LEAD'].includes(membership.role);
-    if (!canResolve)
+    const membership = await prisma.teamMembership.findFirst({
+      where: { profileId: current.profile.id, teamId: post.teamId, leftAt: null },
+      select: { role: true },
+    });
+    if (
+      !canResolveHelpPost({
+        role: current.profile.role,
+        profileId: current.profile.id,
+        authorProfileId: post.authorProfileId,
+        teamRole: membership?.role,
+      })
+    )
       throw new Error('Only the poster, mentor, or moderator can resolve this request');
     if (post.status === 'RESOLVED') throw new Error('This help request is already resolved');
 
@@ -260,6 +267,9 @@ export async function resolveHelpPost(input: z.input<typeof resolveSchema>): Pro
 async function requireCurrent() {
   const current = await getCurrentUserProfile();
   if (!current) throw new Error('Unauthorized');
+  if (!canAccessModule(current.profile.role, 'help')) {
+    throw new Error('You do not have permission to use the help desk');
+  }
   return current;
 }
 

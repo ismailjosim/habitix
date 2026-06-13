@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import { getCurrentUserProfile } from '@/lib/session';
+import { requireModuleAccess } from '@/lib/authorization';
 
 const HELP_CREDIT_MINUTES_PER_POINT = 10;
 const DEFAULT_DAYS = 365;
@@ -48,9 +48,7 @@ type SessionRow = {
 };
 
 export async function getActivityData(rangeDays = DEFAULT_DAYS): Promise<ActivityData> {
-  const current = await getCurrentUserProfile();
-
-  if (!current) return emptyActivityData();
+  const current = await requireModuleAccess('activity');
 
   const { profile } = current;
   const safeDays = [30, 90, 180, 365].includes(rangeDays) ? rangeDays : DEFAULT_DAYS;
@@ -227,25 +225,4 @@ function dateKey(date: Date) {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
-}
-
-function emptyActivityData(): ActivityData {
-  const start = startOfDay(new Date());
-  start.setDate(start.getDate() - (DEFAULT_DAYS - 1));
-
-  return {
-    rangeDays: DEFAULT_DAYS,
-    stats: {
-      totalSessions: 0,
-      totalFocusMinutes: 0,
-      tasksCompleted: 0,
-      helpPoints: 0,
-      helpCreditMinutes: 0,
-      currentStreak: 0,
-      bestDay: null,
-    },
-    heatmap: buildHeatmap(new Map(), start, DEFAULT_DAYS),
-    recentSessions: [],
-    breakdown: [],
-  };
 }

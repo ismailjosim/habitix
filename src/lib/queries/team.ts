@@ -1,6 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import { getCurrentSession } from '@/lib/session';
-import { notFound } from 'next/navigation';
+import { requireModuleAccess } from '@/lib/authorization';
 
 export interface TeamMember {
   id: string;
@@ -36,19 +35,7 @@ export interface TeamData {
 }
 
 export async function getTeamData(): Promise<TeamData | null> {
-  const session = await getCurrentSession();
-  if (!session) {
-    notFound();
-  }
-
-  // Get current user's profile
-  const profile = await prisma.userProfile.findUnique({
-    where: { authUserId: session.user.id },
-  });
-
-  if (!profile) {
-    notFound();
-  }
+  const { profile } = await requireModuleAccess('team');
 
   // Get user's team membership
   const membership = await prisma.teamMembership.findFirst({

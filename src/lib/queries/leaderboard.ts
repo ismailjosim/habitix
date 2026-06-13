@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import { getCurrentUserProfile } from '@/lib/session';
+import { requireModuleAccess } from '@/lib/authorization';
 import { awardBadge, awardEligibleBadges } from '@/lib/badges';
 
 type Period = 'weekly' | 'monthly';
@@ -42,8 +42,7 @@ export type LeaderboardData = {
 };
 
 export async function getLeaderboardData(): Promise<LeaderboardData> {
-  const current = await getCurrentUserProfile();
-  if (!current) return emptyData();
+  const current = await requireModuleAccess('leaderboard');
 
   const membership = await prisma.teamMembership.findFirst({
     where: { profileId: current.profile.id, leftAt: null },

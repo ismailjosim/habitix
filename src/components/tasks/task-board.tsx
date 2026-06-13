@@ -645,19 +645,22 @@ function TaskCard({
         </div>
 
         <div className="flex flex-wrap gap-2">
-          {movementOptions.map((status) => (
-            <Button
-              key={status.value}
-              type="button"
-              variant="outline"
-              size="xs"
-              disabled={disabled}
-              onClick={() => onMove(task.id, status.value)}
-            >
-              <IconArrowRight />
-              {getStatusLabel(status.value)}
-            </Button>
-          ))}
+          {movementOptions.map(
+            (status) =>
+              task.canManage && (
+                <Button
+                  key={status.value}
+                  type="button"
+                  variant="outline"
+                  size="xs"
+                  disabled={disabled}
+                  onClick={() => onMove(task.id, status.value)}
+                >
+                  <IconArrowRight />
+                  {getStatusLabel(status.value)}
+                </Button>
+              )
+          )}
         </div>
       </CardContent>
     </Card>
