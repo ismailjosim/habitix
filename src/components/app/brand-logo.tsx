@@ -11,12 +11,17 @@ type BrandLogoProps = {
 export function BrandLogo({ compact = false, className, priority = false }: BrandLogoProps) {
   return (
     <Image
-      src={compact ? '/android-chrome-192x192.png' : '/logo-with-text.png'}
+      src="/android-chrome-192x192.png"
       alt="Habitix"
-      width={compact ? 192 : 2138}
-      height={compact ? 192 : 779}
+      width={192}
+      height={192}
       priority={priority}
-      className={cn('object-contain', className)}
+      sizes={compact ? '40px' : '32px'}
+      className={cn(
+        'shrink-0 object-contain',
+        compact ? 'size-10 rounded-xl' : 'size-8',
+        className
+      )}
     />
   );
 }

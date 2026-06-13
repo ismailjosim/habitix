@@ -91,7 +91,7 @@ export function AppShell({ children, user, activeFocusSession }: AppShellProps) 
       <PresenceHeartbeat />
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-30 hidden border-r border-white/8 bg-sidebar text-sidebar-foreground shadow-[8px_0_32px_rgba(15,23,42,0.08)] transition-[width] duration-200 print:hidden lg:block',
+          'fixed inset-y-0 left-0 z-30 hidden border-r border-border/70 bg-sidebar text-sidebar-foreground shadow-[8px_0_32px_rgba(15,23,42,0.08)] transition-[width] duration-200 print:hidden lg:block',
           sidebarCollapsed ? 'w-20' : 'w-72'
         )}
       >
@@ -149,7 +149,7 @@ function TopBar({
         </SheetTrigger>
         <SheetContent
           side="left"
-          className="w-72 border-white/8 bg-sidebar p-0 text-sidebar-foreground"
+          className="w-72 border-border/70 bg-sidebar p-0 text-sidebar-foreground"
         >
           <SheetTitle className="sr-only">Habitix navigation</SheetTitle>
           <SidebarContent
@@ -253,19 +253,25 @@ function SidebarContent({
     <div className="flex h-full flex-col">
       <div
         className={cn(
-          'flex h-16 items-center border-b border-white/8',
+          'flex h-16 items-center border-b border-border/70',
           collapsed ? 'justify-center px-2' : 'px-5'
         )}
       >
         {collapsed ? (
-          <BrandLogo compact priority className="size-10 rounded-xl bg-white p-1" />
+          <Link href="/dashboard" aria-label="Habitix dashboard">
+            <BrandLogo compact priority />
+          </Link>
         ) : (
           <Link
             href="/dashboard"
             aria-label="Habitix dashboard"
-            className="flex h-11 w-full items-center rounded-xl bg-white px-3 shadow-sm ring-1 ring-white/15"
+            className="flex h-10 w-full items-center gap-2 rounded-xl"
           >
-            <BrandLogo priority className="h-8 w-auto max-w-full" />
+            <BrandLogo priority className="size-10" />
+            <p className="text-3xl font-bold tracking-widest">
+              <span>Habiti</span>
+              <span className=" text-primary">x</span>
+            </p>
           </Link>
         )}
       </div>
@@ -288,10 +294,10 @@ function SidebarContent({
                 title={collapsed ? item.title : undefined}
                 aria-label={collapsed ? item.title : undefined}
                 className={cn(
-                  'relative flex h-10 items-center rounded-xl text-sm font-medium text-sidebar-foreground/72 transition-[color,background-color,transform] hover:bg-sidebar-muted hover:text-white',
+                  'relative flex h-10 items-center rounded-xl text-sm font-medium text-sidebar-foreground/72 transition-[color,background-color,transform] hover:bg-sidebar-muted hover:text-sidebar-foreground',
                   collapsed ? 'justify-center px-2' : 'gap-3 px-3',
                   isActive &&
-                    'bg-white text-sidebar shadow-[0_8px_24px_rgba(0,0,0,0.15)] hover:bg-white/95 hover:text-sidebar'
+                    'bg-primary text-primary-foreground shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:bg-primary-hover hover:text-primary-foreground'
                 )}
               >
                 <Icon className="size-5" />

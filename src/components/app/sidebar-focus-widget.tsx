@@ -26,21 +26,26 @@ export function SidebarFocusWidget({ session, collapsed }: SidebarFocusWidgetPro
     return () => window.clearInterval(interval);
   }, [session]);
 
-  const elapsedSinceRender = session?.status === 'ACTIVE' ? Math.floor((now - startedAt) / 1000) : 0;
+  const elapsedSinceRender =
+    session?.status === 'ACTIVE' ? Math.floor((now - startedAt) / 1000) : 0;
   const remainingSeconds = Math.max((session?.remainingSeconds ?? 0) - elapsedSinceRender, 0);
 
   if (collapsed) {
     return (
-      <div className="border-t border-white/8 p-3">
+      <div className="border-t border-border/70 p-3">
         <Link
           href="/focus-mode"
           title={session ? `${formatClock(remainingSeconds)} remaining` : 'Start focus session'}
-          aria-label={session ? `${formatClock(remainingSeconds)} remaining in focus session` : 'Start focus session'}
+          aria-label={
+            session
+              ? `${formatClock(remainingSeconds)} remaining in focus session`
+              : 'Start focus session'
+          }
           className={cn(
             'relative grid size-11 place-items-center rounded-xl border transition-colors',
             session
-              ? 'border-primary/30 bg-primary/15 text-primary-foreground hover:bg-primary/25'
-              : 'border-white/8 bg-white/[0.045] text-sidebar-foreground/65 hover:bg-white/10 hover:text-white'
+              ? 'border-primary/30 bg-primary/15 text-primary hover:bg-primary/25'
+              : 'border-border/70 bg-sidebar-muted/50 text-sidebar-foreground/65 hover:bg-sidebar-muted hover:text-sidebar-foreground'
           )}
         >
           {session?.status === 'PAUSED' ? (
@@ -62,15 +67,15 @@ export function SidebarFocusWidget({ session, collapsed }: SidebarFocusWidgetPro
     : 0;
 
   return (
-    <div className="border-t border-white/8 p-4">
+    <div className="border-t border-border/70 p-4">
       <Link
         href="/focus-mode"
-        className="group block rounded-2xl border border-white/8 bg-white/[0.045] p-3.5 transition-colors hover:bg-white/[0.075]"
+        className="group block rounded-2xl border border-border/70 bg-sidebar-muted/50 p-3.5 transition-colors hover:bg-sidebar-muted"
       >
         {session ? (
           <>
             <div className="flex items-center justify-between gap-3">
-              <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-white/55">
+              <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-sidebar-foreground/55">
                 {session.status === 'PAUSED' ? (
                   <IconPlayerPause className="size-3.5 text-warning" />
                 ) : (
@@ -78,15 +83,15 @@ export function SidebarFocusWidget({ session, collapsed }: SidebarFocusWidgetPro
                 )}
                 {session.status === 'PAUSED' ? 'Paused' : 'Focusing'}
               </span>
-              <IconArrowRight className="size-4 text-white/35 transition-transform group-hover:translate-x-0.5 group-hover:text-white/70" />
+              <IconArrowRight className="size-4 text-sidebar-foreground/35 transition-transform group-hover:translate-x-0.5 group-hover:text-sidebar-foreground/70" />
             </div>
-            <p className="mt-3 font-mono text-2xl font-semibold tabular-nums tracking-tight text-white">
+            <p className="mt-3 font-mono text-2xl font-semibold tabular-nums tracking-tight text-sidebar-foreground">
               {formatClock(remainingSeconds)}
             </p>
-            <p className="mt-1 truncate text-xs text-white/55">
+            <p className="mt-1 truncate text-xs text-sidebar-foreground/55">
               {session.taskTitle ?? session.activityLabel}
             </p>
-            <div className="mt-3 h-1 overflow-hidden rounded-full bg-white/10">
+            <div className="mt-3 h-1 overflow-hidden rounded-full bg-sidebar-foreground/10">
               <div
                 className="h-full rounded-full bg-primary transition-[width] duration-1000"
                 style={{ width: `${progress}%` }}
@@ -95,14 +100,16 @@ export function SidebarFocusWidget({ session, collapsed }: SidebarFocusWidgetPro
           </>
         ) : (
           <div className="flex items-center gap-3">
-            <div className="grid size-9 shrink-0 place-items-center rounded-xl bg-primary/15 text-primary-foreground">
+            <div className="grid size-9 shrink-0 place-items-center rounded-xl bg-primary/15 text-primary">
               <IconTargetArrow className="size-4" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold text-white">Start a focus session</p>
-              <p className="mt-0.5 text-xs text-white/45">Protect time for deep work</p>
+              <p className="text-sm font-semibold text-sidebar-foreground">Start a focus session</p>
+              <p className="mt-0.5 text-xs text-sidebar-foreground/45">
+                Protect time for deep work
+              </p>
             </div>
-            <IconArrowRight className="size-4 text-white/35 transition-transform group-hover:translate-x-0.5 group-hover:text-white/70" />
+            <IconArrowRight className="size-4 text-sidebar-foreground/35 transition-transform group-hover:translate-x-0.5 group-hover:text-sidebar-foreground/70" />
           </div>
         )}
       </Link>
