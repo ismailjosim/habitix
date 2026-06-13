@@ -46,7 +46,7 @@ export function OnlinePeersPanel({ peers }: OnlinePeersPanelProps) {
                   <AvatarImage src={peer.user.image ?? ''} />
                   <AvatarFallback>{peer.user.name.charAt(0).toUpperCase()}</AvatarFallback>
                 </Avatar>
-                <div className="absolute bottom-0 right-0 h-2 w-2 rounded-full bg-green-500 ring-2 ring-white" />
+                <div className="absolute bottom-0 right-0 h-2 w-2 rounded-full bg-success ring-2 ring-white" />
               </div>
               <div>
                 <p className="text-sm font-medium">{peer.user.name}</p>

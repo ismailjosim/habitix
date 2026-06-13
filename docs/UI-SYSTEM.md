@@ -4,6 +4,28 @@
 
 The shared UI system provides reusable components, display helpers, and layout conventions for consistent design across the Habitix application.
 
+## Brand Color Roles
+
+Habitix uses an Indigo + Emerald + Slate production palette:
+
+- `primary`: Indigo `#4F46E5` for main actions, links, active navigation, and focus progress.
+- `primary-hover`: Deep Indigo `#4338CA` for hover and stronger calls to action.
+- `success`: Emerald `#047857` for completed work, positive trends, and online state.
+- `focus`: Cyan `#06B6D4` for Help Desk, coding assistance, and informational accents.
+- `warning`: Amber `#D97706` for reminders and attention states.
+- `destructive`: Red `#DC2626` for errors and destructive actions.
+- Slate tokens provide page backgrounds, surfaces, text, inputs, and borders.
+
+Use semantic utilities such as `bg-primary`, `text-success`, `bg-focus`, and
+`text-muted-foreground` instead of introducing unrelated bright colors. Cyan surfaces use a dark
+foreground to preserve readable contrast.
+
+## Application Shell
+
+The desktop sidebar supports expanded and collapsed modes. The collapsed icon rail retains
+accessible labels and native hover titles, and the preference is stored in browser local storage.
+Mobile navigation continues to use the labelled drawer.
+
 ## Components
 
 ### PageHeader

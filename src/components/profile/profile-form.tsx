@@ -95,8 +95,8 @@ export function ProfileForm({ profile }: ProfileFormProps) {
             aria-live="polite"
             className={`rounded-md px-3 py-2 text-sm ${
               message.includes('success')
-                ? 'bg-green-100 text-green-800'
-                : 'bg-red-100 text-red-800'
+                ? 'bg-success-soft text-success'
+                : 'bg-destructive/10 text-destructive'
             }`}
           >
             {message}

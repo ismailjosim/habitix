@@ -14,22 +14,20 @@ function RoleSection({
 }: {
   title: string;
   members: TeamMember[];
-  color: 'purple' | 'blue' | 'green';
+  color: 'indigo' | 'cyan';
 }) {
   if (members.length === 0) {
     return null;
   }
 
   const colorClasses = {
-    purple: 'border-purple-200 bg-purple-50',
-    blue: 'border-blue-200 bg-blue-50',
-    green: 'border-green-200 bg-green-50',
+    indigo: 'border-indigo-200 bg-indigo-50/70 dark:border-indigo-900 dark:bg-indigo-950/40',
+    cyan: 'border-cyan-200 bg-cyan-50/70 dark:border-cyan-900 dark:bg-cyan-950/40',
   };
 
   const badgeClasses = {
-    purple: 'bg-purple-100 text-purple-800',
-    blue: 'bg-blue-100 text-blue-800',
-    green: 'bg-green-100 text-green-800',
+    indigo: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200',
+    cyan: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200',
   };
 
   return (
@@ -66,8 +64,8 @@ export function TeamRoleCards({ leaders, mentors }: TeamRoleCardsProps) {
 
   return (
     <div className="space-y-6">
-      <RoleSection title="Team Leaders" members={leaders} color="purple" />
-      <RoleSection title="Mentors" members={mentors} color="blue" />
+      <RoleSection title="Team Leaders" members={leaders} color="indigo" />
+      <RoleSection title="Mentors" members={mentors} color="cyan" />
     </div>
   );
 }

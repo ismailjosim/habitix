@@ -22,13 +22,13 @@ const icons = {
 };
 
 const tones = {
-  flame: 'bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300',
-  target: 'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300',
-  code: 'bg-violet-100 text-violet-700 dark:bg-violet-950 dark:text-violet-300',
+  flame: 'bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300',
+  target: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300',
+  code: 'bg-cyan-50 text-cyan-700 dark:bg-cyan-950 dark:text-cyan-300',
   star: 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300',
-  'heart-handshake': 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300',
+  'heart-handshake': 'bg-cyan-50 text-cyan-700 dark:bg-cyan-950 dark:text-cyan-300',
   crown: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300',
-  trophy: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300',
+  trophy: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300',
 };
 
 export function BadgeIcon({ name, className }: { name: string; className?: string }) {

@@ -48,27 +48,27 @@ export function formatRelativeTime(date: Date | string): string {
 }
 
 export const statusColors = {
-  TODO: 'bg-gray-100 text-gray-800',
-  IN_PROGRESS: 'bg-blue-100 text-blue-800',
-  BLOCKED: 'bg-red-100 text-red-800',
-  IN_REVIEW: 'bg-yellow-100 text-yellow-800',
-  DONE: 'bg-green-100 text-green-800',
-  ARCHIVED: 'bg-gray-200 text-gray-700',
+  TODO: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200',
+  IN_PROGRESS: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-200',
+  BLOCKED: 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-200',
+  IN_REVIEW: 'bg-cyan-50 text-cyan-700 dark:bg-cyan-950 dark:text-cyan-200',
+  DONE: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-200',
+  ARCHIVED: 'bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300',
 };
 
 export const priorityColors = {
-  LOW: 'bg-green-100 text-green-800',
-  MEDIUM: 'bg-yellow-100 text-yellow-800',
-  HIGH: 'bg-orange-100 text-orange-800',
-  URGENT: 'bg-red-100 text-red-800',
+  LOW: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-200',
+  MEDIUM: 'bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-200',
+  HIGH: 'bg-orange-50 text-orange-700 dark:bg-orange-950 dark:text-orange-200',
+  URGENT: 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-200',
 };
 
 export const roleColors = {
-  STUDENT: 'bg-blue-100 text-blue-800',
-  MENTOR: 'bg-purple-100 text-purple-800',
-  ADMIN: 'bg-red-100 text-red-800',
-  MODERATOR: 'bg-orange-100 text-orange-800',
-  CORPORATE_VIEWER: 'bg-gray-100 text-gray-800',
+  STUDENT: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-200',
+  MENTOR: 'bg-cyan-50 text-cyan-700 dark:bg-cyan-950 dark:text-cyan-200',
+  ADMIN: 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-200',
+  MODERATOR: 'bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-200',
+  CORPORATE_VIEWER: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200',
 };
 
 export function getStatusLabel(status: string): string {

@@ -12,14 +12,14 @@ export function NotificationPanel({ notifications }: NotificationPanelProps) {
     switch (type) {
       case 'TASK_ASSIGNED':
       case 'TASK_DUE':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-200';
       case 'BADGE_AWARDED':
-        return 'bg-yellow-100 text-yellow-800';
+        return 'bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-200';
       case 'HELP_RESPONSE':
       case 'HELP_RESOLVED':
-        return 'bg-green-100 text-green-800';
+        return 'bg-cyan-50 text-cyan-700 dark:bg-cyan-950 dark:text-cyan-200';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200';
     }
   };
 

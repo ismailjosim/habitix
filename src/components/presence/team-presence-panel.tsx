@@ -33,7 +33,7 @@ export function TeamPresencePanel({
                   <span
                     className={`absolute bottom-0 right-0 size-2.5 rounded-full ring-2 ring-card ${
                       member.focus
-                        ? 'bg-blue-500'
+                        ? 'bg-primary'
                         : member.isOnline
                           ? 'bg-emerald-500'
                           : 'bg-slate-400'

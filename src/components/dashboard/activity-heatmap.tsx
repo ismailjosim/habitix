@@ -51,7 +51,7 @@ export function ActivityHeatmap({ days }: { days: DailyPoint[] }) {
                         }}
                       />
                       <span
-                        className="bg-amber-400"
+                        className="bg-focus"
                         style={{
                           height: `${day.totalMinutes ? (day.helpCreditMinutes / day.totalMinutes) * 100 : 0}%`,
                         }}
@@ -72,7 +72,7 @@ export function ActivityHeatmap({ days }: { days: DailyPoint[] }) {
                 Focus Hours
               </span>
               <span className="flex items-center gap-2">
-                <span className="inline-block size-2 rounded-full bg-amber-400" />
+                <span className="inline-block size-2 rounded-full bg-focus" />
                 Help Credit
               </span>
             </div>

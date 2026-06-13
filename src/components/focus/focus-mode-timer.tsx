@@ -493,7 +493,7 @@ function StatusRow({
       <span
         className={cn(
           'max-w-40 truncate text-right font-medium',
-          tone === 'ready' ? 'text-emerald-700' : 'text-muted-foreground'
+          tone === 'ready' ? 'text-success' : 'text-muted-foreground'
         )}
       >
         {value}

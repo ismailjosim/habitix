@@ -107,7 +107,10 @@ export function HelpDeskBoard({
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button disabled={!data.canCreatePost}>
+            <Button
+              disabled={!data.canCreatePost}
+              className="bg-focus text-focus-foreground hover:bg-cyan-600"
+            >
               <IconPlus /> Ask for help
             </Button>
           </DialogTrigger>
@@ -407,7 +410,7 @@ function Stat({
           <p className="text-sm text-muted-foreground">{text}</p>
           <p className="text-2xl font-bold">{value}</p>
         </div>
-        <Icon className="size-5 text-primary" />
+        <Icon className="size-5 text-focus" />
       </CardContent>
     </Card>
   );

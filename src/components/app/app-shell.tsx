@@ -3,8 +3,17 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { IconBell, IconChevronDown, IconMenu2, IconSearch } from '@tabler/icons-react';
+import { useState } from 'react';
+import {
+  IconBell,
+  IconChevronDown,
+  IconChevronLeft,
+  IconChevronRight,
+  IconMenu2,
+  IconSearch,
+} from '@tabler/icons-react';
 
+import habitixMark from '@/assets/Habitix-logo.png';
 import habitixLogo from '@/assets/Habitix-logo-with-text.png';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -57,6 +66,20 @@ function initialsForName(name: string) {
 }
 
 export function AppShell({ children, user }: AppShellProps) {
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(
+    () =>
+      typeof window !== 'undefined' &&
+      window.localStorage.getItem('habitix-sidebar-collapsed') === 'true'
+  );
+
+  function toggleSidebar() {
+    setSidebarCollapsed((current) => {
+      const next = !current;
+      window.localStorage.setItem('habitix-sidebar-collapsed', String(next));
+      return next;
+    });
+  }
+
   return (
     <div className="min-h-screen bg-canvas text-foreground">
       <a
@@ -66,12 +89,22 @@ export function AppShell({ children, user }: AppShellProps) {
         Skip to main content
       </a>
       <PresenceHeartbeat />
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-72 border-r border-white/10 bg-sidebar text-sidebar-foreground print:hidden lg:block">
-        <SidebarContent role={user.role} />
+      <aside
+        className={cn(
+          'fixed inset-y-0 left-0 z-30 hidden border-r border-border bg-sidebar text-sidebar-foreground shadow-sm transition-[width] duration-200 print:hidden lg:block',
+          sidebarCollapsed ? 'w-20' : 'w-72'
+        )}
+      >
+        <SidebarContent role={user.role} collapsed={sidebarCollapsed} />
       </aside>
 
-      <div className="print:pl-0 lg:pl-72">
-        <TopBar user={user} />
+      <div
+        className={cn(
+          'transition-[padding] duration-200 print:pl-0',
+          sidebarCollapsed ? 'lg:pl-20' : 'lg:pl-72'
+        )}
+      >
+        <TopBar user={user} sidebarCollapsed={sidebarCollapsed} onToggleSidebar={toggleSidebar} />
         <main
           id="main-content"
           tabIndex={-1}
@@ -84,7 +117,14 @@ export function AppShell({ children, user }: AppShellProps) {
   );
 }
 
-function TopBar({ user }: Pick<AppShellProps, 'user'>) {
+function TopBar({
+  user,
+  sidebarCollapsed,
+  onToggleSidebar,
+}: Pick<AppShellProps, 'user'> & {
+  sidebarCollapsed: boolean;
+  onToggleSidebar: () => void;
+}) {
   const pathname = usePathname();
   const roleLabel = formatRole(user.role);
   const initials = initialsForName(user.name) || 'HX';
@@ -99,12 +139,24 @@ function TopBar({ user }: Pick<AppShellProps, 'user'>) {
         </SheetTrigger>
         <SheetContent
           side="left"
-          className="w-72 border-white/10 bg-sidebar p-0 text-sidebar-foreground"
+          className="w-72 border-border bg-sidebar p-0 text-sidebar-foreground"
         >
           <SheetTitle className="sr-only">Habitix navigation</SheetTitle>
-          <SidebarContent role={user.role} />
+          <SidebarContent role={user.role} collapsed={false} />
         </SheetContent>
       </Sheet>
+
+      <Button
+        type="button"
+        variant="outline"
+        size="icon"
+        className="hidden lg:inline-flex"
+        aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        aria-pressed={sidebarCollapsed}
+        onClick={onToggleSidebar}
+      >
+        {sidebarCollapsed ? <IconChevronRight /> : <IconChevronLeft />}
+      </Button>
 
       <form action={searchTarget(pathname)} className="relative hidden w-full max-w-md sm:block">
         <IconSearch className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -169,7 +221,7 @@ function TopBar({ user }: Pick<AppShellProps, 'user'>) {
   );
 }
 
-function SidebarContent({ role }: { role: string }) {
+function SidebarContent({ role, collapsed }: { role: string; collapsed: boolean }) {
   const pathname = usePathname();
   const visibleItems = navigationItems.filter((item) =>
     canAccessModule(role as AppRole, item.module)
@@ -177,11 +229,21 @@ function SidebarContent({ role }: { role: string }) {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex h-16 items-center border-b border-white/10 px-5">
-        <Image src={habitixLogo} alt="Habitix" className="h-9 w-auto object-contain" priority />
+      <div
+        className={cn(
+          'flex h-16 items-center border-b border-border',
+          collapsed ? 'justify-center px-2' : 'px-5'
+        )}
+      >
+        <Image
+          src={collapsed ? habitixMark : habitixLogo}
+          alt="Habitix"
+          className={cn('object-contain', collapsed ? 'size-9' : 'h-9 w-auto')}
+          priority
+        />
       </div>
 
-      <ScrollArea className="flex-1 px-3 py-4">
+      <ScrollArea className={cn('flex-1 py-4', collapsed ? 'px-2' : 'px-3')}>
         <nav className="space-y-1">
           {visibleItems.map((item) => {
             const Icon = item.icon;
@@ -191,21 +253,26 @@ function SidebarContent({ role }: { role: string }) {
               <Link
                 key={item.href}
                 href={item.href}
+                title={collapsed ? item.title : undefined}
+                aria-label={collapsed ? item.title : undefined}
                 className={cn(
-                  'flex h-10 items-center gap-3 rounded-lg px-3 text-sm font-medium text-sidebar-foreground transition-colors hover:bg-sidebar-muted hover:text-white',
-                  isActive && 'bg-primary text-primary-foreground shadow-sm shadow-blue-950/20'
+                  'flex h-10 items-center rounded-lg text-sm font-medium text-sidebar-foreground transition-colors hover:bg-sidebar-muted hover:text-primary',
+                  collapsed ? 'justify-center px-2' : 'gap-3 px-3',
+                  isActive &&
+                    'bg-primary text-primary-foreground shadow-sm hover:bg-primary-hover hover:text-primary-foreground'
                 )}
               >
                 <Icon className="size-5" />
-                <span>{item.title}</span>
+                {!collapsed && <span>{item.title}</span>}
               </Link>
             );
           })}
         </nav>
       </ScrollArea>
 
-      <div className="border-t border-white/10 p-4">
-        <div className="rounded-lg border border-white/10 bg-white/[0.06] p-3">
+      {!collapsed && (
+      <div className="border-t border-border p-4">
+        <div className="rounded-lg border border-border bg-muted/60 p-3">
           <div className="flex items-center justify-between gap-2">
             <span className="text-sm font-medium">SCE Workspace</span>
             <Badge className="bg-primary text-primary-foreground hover:bg-primary">MVP</Badge>
@@ -215,6 +282,7 @@ function SidebarContent({ role }: { role: string }) {
           </p>
         </div>
       </div>
+      )}
     </div>
   );
 }
