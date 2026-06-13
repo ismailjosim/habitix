@@ -16,7 +16,6 @@ import {
 import habitixMark from '@/assets/Habitix-logo.png';
 import habitixLogo from '@/assets/Habitix-logo-with-text.png';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -32,13 +31,16 @@ import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/s
 import { SignOutMenuItem } from '@/components/app/sign-out-menu-item';
 import { ThemeToggle } from '@/components/app/theme-toggle';
 import { PresenceHeartbeat } from '@/components/app/presence-heartbeat';
+import { SidebarFocusWidget } from '@/components/app/sidebar-focus-widget';
 import { navigationItems } from '@/lib/navigation';
 import { canAccessModule } from '@/lib/permissions';
 import type { AppRole } from '@/generated/prisma/client';
 import { cn } from '@/lib/utils';
+import type { ActiveFocusSession } from '@/lib/queries/focus';
 
 type AppShellProps = {
   children: React.ReactNode;
+  activeFocusSession: ActiveFocusSession | null;
   user: {
     name: string;
     email: string;
@@ -65,7 +67,7 @@ function initialsForName(name: string) {
     .join('');
 }
 
-export function AppShell({ children, user }: AppShellProps) {
+export function AppShell({ children, user, activeFocusSession }: AppShellProps) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(
     () =>
       typeof window !== 'undefined' &&
@@ -84,18 +86,22 @@ export function AppShell({ children, user }: AppShellProps) {
     <div className="min-h-screen bg-canvas text-foreground">
       <a
         href="#main-content"
-        className="sr-only fixed left-4 top-4 z-50 rounded-md bg-primary px-4 py-2 text-primary-foreground focus:not-sr-only"
+        className="sr-only fixed left-4 top-4 z-50 rounded-xl bg-primary px-4 py-2 text-primary-foreground shadow-lg focus:not-sr-only"
       >
         Skip to main content
       </a>
       <PresenceHeartbeat />
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-30 hidden border-r border-border bg-sidebar text-sidebar-foreground shadow-sm transition-[width] duration-200 print:hidden lg:block',
+          'fixed inset-y-0 left-0 z-30 hidden border-r border-white/8 bg-sidebar text-sidebar-foreground shadow-[8px_0_32px_rgba(15,23,42,0.08)] transition-[width] duration-200 print:hidden lg:block',
           sidebarCollapsed ? 'w-20' : 'w-72'
         )}
       >
-        <SidebarContent role={user.role} collapsed={sidebarCollapsed} />
+        <SidebarContent
+          role={user.role}
+          collapsed={sidebarCollapsed}
+          activeFocusSession={activeFocusSession}
+        />
       </aside>
 
       <div
@@ -104,11 +110,16 @@ export function AppShell({ children, user }: AppShellProps) {
           sidebarCollapsed ? 'lg:pl-20' : 'lg:pl-72'
         )}
       >
-        <TopBar user={user} sidebarCollapsed={sidebarCollapsed} onToggleSidebar={toggleSidebar} />
+        <TopBar
+          user={user}
+          activeFocusSession={activeFocusSession}
+          sidebarCollapsed={sidebarCollapsed}
+          onToggleSidebar={toggleSidebar}
+        />
         <main
           id="main-content"
           tabIndex={-1}
-          className="min-h-[calc(100vh-4rem)] px-4 py-5 print:min-h-0 print:p-0 sm:px-6 lg:px-8"
+          className="min-h-[calc(100vh-4rem)] px-4 py-6 print:min-h-0 print:p-0 sm:px-6 lg:px-8 xl:px-10"
         >
           {children}
         </main>
@@ -119,9 +130,10 @@ export function AppShell({ children, user }: AppShellProps) {
 
 function TopBar({
   user,
+  activeFocusSession,
   sidebarCollapsed,
   onToggleSidebar,
-}: Pick<AppShellProps, 'user'> & {
+}: Pick<AppShellProps, 'user' | 'activeFocusSession'> & {
   sidebarCollapsed: boolean;
   onToggleSidebar: () => void;
 }) {
@@ -130,7 +142,7 @@ function TopBar({
   const initials = initialsForName(user.name) || 'HX';
 
   return (
-    <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-border bg-card/95 px-4 backdrop-blur print:hidden sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-border/70 bg-background/80 px-4 backdrop-blur-xl print:hidden sm:px-6 lg:px-8 xl:px-10">
       <Sheet>
         <SheetTrigger asChild>
           <Button variant="outline" size="icon" className="lg:hidden" aria-label="Open navigation">
@@ -139,10 +151,14 @@ function TopBar({
         </SheetTrigger>
         <SheetContent
           side="left"
-          className="w-72 border-border bg-sidebar p-0 text-sidebar-foreground"
+          className="w-72 border-white/8 bg-sidebar p-0 text-sidebar-foreground"
         >
           <SheetTitle className="sr-only">Habitix navigation</SheetTitle>
-          <SidebarContent role={user.role} collapsed={false} />
+          <SidebarContent
+            role={user.role}
+            collapsed={false}
+            activeFocusSession={activeFocusSession}
+          />
         </SheetContent>
       </Sheet>
 
@@ -163,7 +179,7 @@ function TopBar({
         <Input
           aria-label="Search"
           name={pathname.startsWith('/study-materials') ? 'search' : 'q'}
-          className="h-9 border-border bg-secondary/70 pl-9"
+          className="h-10 border-border/80 bg-card/90 pl-9"
           placeholder="Search tasks, teammates, reports..."
         />
       </form>
@@ -188,7 +204,7 @@ function TopBar({
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-10 gap-2 px-2">
+            <Button variant="ghost" className="h-10 gap-2 px-2 hover:bg-card">
               <Avatar className="size-8">
                 <AvatarImage src={user.image ?? ''} alt={user.name} />
                 <AvatarFallback>{initials}</AvatarFallback>
@@ -221,7 +237,15 @@ function TopBar({
   );
 }
 
-function SidebarContent({ role, collapsed }: { role: string; collapsed: boolean }) {
+function SidebarContent({
+  role,
+  collapsed,
+  activeFocusSession,
+}: {
+  role: string;
+  collapsed: boolean;
+  activeFocusSession: ActiveFocusSession | null;
+}) {
   const pathname = usePathname();
   const visibleItems = navigationItems.filter((item) =>
     canAccessModule(role as AppRole, item.module)
@@ -231,7 +255,7 @@ function SidebarContent({ role, collapsed }: { role: string; collapsed: boolean 
     <div className="flex h-full flex-col">
       <div
         className={cn(
-          'flex h-16 items-center border-b border-border',
+          'flex h-16 items-center border-b border-white/8',
           collapsed ? 'justify-center px-2' : 'px-5'
         )}
       >
@@ -243,8 +267,13 @@ function SidebarContent({ role, collapsed }: { role: string; collapsed: boolean 
         />
       </div>
 
-      <ScrollArea className={cn('flex-1 py-4', collapsed ? 'px-2' : 'px-3')}>
-        <nav className="space-y-1">
+      <ScrollArea className={cn('flex-1 py-5', collapsed ? 'px-2' : 'px-3')}>
+        {!collapsed && (
+          <p className="mb-3 px-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-sidebar-foreground/45">
+            Workspace
+          </p>
+        )}
+        <nav className="space-y-1.5">
           {visibleItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
@@ -256,10 +285,10 @@ function SidebarContent({ role, collapsed }: { role: string; collapsed: boolean 
                 title={collapsed ? item.title : undefined}
                 aria-label={collapsed ? item.title : undefined}
                 className={cn(
-                  'flex h-10 items-center rounded-lg text-sm font-medium text-sidebar-foreground transition-colors hover:bg-sidebar-muted hover:text-primary',
+                  'relative flex h-10 items-center rounded-xl text-sm font-medium text-sidebar-foreground/72 transition-[color,background-color,transform] hover:bg-sidebar-muted hover:text-white',
                   collapsed ? 'justify-center px-2' : 'gap-3 px-3',
                   isActive &&
-                    'bg-primary text-primary-foreground shadow-sm hover:bg-primary-hover hover:text-primary-foreground'
+                    'bg-white text-sidebar shadow-[0_8px_24px_rgba(0,0,0,0.15)] hover:bg-white/95 hover:text-sidebar'
                 )}
               >
                 <Icon className="size-5" />
@@ -270,19 +299,11 @@ function SidebarContent({ role, collapsed }: { role: string; collapsed: boolean 
         </nav>
       </ScrollArea>
 
-      {!collapsed && (
-      <div className="border-t border-border p-4">
-        <div className="rounded-lg border border-border bg-muted/60 p-3">
-          <div className="flex items-center justify-between gap-2">
-            <span className="text-sm font-medium">SCE Workspace</span>
-            <Badge className="bg-primary text-primary-foreground hover:bg-primary">MVP</Badge>
-          </div>
-          <p className="mt-2 text-xs leading-5 text-sidebar-foreground/80">
-            Habitix branded student collaboration environment.
-          </p>
-        </div>
-      </div>
-      )}
+      <SidebarFocusWidget
+        key={`${activeFocusSession?.id ?? 'idle'}-${activeFocusSession?.status ?? 'none'}-${activeFocusSession?.remainingSeconds ?? 0}`}
+        session={activeFocusSession}
+        collapsed={collapsed}
+      />
     </div>
   );
 }

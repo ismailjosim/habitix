@@ -15,21 +15,21 @@ the production Next.js build.
 
 ## Route Review
 
-| Route | Core state reviewed |
-| --- | --- |
-| `/sign-up`, `/sign-in` | Labels, password rules, errors, redirects, mobile card layout |
-| `/dashboard` | Empty totals, trends, heatmap, notifications, presence |
-| `/activity` | Empty history, ranges, horizontal heatmap overflow, breakdown |
-| `/focus-mode` | Timer controls, restored session, linked task, empty sessions |
-| `/tasks`, `/tasks/[id]` | Personal/assigned creation, status, subtasks, comments, empty board |
-| `/help-desk` | No-team guidance, create/respond/resolve/award flow, filters |
-| `/leaderboard` | No-team and zero-activity states, weekly/monthly views |
-| `/team` | No-membership state, members, presence, shared tasks |
-| `/notifications` | Empty inbox, read one, read all |
-| `/profile` | Responsive form, badges, stats, live save feedback |
-| `/study-materials`, detail | Empty library, filters, managed create form, resource detail |
-| `/corporate-report` | Student, aggregate, empty, filter, and print states |
-| `/admin/users` | Admin-only access, role changes, team creation and assignment |
+| Route                      | Core state reviewed                                                 |
+| -------------------------- | ------------------------------------------------------------------- |
+| `/sign-up`, `/sign-in`     | Labels, password rules, errors, redirects, mobile card layout       |
+| `/dashboard`               | Empty totals, trends, heatmap, notifications, presence              |
+| `/activity`                | Empty history, ranges, horizontal heatmap overflow, breakdown       |
+| `/focus-mode`              | Timer controls, restored session, linked task, empty sessions       |
+| `/tasks`, `/tasks/[id]`    | Personal/assigned creation, status, subtasks, comments, empty board |
+| `/help-desk`               | No-team guidance, create/respond/resolve/award flow, filters        |
+| `/leaderboard`             | No-team and zero-activity states, weekly/monthly views              |
+| `/team`                    | No-membership state, members, presence, shared tasks                |
+| `/notifications`           | Empty inbox, read one, read all                                     |
+| `/profile`                 | Responsive form, badges, stats, live save feedback                  |
+| `/study-materials`, detail | Empty library, filters, managed create form, resource detail        |
+| `/corporate-report`        | Student, aggregate, empty, filter, and print states                 |
+| `/admin/users`             | Admin-only access, role changes, team creation and assignment       |
 
 ## Accessibility And Responsive Review
 

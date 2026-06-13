@@ -28,7 +28,12 @@ describe('analytics helpers', () => {
       [{ pointsAwarded: 2, isAccepted: true }]
     );
 
-    expect(focus).toMatchObject({ sessions: 2, actualMinutes: 50, activeDays: 1, completionRate: 100 });
+    expect(focus).toMatchObject({
+      sessions: 2,
+      actualMinutes: 50,
+      activeDays: 1,
+      completionRate: 100,
+    });
     expect(help).toMatchObject({
       resolvedPosts: 1,
       resolutionRate: 100,
@@ -53,7 +58,10 @@ describe('analytics helpers', () => {
     expect(daily).toHaveLength(3);
     expect(daily[1]).toMatchObject({ focusMinutes: 25, helpCreditMinutes: 20, totalMinutes: 45 });
     expect(
-      calculateCurrentStreak(new Set(['2026-06-10', '2026-06-11', '2026-06-12']), new Date(2026, 5, 12))
+      calculateCurrentStreak(
+        new Set(['2026-06-10', '2026-06-11', '2026-06-12']),
+        new Date(2026, 5, 12)
+      )
     ).toBe(3);
   });
 
@@ -77,7 +85,12 @@ describe('analytics helpers', () => {
       new Date('2026-06-10T00:00:00Z')
     );
 
-    expect(row).toMatchObject({ profileId: 'profile-1', focusMinutes: 45, helpPoints: 2, resolutions: 1 });
+    expect(row).toMatchObject({
+      profileId: 'profile-1',
+      focusMinutes: 45,
+      helpPoints: 2,
+      resolutions: 1,
+    });
   });
 
   it('handles comparison and invalid custom ranges', () => {

@@ -50,7 +50,9 @@ describe('focus session completion', () => {
     const tx = {
       focusSession: {
         count: vi.fn().mockResolvedValue(0),
-        update: vi.fn().mockResolvedValue({ id: 'focus-1', status: 'COMPLETED', actualMinutes: 25 }),
+        update: vi
+          .fn()
+          .mockResolvedValue({ id: 'focus-1', status: 'COMPLETED', actualMinutes: 25 }),
       },
       userProfile: { update: vi.fn().mockResolvedValue({}) },
       activityEvent: { create: vi.fn().mockResolvedValue({}) },

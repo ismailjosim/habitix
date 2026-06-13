@@ -90,13 +90,13 @@ All demo accounts use:
 Password: HabitixDemo123!
 ```
 
-| Experience | Email |
-| --- | --- |
-| Mentor | `mentor.demo@habitix.local` |
-| Student | `student.demo@habitix.local` |
-| Student and team lead | `peer.demo@habitix.local` |
-| Moderator | `moderator.demo@habitix.local` |
-| Corporate Viewer | `corporate.demo@habitix.local` |
+| Experience            | Email                          |
+| --------------------- | ------------------------------ |
+| Mentor                | `mentor.demo@habitix.local`    |
+| Student               | `student.demo@habitix.local`   |
+| Student and team lead | `peer.demo@habitix.local`      |
+| Moderator             | `moderator.demo@habitix.local` |
+| Corporate Viewer      | `corporate.demo@habitix.local` |
 
 The seed refuses to run when `NODE_ENV=production`.
 
@@ -126,56 +126,56 @@ memberships, and team roles. The final administrator cannot demote themselves.
 
 ## Application Routes
 
-| Route | Purpose |
-| --- | --- |
-| `/dashboard` | Focus, tasks, streak, help points, activity, presence, and notifications |
-| `/activity` | Date-range analytics, heatmap, session history, and breakdown |
-| `/focus-mode` | Persistent focus timer and daily sessions |
-| `/tasks` | Personal and assigned task board |
-| `/tasks/[taskId]` | Task detail, subtasks, comments, history, and focus sessions |
-| `/help-desk` | Team coding Q&A, responses, resolutions, and point awards |
-| `/leaderboard` | Weekly/monthly focus and contribution rankings |
-| `/team` | Team members, roles, presence, and tasks |
-| `/notifications` | Notification inbox and read state |
-| `/profile` | Profile editing, statistics, and badges |
-| `/study-materials` | Searchable learning-resource library |
-| `/corporate-report` | Student or aggregate reporting based on role |
-| `/admin/users` | Admin-only role, profile, team, and membership management |
+| Route               | Purpose                                                                  |
+| ------------------- | ------------------------------------------------------------------------ |
+| `/dashboard`        | Focus, tasks, streak, help points, activity, presence, and notifications |
+| `/activity`         | Date-range analytics, heatmap, session history, and breakdown            |
+| `/focus-mode`       | Persistent focus timer and daily sessions                                |
+| `/tasks`            | Personal and assigned task board                                         |
+| `/tasks/[taskId]`   | Task detail, subtasks, comments, history, and focus sessions             |
+| `/help-desk`        | Team coding Q&A, responses, resolutions, and point awards                |
+| `/leaderboard`      | Weekly/monthly focus and contribution rankings                           |
+| `/team`             | Team members, roles, presence, and tasks                                 |
+| `/notifications`    | Notification inbox and read state                                        |
+| `/profile`          | Profile editing, statistics, and badges                                  |
+| `/study-materials`  | Searchable learning-resource library                                     |
+| `/corporate-report` | Student or aggregate reporting based on role                             |
+| `/admin/users`      | Admin-only role, profile, team, and membership management                |
 
 ## Roles
 
-| Role | Main access |
-| --- | --- |
-| Student | Dashboard, activity, focus, tasks, Help Desk, leaderboard, team, materials |
-| Mentor | Student features plus assignments, reporting, and owned material management |
-| Admin | Operational modules, Focus Mode, reporting, materials, and user management |
-| Moderator | Dashboard, Help Desk moderation, notifications, and profile |
-| Corporate Viewer | Notifications, profile, and approved aggregate reports only |
+| Role             | Main access                                                                 |
+| ---------------- | --------------------------------------------------------------------------- |
+| Student          | Dashboard, activity, focus, tasks, Help Desk, leaderboard, team, materials  |
+| Mentor           | Student features plus assignments, reporting, and owned material management |
+| Admin            | Operational modules, Focus Mode, reporting, materials, and user management  |
+| Moderator        | Dashboard, Help Desk moderation, notifications, and profile                 |
+| Corporate Viewer | Notifications, profile, and approved aggregate reports only                 |
 
 Platform role and team role are separate. Help Desk posting requires an active team membership even
 when the platform role permits Help Desk access.
 
 ## Commands
 
-| Command | Purpose |
-| --- | --- |
-| `npm run dev` | Start the development server |
-| `npm run build` | Create the production build |
-| `npm start` | Start the production server |
-| `npm test` | Run Vitest once |
-| `npm run test:watch` | Run tests in watch mode |
-| `npm run test:coverage` | Generate test coverage |
-| `npm run lint` | Run ESLint |
-| `npm run qa:check` | Run tests, permission audit, lint, Prisma validation, and build |
-| `npm run db:generate` | Generate Prisma Client |
-| `npm run db:deploy` | Apply committed migrations |
-| `npm run db:migrate` | Create migrations during development only |
-| `npm run db:migrate:status` | Inspect migration status |
-| `npm run db:seed` | Seed required defaults |
-| `npm run demo:seed` | Load the local showcase dataset |
-| `npm run db:studio` | Open Prisma Studio |
-| `npm run admin:promote -- EMAIL` | Promote the first administrator |
-| `npm run deploy:prepare` | Generate Prisma Client and deploy migrations |
+| Command                          | Purpose                                                         |
+| -------------------------------- | --------------------------------------------------------------- |
+| `npm run dev`                    | Start the development server                                    |
+| `npm run build`                  | Create the production build                                     |
+| `npm start`                      | Start the production server                                     |
+| `npm test`                       | Run Vitest once                                                 |
+| `npm run test:watch`             | Run tests in watch mode                                         |
+| `npm run test:coverage`          | Generate test coverage                                          |
+| `npm run lint`                   | Run ESLint                                                      |
+| `npm run qa:check`               | Run tests, permission audit, lint, Prisma validation, and build |
+| `npm run db:generate`            | Generate Prisma Client                                          |
+| `npm run db:deploy`              | Apply committed migrations                                      |
+| `npm run db:migrate`             | Create migrations during development only                       |
+| `npm run db:migrate:status`      | Inspect migration status                                        |
+| `npm run db:seed`                | Seed required defaults                                          |
+| `npm run demo:seed`              | Load the local showcase dataset                                 |
+| `npm run db:studio`              | Open Prisma Studio                                              |
+| `npm run admin:promote -- EMAIL` | Promote the first administrator                                 |
+| `npm run deploy:prepare`         | Generate Prisma Client and deploy migrations                    |
 
 ## Testing
 

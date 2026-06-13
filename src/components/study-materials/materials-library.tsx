@@ -81,7 +81,12 @@ export function MaterialsLibrary({
                   <DialogTitle>Create PDF resource</DialogTitle>
                   <DialogDescription>Add metadata and an external PDF URL.</DialogDescription>
                 </DialogHeader>
-                <Input aria-label="Resource title" name="title" placeholder="Resource title" required />
+                <Input
+                  aria-label="Resource title"
+                  name="title"
+                  placeholder="Resource title"
+                  required
+                />
                 <Input aria-label="Book author" name="author" placeholder="Book author" />
                 <Textarea aria-label="Description" name="description" placeholder="Description" />
                 <Input

@@ -627,7 +627,8 @@ async function main() {
       tasksCompleted: 13,
       focusMinutes: 1160,
       helpDeskResolutionRate: 82,
-      summary: 'The Habitix Product Lab maintained strong focus consistency and peer response times.',
+      summary:
+        'The Habitix Product Lab maintained strong focus consistency and peer response times.',
     },
   });
 

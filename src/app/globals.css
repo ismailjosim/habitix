@@ -2,57 +2,58 @@
 @import "tw-animate-css";
 
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
-  --canvas: #f1f5f9;
+  --background: #fff7ed;
+  --foreground: #1e293b;
+  --canvas: #fffbf7;
 
   --card: #ffffff;
-  --card-foreground: #0f172a;
+  --card-foreground: #1e293b;
 
   --popover: #ffffff;
-  --popover-foreground: #0f172a;
+  --popover-foreground: #1e293b;
 
-  /* Main habit app brand color */
-  --primary: #16a34a;
+  /* Main brand: modern tomato/coral */
+  --primary: #f9735b;
   --primary-foreground: #ffffff;
-  --primary-hover: #15803d;
+  --primary-hover: #ea5a3f;
+  --primary-soft: #fff1ed;
 
-  /* Blue for learning, coding, Q&A, focus */
-  --secondary: #dbeafe;
-  --secondary-foreground: #1e40af;
+  /* Calm professional contrast */
+  --secondary: #f8fafc;
+  --secondary-foreground: #1e293b;
 
-  --muted: #f1f5f9;
+  --muted: #fff1ed;
   --muted-foreground: #64748b;
 
-  /* Soft blue accent for info cards/questions */
-  --accent: #eff6ff;
-  --accent-foreground: #2563eb;
+  /* Q&A / coding info accent */
+  --accent: #e0f2fe;
+  --accent-foreground: #0369a1;
 
   /* Habit completion */
   --success: #16a34a;
   --success-soft: #dcfce7;
   --success-foreground: #ffffff;
 
-  /* Streaks, reminders, pending habits */
+  /* Streak / reminder / motivation */
   --warning: #f59e0b;
   --warning-soft: #fef3c7;
   --warning-foreground: #78350f;
 
-  /* Focus session / active coding session */
-  --focus: #2563eb;
-  --focus-hover: #1d4ed8;
-  --focus-soft: #dbeafe;
-  --focus-foreground: #1e3a8a;
+  /* Focus / active session */
+  --focus: #f9735b;
+  --focus-hover: #ea5a3f;
+  --focus-soft: #fff1ed;
+  --focus-foreground: #7c2d12;
 
   --sidebar: #ffffff;
-  --sidebar-foreground: #334155;
-  --sidebar-muted: #f1f5f9;
+  --sidebar-foreground: #1e293b;
+  --sidebar-muted: #fff1ed;
 
   --destructive: #dc2626;
 
-  --border: #e2e8f0;
-  --input: #cbd5e1;
-  --ring: #16a34a;
+  --border: #fed7aa;
+  --input: #fdba74;
+  --ring: #f9735b;
 
   --radius: 0.75rem;
 }
@@ -60,28 +61,29 @@
 .dark {
   color-scheme: dark;
 
-  --background: #020617;
-  --foreground: #f8fafc;
-  --canvas: #0f172a;
+  --background: #0f172a;
+  --foreground: #fff7ed;
+  --canvas: #111827;
 
-  --card: #0f172a;
-  --card-foreground: #f8fafc;
+  --card: #1e293b;
+  --card-foreground: #fff7ed;
 
-  --popover: #0f172a;
-  --popover-foreground: #f8fafc;
+  --popover: #1e293b;
+  --popover-foreground: #fff7ed;
 
-  --primary: #22c55e;
-  --primary-foreground: #052e16;
-  --primary-hover: #4ade80;
+  --primary: #fb7f67;
+  --primary-foreground: #1c0a05;
+  --primary-hover: #ff9a85;
+  --primary-soft: #3b120d;
 
-  --secondary: #172554;
-  --secondary-foreground: #bfdbfe;
+  --secondary: #1e293b;
+  --secondary-foreground: #f8fafc;
 
-  --muted: #1e293b;
-  --muted-foreground: #94a3b8;
+  --muted: #273548;
+  --muted-foreground: #cbd5e1;
 
-  --accent: #172554;
-  --accent-foreground: #bfdbfe;
+  --accent: #082f49;
+  --accent-foreground: #bae6fd;
 
   --success: #22c55e;
   --success-soft: #052e16;
@@ -91,20 +93,20 @@
   --warning-soft: #451a03;
   --warning-foreground: #fef3c7;
 
-  --focus: #60a5fa;
-  --focus-hover: #93c5fd;
-  --focus-soft: #172554;
-  --focus-foreground: #dbeafe;
+  --focus: #fb7f67;
+  --focus-hover: #ff9a85;
+  --focus-soft: #3b120d;
+  --focus-foreground: #fff1ed;
 
-  --sidebar: #0f172a;
-  --sidebar-foreground: #cbd5e1;
+  --sidebar: #111827;
+  --sidebar-foreground: #f8fafc;
   --sidebar-muted: #1e293b;
 
   --destructive: #f87171;
 
-  --border: #1e293b;
-  --input: #334155;
-  --ring: #22c55e;
+  --border: #334155;
+  --input: #475569;
+  --ring: #fb7f67;
 }
 
 @theme inline {
@@ -121,6 +123,7 @@
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary-hover: var(--primary-hover);
+  --color-primary-soft: var(--primary-soft);
 
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
@@ -168,12 +171,15 @@
 }
 
 body {
-  background: var(--background);
+  background:
+    radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--primary) 7%, transparent) 0, transparent 28rem),
+    radial-gradient(circle at 88% 12%, color-mix(in srgb, var(--focus) 6%, transparent) 0, transparent 24rem),
+    var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease;
+  min-height: 100vh;
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 html {
@@ -218,18 +224,18 @@ select {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #8ecae6;
+  background: #c3c8d4;
   border-radius: 10px;
 }
 
 .dark ::-webkit-scrollbar-thumb {
-  background: #12516f;
+  background: #414b60;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #ff6347;
+  background: #969eae;
 }
 
 .dark ::-webkit-scrollbar-thumb:hover {
-  background: #ff7a66;
+  background: #606b80;
 }

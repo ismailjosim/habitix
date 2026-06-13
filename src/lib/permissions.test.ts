@@ -18,11 +18,14 @@ describe('role permissions', () => {
     ['ADMIN', true, true, true],
     ['MODERATOR', false, false, false],
     ['CORPORATE_VIEWER', false, false, false],
-  ] as const)('%s task and material capabilities are explicit', (role, tasks, assign, materials) => {
-    expect(canAccessModule(role, 'tasks')).toBe(tasks);
-    expect(canAssignTask(role)).toBe(assign);
-    expect(canManageStudyMaterials(role)).toBe(materials);
-  });
+  ] as const)(
+    '%s task and material capabilities are explicit',
+    (role, tasks, assign, materials) => {
+      expect(canAccessModule(role, 'tasks')).toBe(tasks);
+      expect(canAssignTask(role)).toBe(assign);
+      expect(canManageStudyMaterials(role)).toBe(materials);
+    }
+  );
 
   it('covers module access for every role', () => {
     for (const role of roles) {

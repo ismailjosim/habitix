@@ -33,6 +33,21 @@ export type FocusModeData = {
   todayFocusMinutes: number;
 };
 
+export async function getActiveFocusSession(profileId: string): Promise<ActiveFocusSession | null> {
+  const session = await prisma.focusSession.findFirst({
+    where: {
+      profileId,
+      status: { in: ['ACTIVE', 'PAUSED'] },
+    },
+    include: {
+      task: { select: { title: true } },
+    },
+    orderBy: { updatedAt: 'desc' },
+  });
+
+  return session ? formatActiveSession(session) : null;
+}
+
 type FocusMetadata = {
   elapsedSeconds?: number;
   lastStartedAt?: string | null;

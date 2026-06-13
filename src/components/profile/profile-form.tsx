@@ -44,7 +44,9 @@ export function ProfileForm({ profile }: ProfileFormProps) {
     <DataPanel title="Personal Information" description="Update your profile details">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="profile-name" className="text-sm font-medium">Name</label>
+          <label htmlFor="profile-name" className="text-sm font-medium">
+            Name
+          </label>
           <Input
             id="profile-name"
             value={displayName}
@@ -55,7 +57,9 @@ export function ProfileForm({ profile }: ProfileFormProps) {
         </div>
 
         <div>
-          <label htmlFor="profile-bio" className="text-sm font-medium">About Me</label>
+          <label htmlFor="profile-bio" className="text-sm font-medium">
+            About Me
+          </label>
           <Textarea
             id="profile-bio"
             value={bio}
@@ -68,7 +72,9 @@ export function ProfileForm({ profile }: ProfileFormProps) {
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label htmlFor="profile-institution" className="text-sm font-medium">Institution</label>
+            <label htmlFor="profile-institution" className="text-sm font-medium">
+              Institution
+            </label>
             <Input
               id="profile-institution"
               value={institution}
@@ -78,7 +84,9 @@ export function ProfileForm({ profile }: ProfileFormProps) {
             />
           </div>
           <div>
-            <label htmlFor="profile-department" className="text-sm font-medium">Department</label>
+            <label htmlFor="profile-department" className="text-sm font-medium">
+              Department
+            </label>
             <Input
               id="profile-department"
               value={department}

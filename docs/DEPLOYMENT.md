@@ -14,12 +14,12 @@ build time.
 
 ## Required Environment
 
-| Variable | Purpose |
-| --- | --- |
-| `DATABASE_URL` | PostgreSQL connection string used by Prisma and the application. |
-| `BETTER_AUTH_SECRET` | Unique secret of at least 32 characters. Never reuse the development value. |
-| `BETTER_AUTH_URL` | Exact public origin, such as `https://habitix.example.com`, without a trailing slash. |
-| `SEED_DEMO_DATA` | Optional. Leave unset or `false` in production. |
+| Variable             | Purpose                                                                               |
+| -------------------- | ------------------------------------------------------------------------------------- |
+| `DATABASE_URL`       | PostgreSQL connection string used by Prisma and the application.                      |
+| `BETTER_AUTH_SECRET` | Unique secret of at least 32 characters. Never reuse the development value.           |
+| `BETTER_AUTH_URL`    | Exact public origin, such as `https://habitix.example.com`, without a trailing slash. |
+| `SEED_DEMO_DATA`     | Optional. Leave unset or `false` in production.                                       |
 
 `BETTER_AUTH_URL` is also the only trusted production origin. Confirm that the deployment host,
 protocol, and any custom domain exactly match this value. Preview deployments need their own
