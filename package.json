@@ -22,6 +22,7 @@
     "db:test": "tsx scripts/test-database.ts",
     "admin:promote": "tsx scripts/promote-admin.ts",
     "security:test": "tsx scripts/test-permissions.ts",
+    "qa:check": "npm test && npm run security:test && npm run lint && npm run db:validate && npm run build",
     "deploy:check": "npm test && npm run lint && npm run db:validate && npm run build",
     "deploy:prepare": "npm run db:generate && npm run db:deploy"
   },

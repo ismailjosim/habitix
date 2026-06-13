@@ -253,9 +253,11 @@ export function TaskBoard({
                   />
 
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Assignee</label>
+                    <label htmlFor="assigned-task-target" className="text-sm font-medium">
+                      Assignee
+                    </label>
                     <Select name="target" required>
-                      <SelectTrigger className="w-full">
+                      <SelectTrigger id="assigned-task-target" className="w-full">
                         <SelectValue placeholder="Choose student or team" />
                       </SelectTrigger>
                       <SelectContent>
@@ -346,6 +348,7 @@ export function TaskBoard({
 
       <form className="grid gap-2 rounded-xl border bg-card p-3 sm:grid-cols-[minmax(12rem,1fr)_12rem_12rem_auto_auto]">
         <Input
+          aria-label="Search tasks"
           name="q"
           defaultValue={filters.q}
           placeholder="Search task title, details, or category"
@@ -509,9 +512,11 @@ function TaskFormFields({
 
       <div className="grid gap-3 sm:grid-cols-3">
         <div className="space-y-2">
-          <label className="text-sm font-medium">Category</label>
+          <label htmlFor={`${titleId}-category`} className="text-sm font-medium">
+            Category
+          </label>
           <Select name="category" defaultValue="Coding">
-            <SelectTrigger className="w-full">
+            <SelectTrigger id={`${titleId}-category`} className="w-full">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -525,9 +530,11 @@ function TaskFormFields({
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Priority</label>
+          <label htmlFor={`${titleId}-priority`} className="text-sm font-medium">
+            Priority
+          </label>
           <Select name="priority" defaultValue="MEDIUM">
-            <SelectTrigger className="w-full">
+            <SelectTrigger id={`${titleId}-priority`} className="w-full">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

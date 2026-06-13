@@ -64,3 +64,12 @@ npm run admin:promote -- admin@example.com
 The administrator can then open `/admin/users` to change platform roles, edit profile details,
 create teams, and assign active team memberships. Help Desk posting requires an active team
 membership, regardless of platform role.
+
+## Project Documentation
+
+- [User Guide](docs/USER-GUIDE.md)
+- [Final QA Checklist](docs/FINAL-QA.md)
+- [Developer Handoff](docs/DEVELOPER-HANDOFF.md)
+- [Known Limitations](docs/KNOWN-LIMITATIONS.md)
+- [VS Code Extension Roadmap](docs/VSCODE-EXTENSION-ROADMAP.md)
+- [Deployment Guide](docs/DEPLOYMENT.md)

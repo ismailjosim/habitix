@@ -59,6 +59,12 @@ function initialsForName(name: string) {
 export function AppShell({ children, user }: AppShellProps) {
   return (
     <div className="min-h-screen bg-canvas text-foreground">
+      <a
+        href="#main-content"
+        className="sr-only fixed left-4 top-4 z-50 rounded-md bg-primary px-4 py-2 text-primary-foreground focus:not-sr-only"
+      >
+        Skip to main content
+      </a>
       <PresenceHeartbeat />
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-72 border-r border-white/10 bg-sidebar text-sidebar-foreground print:hidden lg:block">
         <SidebarContent role={user.role} />
@@ -66,7 +72,11 @@ export function AppShell({ children, user }: AppShellProps) {
 
       <div className="print:pl-0 lg:pl-72">
         <TopBar user={user} />
-        <main className="min-h-[calc(100vh-4rem)] px-4 py-5 print:min-h-0 print:p-0 sm:px-6 lg:px-8">
+        <main
+          id="main-content"
+          tabIndex={-1}
+          className="min-h-[calc(100vh-4rem)] px-4 py-5 print:min-h-0 print:p-0 sm:px-6 lg:px-8"
+        >
           {children}
         </main>
       </div>
@@ -99,6 +109,7 @@ function TopBar({ user }: Pick<AppShellProps, 'user'>) {
       <form action={searchTarget(pathname)} className="relative hidden w-full max-w-md sm:block">
         <IconSearch className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
         <Input
+          aria-label="Search"
           name={pathname.startsWith('/study-materials') ? 'search' : 'q'}
           className="h-9 border-border bg-secondary/70 pl-9"
           placeholder="Search tasks, teammates, reports..."
@@ -146,7 +157,9 @@ function TopBar({ user }: Pick<AppShellProps, 'user'>) {
             <DropdownMenuItem asChild>
               <Link href="/profile">Profile</Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>Account settings</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/profile">Account settings</Link>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <SignOutMenuItem />
           </DropdownMenuContent>

@@ -237,7 +237,11 @@ export function HelpDeskBoard({
           <EmptyState
             icon={<IconHelp className="size-10" />}
             title="No matching help requests"
-            description="Try clearing a filter or start a new conversation."
+            description={
+              data.canCreatePost
+                ? 'Try clearing a filter or start a new conversation.'
+                : 'Try clearing a filter. An admin must assign you to a team before you can post.'
+            }
           />
         ) : (
           data.posts.map((post) => (
@@ -417,7 +421,10 @@ function formatMinutes(minutes: number | null) {
 
 function ErrorMessage({ message }: { message: string }) {
   return (
-    <div className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+    <div
+      role="alert"
+      className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+    >
       {message}
     </div>
   );

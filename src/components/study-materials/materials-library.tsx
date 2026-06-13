@@ -81,19 +81,29 @@ export function MaterialsLibrary({
                   <DialogTitle>Create PDF resource</DialogTitle>
                   <DialogDescription>Add metadata and an external PDF URL.</DialogDescription>
                 </DialogHeader>
-                <Input name="title" placeholder="Resource title" required />
-                <Input name="author" placeholder="Book author" />
-                <Textarea name="description" placeholder="Description" />
-                <Input name="url" type="url" placeholder="https://.../book.pdf" required />
+                <Input aria-label="Resource title" name="title" placeholder="Resource title" required />
+                <Input aria-label="Book author" name="author" placeholder="Book author" />
+                <Textarea aria-label="Description" name="description" placeholder="Description" />
+                <Input
+                  aria-label="Resource URL"
+                  name="url"
+                  type="url"
+                  placeholder="https://.../book.pdf"
+                  required
+                />
                 <div className="grid gap-3 sm:grid-cols-2">
-                  <Input name="module" placeholder="Module" required />
-                  <Input name="milestone" placeholder="Milestone" />
+                  <Input aria-label="Module" name="module" placeholder="Module" required />
+                  <Input aria-label="Milestone" name="milestone" placeholder="Milestone" />
                 </div>
-                <Input name="tags" placeholder="Tags, comma separated" />
+                <Input aria-label="Tags" name="tags" placeholder="Tags, comma separated" />
                 <label className="flex items-center gap-2 text-sm">
                   <input type="checkbox" name="published" /> Publish now
                 </label>
-                {error && <p className="text-sm text-destructive">{error}</p>}
+                {error && (
+                  <p role="alert" className="text-sm text-destructive">
+                    {error}
+                  </p>
+                )}
                 <DialogFooter>
                   <Button disabled={pending}>Create</Button>
                 </DialogFooter>
@@ -103,8 +113,14 @@ export function MaterialsLibrary({
         )}
       </header>
       <form className="flex flex-col gap-2 sm:flex-row">
-        <Input name="search" defaultValue={search} placeholder="Search books, modules..." />
+        <Input
+          aria-label="Search study materials"
+          name="search"
+          defaultValue={search}
+          placeholder="Search books, modules..."
+        />
         <select
+          aria-label="Filter by module"
           name="module"
           defaultValue={module}
           className="h-8 rounded-lg border bg-background px-3 text-sm"

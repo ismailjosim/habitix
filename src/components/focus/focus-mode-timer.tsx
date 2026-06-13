@@ -260,7 +260,10 @@ export function FocusModeTimer({
       </div>
 
       {error && (
-        <div className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+        <div
+          role="alert"
+          className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+        >
           {error}
         </div>
       )}
@@ -320,13 +323,15 @@ export function FocusModeTimer({
 
             <div className="grid gap-3 md:grid-cols-2">
               <div className="space-y-2">
-                <label className="text-sm font-medium">Activity</label>
+                <label htmlFor="focus-activity" className="text-sm font-medium">
+                  Activity
+                </label>
                 <Select
                   value={activityType}
                   onValueChange={setActivityType}
                   disabled={timerState === 'running' || timerState === 'paused' || isPending}
                 >
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger id="focus-activity" className="w-full">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -340,13 +345,15 @@ export function FocusModeTimer({
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium">Related task</label>
+                <label htmlFor="focus-task" className="text-sm font-medium">
+                  Related task
+                </label>
                 <Select
                   value={taskId}
                   onValueChange={setTaskId}
                   disabled={timerState === 'running' || timerState === 'paused' || isPending}
                 >
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger id="focus-task" className="w-full">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -373,7 +380,10 @@ export function FocusModeTimer({
                 <div className="grid size-full place-items-center rounded-full bg-card">
                   <div className="text-center">
                     <IconTargetArrow className="mx-auto mb-3 size-8 text-primary" />
-                    <p className="font-mono text-5xl font-semibold tabular-nums sm:text-6xl">
+                    <p
+                      aria-label={`${formatClock(remainingSeconds)} remaining`}
+                      className="font-mono text-5xl font-semibold tabular-nums sm:text-6xl"
+                    >
                       {formatClock(remainingSeconds)}
                     </p>
                     <p className="mt-2 text-sm text-muted-foreground">{progress}% complete</p>

@@ -44,8 +44,9 @@ export function ProfileForm({ profile }: ProfileFormProps) {
     <DataPanel title="Personal Information" description="Update your profile details">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="text-sm font-medium">Name</label>
+          <label htmlFor="profile-name" className="text-sm font-medium">Name</label>
           <Input
+            id="profile-name"
             value={displayName}
             onChange={(e) => setDisplayName(e.target.value)}
             placeholder="Your name"
@@ -54,8 +55,9 @@ export function ProfileForm({ profile }: ProfileFormProps) {
         </div>
 
         <div>
-          <label className="text-sm font-medium">About Me</label>
+          <label htmlFor="profile-bio" className="text-sm font-medium">About Me</label>
           <Textarea
+            id="profile-bio"
             value={bio}
             onChange={(e) => setBio(e.target.value)}
             placeholder="Tell us about yourself..."
@@ -64,10 +66,11 @@ export function ProfileForm({ profile }: ProfileFormProps) {
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="text-sm font-medium">Institution</label>
+            <label htmlFor="profile-institution" className="text-sm font-medium">Institution</label>
             <Input
+              id="profile-institution"
               value={institution}
               onChange={(e) => setInstitution(e.target.value)}
               placeholder="University/School"
@@ -75,8 +78,9 @@ export function ProfileForm({ profile }: ProfileFormProps) {
             />
           </div>
           <div>
-            <label className="text-sm font-medium">Department</label>
+            <label htmlFor="profile-department" className="text-sm font-medium">Department</label>
             <Input
+              id="profile-department"
               value={department}
               onChange={(e) => setDepartment(e.target.value)}
               placeholder="Your department"
@@ -87,6 +91,8 @@ export function ProfileForm({ profile }: ProfileFormProps) {
 
         {message && (
           <div
+            role="status"
+            aria-live="polite"
             className={`rounded-md px-3 py-2 text-sm ${
               message.includes('success')
                 ? 'bg-green-100 text-green-800'
