@@ -17,7 +17,7 @@ export type AppModule =
 const moduleRoles: Record<AppModule, readonly AppRole[]> = {
   dashboard: ['STUDENT', 'MENTOR', 'ADMIN', 'MODERATOR'],
   activity: ['STUDENT', 'MENTOR', 'ADMIN'],
-  focus: ['STUDENT', 'MENTOR'],
+  focus: ['STUDENT', 'MENTOR', 'ADMIN'],
   tasks: ['STUDENT', 'MENTOR', 'ADMIN'],
   help: ['STUDENT', 'MENTOR', 'ADMIN', 'MODERATOR'],
   leaderboard: ['STUDENT', 'MENTOR', 'ADMIN'],

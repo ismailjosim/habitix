@@ -18,6 +18,7 @@
     "db:deploy": "prisma migrate deploy",
     "db:migrate:status": "prisma migrate status",
     "db:seed": "prisma db seed",
+    "demo:seed": "tsx prisma/demo-seed.ts",
     "db:studio": "prisma studio",
     "db:test": "tsx scripts/test-database.ts",
     "admin:promote": "tsx scripts/promote-admin.ts",

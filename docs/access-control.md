@@ -7,7 +7,7 @@ Server queries and actions must enforce these rules; hiding a navigation item or
 
 - `STUDENT`: Own profile, focus, activity, accessible tasks, team help, leaderboard, team, notifications, and published study materials. May update assigned/owned task progress but cannot manage unrelated team tasks.
 - `MENTOR`: Student capabilities plus scoped task assignment, assigned-student reports, managed-team task progress, help resolution inside active teams, and owned study material management.
-- `ADMIN`: Organization-wide task, report, help, and study-material management. Individual data access remains limited to modules explicitly granted by policy.
+- `ADMIN`: Organization-wide task, report, help, and study-material management, plus personal Focus Mode access. Individual data access remains limited to modules explicitly granted by policy.
 - `MODERATOR`: Help-desk moderation plus own dashboard, notifications, and profile. No task, focus, team-directory, study-material management, or individual report access.
 - `CORPORATE_VIEWER`: Own notifications and profile plus approved aggregate corporate snapshots. Dashboard requests redirect to corporate reporting; no individual task, help, focus, team-directory, or student operational records are queried.
 

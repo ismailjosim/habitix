@@ -33,6 +33,7 @@ describe('role permissions', () => {
     expect(canAccessModule('STUDENT', 'corporateReport')).toBe(false);
     expect(canAccessModule('ADMIN', 'admin')).toBe(true);
     expect(canAccessModule('MENTOR', 'admin')).toBe(false);
+    expect(canAccessModule('ADMIN', 'focus')).toBe(true);
   });
 
   it('allows task participants but rejects unrelated viewers', () => {
