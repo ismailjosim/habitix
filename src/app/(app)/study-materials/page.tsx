@@ -9,11 +9,11 @@ export default async function StudyMaterialsPage({
 }) {
   const params = await searchParams;
   const search = params.search?.trim() ?? '';
-  const module = params.module ?? 'all';
-  const data = await getStudyMaterials({ search, module });
+  const selectedModule = params.module ?? 'all';
+  const data = await getStudyMaterials({ search, module: selectedModule });
   return (
     <div className={`${LAYOUT_CONSTRAINTS.pageMaxWidth} ${LAYOUT_CONSTRAINTS.pagePadding} mx-auto`}>
-      <MaterialsLibrary data={data} search={search} module={module} />
+      <MaterialsLibrary data={data} search={search} module={selectedModule} />
     </div>
   );
 }

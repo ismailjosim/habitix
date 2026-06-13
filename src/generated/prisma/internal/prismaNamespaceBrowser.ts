@@ -455,6 +455,7 @@ export type NotificationScalarFieldEnum =
 export const StudyMaterialScalarFieldEnum = {
   id: 'id',
   title: 'title',
+  author: 'author',
   description: 'description',
   type: 'type',
   url: 'url',

@@ -557,6 +557,7 @@ model Notification {
 model StudyMaterial {
   id             String              @id @default(cuid())
   title          String
+  author         String?
   description    String?
   type           StudyMaterialType
   url            String?

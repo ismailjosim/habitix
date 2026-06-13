@@ -6,10 +6,11 @@ export async function getStudyMaterials({ search = '', module = 'all' } = {}) {
   const current = await getCurrentUserProfile();
   if (!current) return { materials: [], modules: [], canManage: false };
   const canManage = ['MENTOR', 'ADMIN', 'MODERATOR'].includes(current.profile.role);
-  const membership = await prisma.teamMembership.findFirst({
+  const memberships = await prisma.teamMembership.findMany({
     where: { profileId: current.profile.id, leftAt: null },
     select: { teamId: true },
   });
+  const teamIds = memberships.map(({ teamId }) => teamId);
 
   const materials = await prisma.studyMaterial.findMany({
     where: {
@@ -27,7 +28,7 @@ export async function getStudyMaterials({ search = '', module = 'all' } = {}) {
       OR: [
         { visibility: 'PUBLIC' },
         { visibility: 'ORGANIZATION' },
-        ...(membership ? [{ visibility: 'TEAM' as const, teamId: membership.teamId }] : []),
+        ...(teamIds.length ? [{ visibility: 'TEAM' as const, teamId: { in: teamIds } }] : []),
         { ownerProfileId: current.profile.id },
       ],
     },
@@ -49,6 +50,12 @@ export async function getStudyMaterials({ search = '', module = 'all' } = {}) {
 export async function getStudyMaterial(id: string) {
   const current = await getCurrentUserProfile();
   if (!current) notFound();
+  const memberships = await prisma.teamMembership.findMany({
+    where: { profileId: current.profile.id, leftAt: null },
+    select: { teamId: true },
+  });
+  const teamIds = memberships.map(({ teamId }) => teamId);
+  const canManage = ['MENTOR', 'ADMIN', 'MODERATOR'].includes(current.profile.role);
   const material = await prisma.studyMaterial.findUnique({
     where: { id },
     include: {
@@ -58,8 +65,16 @@ export async function getStudyMaterial(id: string) {
     },
   });
   if (!material) notFound();
-  const canManage = ['MENTOR', 'ADMIN', 'MODERATOR'].includes(current.profile.role);
-  if (!material.isPublished && !canManage && material.ownerProfileId !== current.profile.id)
-    notFound();
-  return { material, canManage };
+  const isOwner = material.ownerProfileId === current.profile.id;
+  const isVisible =
+    material.visibility === 'PUBLIC' ||
+    material.visibility === 'ORGANIZATION' ||
+    (material.visibility === 'TEAM' &&
+      Boolean(material.teamId && teamIds.includes(material.teamId))) ||
+    isOwner;
+  if (!isVisible || (!material.isPublished && !canManage && !isOwner)) notFound();
+  const canEdit =
+    ['ADMIN', 'MODERATOR'].includes(current.profile.role) ||
+    (current.profile.role === 'MENTOR' && material.ownerProfileId === current.profile.id);
+  return { material, canManage, canEdit };
 }

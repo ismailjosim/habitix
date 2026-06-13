@@ -27,6 +27,7 @@ export type AggregateStudyMaterial = {
 export type StudyMaterialMinAggregateOutputType = {
   id: string | null;
   title: string | null;
+  author: string | null;
   description: string | null;
   type: $Enums.StudyMaterialType | null;
   url: string | null;
@@ -45,6 +46,7 @@ export type StudyMaterialMinAggregateOutputType = {
 export type StudyMaterialMaxAggregateOutputType = {
   id: string | null;
   title: string | null;
+  author: string | null;
   description: string | null;
   type: $Enums.StudyMaterialType | null;
   url: string | null;
@@ -63,6 +65,7 @@ export type StudyMaterialMaxAggregateOutputType = {
 export type StudyMaterialCountAggregateOutputType = {
   id: number;
   title: number;
+  author: number;
   description: number;
   type: number;
   url: number;
@@ -82,6 +85,7 @@ export type StudyMaterialCountAggregateOutputType = {
 export type StudyMaterialMinAggregateInputType = {
   id?: true;
   title?: true;
+  author?: true;
   description?: true;
   type?: true;
   url?: true;
@@ -100,6 +104,7 @@ export type StudyMaterialMinAggregateInputType = {
 export type StudyMaterialMaxAggregateInputType = {
   id?: true;
   title?: true;
+  author?: true;
   description?: true;
   type?: true;
   url?: true;
@@ -118,6 +123,7 @@ export type StudyMaterialMaxAggregateInputType = {
 export type StudyMaterialCountAggregateInputType = {
   id?: true;
   title?: true;
+  author?: true;
   description?: true;
   type?: true;
   url?: true;
@@ -214,6 +220,7 @@ export type StudyMaterialGroupByArgs<
 export type StudyMaterialGroupByOutputType = {
   id: string;
   title: string;
+  author: string | null;
   description: string | null;
   type: $Enums.StudyMaterialType;
   url: string | null;
@@ -251,6 +258,7 @@ export type StudyMaterialWhereInput = {
   NOT?: Prisma.StudyMaterialWhereInput | Prisma.StudyMaterialWhereInput[];
   id?: Prisma.StringFilter<'StudyMaterial'> | string;
   title?: Prisma.StringFilter<'StudyMaterial'> | string;
+  author?: Prisma.StringNullableFilter<'StudyMaterial'> | string | null;
   description?: Prisma.StringNullableFilter<'StudyMaterial'> | string | null;
   type?: Prisma.EnumStudyMaterialTypeFilter<'StudyMaterial'> | $Enums.StudyMaterialType;
   url?: Prisma.StringNullableFilter<'StudyMaterial'> | string | null;
@@ -273,6 +281,7 @@ export type StudyMaterialWhereInput = {
 export type StudyMaterialOrderByWithRelationInput = {
   id?: Prisma.SortOrder;
   title?: Prisma.SortOrder;
+  author?: Prisma.SortOrderInput | Prisma.SortOrder;
   description?: Prisma.SortOrderInput | Prisma.SortOrder;
   type?: Prisma.SortOrder;
   url?: Prisma.SortOrderInput | Prisma.SortOrder;
@@ -299,6 +308,7 @@ export type StudyMaterialWhereUniqueInput = Prisma.AtLeast<
     OR?: Prisma.StudyMaterialWhereInput[];
     NOT?: Prisma.StudyMaterialWhereInput | Prisma.StudyMaterialWhereInput[];
     title?: Prisma.StringFilter<'StudyMaterial'> | string;
+    author?: Prisma.StringNullableFilter<'StudyMaterial'> | string | null;
     description?: Prisma.StringNullableFilter<'StudyMaterial'> | string | null;
     type?: Prisma.EnumStudyMaterialTypeFilter<'StudyMaterial'> | $Enums.StudyMaterialType;
     url?: Prisma.StringNullableFilter<'StudyMaterial'> | string | null;
@@ -323,6 +333,7 @@ export type StudyMaterialWhereUniqueInput = Prisma.AtLeast<
 export type StudyMaterialOrderByWithAggregationInput = {
   id?: Prisma.SortOrder;
   title?: Prisma.SortOrder;
+  author?: Prisma.SortOrderInput | Prisma.SortOrder;
   description?: Prisma.SortOrderInput | Prisma.SortOrder;
   type?: Prisma.SortOrder;
   url?: Prisma.SortOrderInput | Prisma.SortOrder;
@@ -351,6 +362,7 @@ export type StudyMaterialScalarWhereWithAggregatesInput = {
     | Prisma.StudyMaterialScalarWhereWithAggregatesInput[];
   id?: Prisma.StringWithAggregatesFilter<'StudyMaterial'> | string;
   title?: Prisma.StringWithAggregatesFilter<'StudyMaterial'> | string;
+  author?: Prisma.StringNullableWithAggregatesFilter<'StudyMaterial'> | string | null;
   description?: Prisma.StringNullableWithAggregatesFilter<'StudyMaterial'> | string | null;
   type?:
     | Prisma.EnumStudyMaterialTypeWithAggregatesFilter<'StudyMaterial'>
@@ -371,6 +383,7 @@ export type StudyMaterialScalarWhereWithAggregatesInput = {
 export type StudyMaterialCreateInput = {
   id?: string;
   title: string;
+  author?: string | null;
   description?: string | null;
   type: $Enums.StudyMaterialType;
   url?: string | null;
@@ -391,6 +404,7 @@ export type StudyMaterialCreateInput = {
 export type StudyMaterialUncheckedCreateInput = {
   id?: string;
   title: string;
+  author?: string | null;
   description?: string | null;
   type: $Enums.StudyMaterialType;
   url?: string | null;
@@ -411,6 +425,7 @@ export type StudyMaterialUncheckedCreateInput = {
 export type StudyMaterialUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   title?: Prisma.StringFieldUpdateOperationsInput | string;
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   type?: Prisma.EnumStudyMaterialTypeFieldUpdateOperationsInput | $Enums.StudyMaterialType;
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -431,6 +446,7 @@ export type StudyMaterialUpdateInput = {
 export type StudyMaterialUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   title?: Prisma.StringFieldUpdateOperationsInput | string;
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   type?: Prisma.EnumStudyMaterialTypeFieldUpdateOperationsInput | $Enums.StudyMaterialType;
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -451,6 +467,7 @@ export type StudyMaterialUncheckedUpdateInput = {
 export type StudyMaterialCreateManyInput = {
   id?: string;
   title: string;
+  author?: string | null;
   description?: string | null;
   type: $Enums.StudyMaterialType;
   url?: string | null;
@@ -469,6 +486,7 @@ export type StudyMaterialCreateManyInput = {
 export type StudyMaterialUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   title?: Prisma.StringFieldUpdateOperationsInput | string;
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   type?: Prisma.EnumStudyMaterialTypeFieldUpdateOperationsInput | $Enums.StudyMaterialType;
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -485,6 +503,7 @@ export type StudyMaterialUpdateManyMutationInput = {
 export type StudyMaterialUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   title?: Prisma.StringFieldUpdateOperationsInput | string;
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   type?: Prisma.EnumStudyMaterialTypeFieldUpdateOperationsInput | $Enums.StudyMaterialType;
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -513,6 +532,7 @@ export type StudyMaterialOrderByRelationAggregateInput = {
 export type StudyMaterialCountOrderByAggregateInput = {
   id?: Prisma.SortOrder;
   title?: Prisma.SortOrder;
+  author?: Prisma.SortOrder;
   description?: Prisma.SortOrder;
   type?: Prisma.SortOrder;
   url?: Prisma.SortOrder;
@@ -531,6 +551,7 @@ export type StudyMaterialCountOrderByAggregateInput = {
 export type StudyMaterialMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder;
   title?: Prisma.SortOrder;
+  author?: Prisma.SortOrder;
   description?: Prisma.SortOrder;
   type?: Prisma.SortOrder;
   url?: Prisma.SortOrder;
@@ -549,6 +570,7 @@ export type StudyMaterialMaxOrderByAggregateInput = {
 export type StudyMaterialMinOrderByAggregateInput = {
   id?: Prisma.SortOrder;
   title?: Prisma.SortOrder;
+  author?: Prisma.SortOrder;
   description?: Prisma.SortOrder;
   type?: Prisma.SortOrder;
   url?: Prisma.SortOrder;
@@ -804,6 +826,7 @@ export type StudyMaterialUpdateOneRequiredWithoutTagsNestedInput = {
 export type StudyMaterialCreateWithoutOwnerInput = {
   id?: string;
   title: string;
+  author?: string | null;
   description?: string | null;
   type: $Enums.StudyMaterialType;
   url?: string | null;
@@ -823,6 +846,7 @@ export type StudyMaterialCreateWithoutOwnerInput = {
 export type StudyMaterialUncheckedCreateWithoutOwnerInput = {
   id?: string;
   title: string;
+  author?: string | null;
   description?: string | null;
   type: $Enums.StudyMaterialType;
   url?: string | null;
@@ -886,6 +910,7 @@ export type StudyMaterialScalarWhereInput = {
   NOT?: Prisma.StudyMaterialScalarWhereInput | Prisma.StudyMaterialScalarWhereInput[];
   id?: Prisma.StringFilter<'StudyMaterial'> | string;
   title?: Prisma.StringFilter<'StudyMaterial'> | string;
+  author?: Prisma.StringNullableFilter<'StudyMaterial'> | string | null;
   description?: Prisma.StringNullableFilter<'StudyMaterial'> | string | null;
   type?: Prisma.EnumStudyMaterialTypeFilter<'StudyMaterial'> | $Enums.StudyMaterialType;
   url?: Prisma.StringNullableFilter<'StudyMaterial'> | string | null;
@@ -904,6 +929,7 @@ export type StudyMaterialScalarWhereInput = {
 export type StudyMaterialCreateWithoutTeamInput = {
   id?: string;
   title: string;
+  author?: string | null;
   description?: string | null;
   type: $Enums.StudyMaterialType;
   url?: string | null;
@@ -923,6 +949,7 @@ export type StudyMaterialCreateWithoutTeamInput = {
 export type StudyMaterialUncheckedCreateWithoutTeamInput = {
   id?: string;
   title: string;
+  author?: string | null;
   description?: string | null;
   type: $Enums.StudyMaterialType;
   url?: string | null;
@@ -983,6 +1010,7 @@ export type StudyMaterialUpdateManyWithWhereWithoutTeamInput = {
 export type StudyMaterialCreateWithoutViewsInput = {
   id?: string;
   title: string;
+  author?: string | null;
   description?: string | null;
   type: $Enums.StudyMaterialType;
   url?: string | null;
@@ -1002,6 +1030,7 @@ export type StudyMaterialCreateWithoutViewsInput = {
 export type StudyMaterialUncheckedCreateWithoutViewsInput = {
   id?: string;
   title: string;
+  author?: string | null;
   description?: string | null;
   type: $Enums.StudyMaterialType;
   url?: string | null;
@@ -1049,6 +1078,7 @@ export type StudyMaterialUpdateToOneWithWhereWithoutViewsInput = {
 export type StudyMaterialUpdateWithoutViewsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   title?: Prisma.StringFieldUpdateOperationsInput | string;
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   type?: Prisma.EnumStudyMaterialTypeFieldUpdateOperationsInput | $Enums.StudyMaterialType;
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1068,6 +1098,7 @@ export type StudyMaterialUpdateWithoutViewsInput = {
 export type StudyMaterialUncheckedUpdateWithoutViewsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   title?: Prisma.StringFieldUpdateOperationsInput | string;
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   type?: Prisma.EnumStudyMaterialTypeFieldUpdateOperationsInput | $Enums.StudyMaterialType;
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1087,6 +1118,7 @@ export type StudyMaterialUncheckedUpdateWithoutViewsInput = {
 export type StudyMaterialCreateWithoutTagsInput = {
   id?: string;
   title: string;
+  author?: string | null;
   description?: string | null;
   type: $Enums.StudyMaterialType;
   url?: string | null;
@@ -1106,6 +1138,7 @@ export type StudyMaterialCreateWithoutTagsInput = {
 export type StudyMaterialUncheckedCreateWithoutTagsInput = {
   id?: string;
   title: string;
+  author?: string | null;
   description?: string | null;
   type: $Enums.StudyMaterialType;
   url?: string | null;
@@ -1153,6 +1186,7 @@ export type StudyMaterialUpdateToOneWithWhereWithoutTagsInput = {
 export type StudyMaterialUpdateWithoutTagsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   title?: Prisma.StringFieldUpdateOperationsInput | string;
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   type?: Prisma.EnumStudyMaterialTypeFieldUpdateOperationsInput | $Enums.StudyMaterialType;
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1172,6 +1206,7 @@ export type StudyMaterialUpdateWithoutTagsInput = {
 export type StudyMaterialUncheckedUpdateWithoutTagsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   title?: Prisma.StringFieldUpdateOperationsInput | string;
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   type?: Prisma.EnumStudyMaterialTypeFieldUpdateOperationsInput | $Enums.StudyMaterialType;
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1191,6 +1226,7 @@ export type StudyMaterialUncheckedUpdateWithoutTagsInput = {
 export type StudyMaterialCreateManyOwnerInput = {
   id?: string;
   title: string;
+  author?: string | null;
   description?: string | null;
   type: $Enums.StudyMaterialType;
   url?: string | null;
@@ -1208,6 +1244,7 @@ export type StudyMaterialCreateManyOwnerInput = {
 export type StudyMaterialUpdateWithoutOwnerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   title?: Prisma.StringFieldUpdateOperationsInput | string;
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   type?: Prisma.EnumStudyMaterialTypeFieldUpdateOperationsInput | $Enums.StudyMaterialType;
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1227,6 +1264,7 @@ export type StudyMaterialUpdateWithoutOwnerInput = {
 export type StudyMaterialUncheckedUpdateWithoutOwnerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   title?: Prisma.StringFieldUpdateOperationsInput | string;
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   type?: Prisma.EnumStudyMaterialTypeFieldUpdateOperationsInput | $Enums.StudyMaterialType;
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1246,6 +1284,7 @@ export type StudyMaterialUncheckedUpdateWithoutOwnerInput = {
 export type StudyMaterialUncheckedUpdateManyWithoutOwnerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   title?: Prisma.StringFieldUpdateOperationsInput | string;
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   type?: Prisma.EnumStudyMaterialTypeFieldUpdateOperationsInput | $Enums.StudyMaterialType;
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1263,6 +1302,7 @@ export type StudyMaterialUncheckedUpdateManyWithoutOwnerInput = {
 export type StudyMaterialCreateManyTeamInput = {
   id?: string;
   title: string;
+  author?: string | null;
   description?: string | null;
   type: $Enums.StudyMaterialType;
   url?: string | null;
@@ -1280,6 +1320,7 @@ export type StudyMaterialCreateManyTeamInput = {
 export type StudyMaterialUpdateWithoutTeamInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   title?: Prisma.StringFieldUpdateOperationsInput | string;
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   type?: Prisma.EnumStudyMaterialTypeFieldUpdateOperationsInput | $Enums.StudyMaterialType;
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1299,6 +1340,7 @@ export type StudyMaterialUpdateWithoutTeamInput = {
 export type StudyMaterialUncheckedUpdateWithoutTeamInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   title?: Prisma.StringFieldUpdateOperationsInput | string;
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   type?: Prisma.EnumStudyMaterialTypeFieldUpdateOperationsInput | $Enums.StudyMaterialType;
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1318,6 +1360,7 @@ export type StudyMaterialUncheckedUpdateWithoutTeamInput = {
 export type StudyMaterialUncheckedUpdateManyWithoutTeamInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   title?: Prisma.StringFieldUpdateOperationsInput | string;
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   type?: Prisma.EnumStudyMaterialTypeFieldUpdateOperationsInput | $Enums.StudyMaterialType;
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1384,6 +1427,7 @@ export type StudyMaterialSelect<
   {
     id?: boolean;
     title?: boolean;
+    author?: boolean;
     description?: boolean;
     type?: boolean;
     url?: boolean;
@@ -1412,6 +1456,7 @@ export type StudyMaterialSelectCreateManyAndReturn<
   {
     id?: boolean;
     title?: boolean;
+    author?: boolean;
     description?: boolean;
     type?: boolean;
     url?: boolean;
@@ -1437,6 +1482,7 @@ export type StudyMaterialSelectUpdateManyAndReturn<
   {
     id?: boolean;
     title?: boolean;
+    author?: boolean;
     description?: boolean;
     type?: boolean;
     url?: boolean;
@@ -1459,6 +1505,7 @@ export type StudyMaterialSelectUpdateManyAndReturn<
 export type StudyMaterialSelectScalar = {
   id?: boolean;
   title?: boolean;
+  author?: boolean;
   description?: boolean;
   type?: boolean;
   url?: boolean;
@@ -1479,6 +1526,7 @@ export type StudyMaterialOmit<
 > = runtime.Types.Extensions.GetOmit<
   | 'id'
   | 'title'
+  | 'author'
   | 'description'
   | 'type'
   | 'url'
@@ -1530,6 +1578,7 @@ export type $StudyMaterialPayload<
     {
       id: string;
       title: string;
+      author: string | null;
       description: string | null;
       type: $Enums.StudyMaterialType;
       url: string | null;
@@ -2164,6 +2213,7 @@ export interface Prisma__StudyMaterialClient<
 export interface StudyMaterialFieldRefs {
   readonly id: Prisma.FieldRef<'StudyMaterial', 'String'>;
   readonly title: Prisma.FieldRef<'StudyMaterial', 'String'>;
+  readonly author: Prisma.FieldRef<'StudyMaterial', 'String'>;
   readonly description: Prisma.FieldRef<'StudyMaterial', 'String'>;
   readonly type: Prisma.FieldRef<'StudyMaterial', 'StudyMaterialType'>;
   readonly url: Prisma.FieldRef<'StudyMaterial', 'String'>;

@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
-import { IconBook2, IconExternalLink, IconFileTypePdf, IconPlus } from '@tabler/icons-react';
+import { IconBook2, IconFileTypePdf, IconPlus } from '@tabler/icons-react';
 import { createStudyMaterial } from '@/lib/actions/study-materials';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -40,6 +40,7 @@ export function MaterialsLibrary({
     startTransition(async () => {
       const result = await createStudyMaterial({
         title: String(formData.get('title') || ''),
+        author: String(formData.get('author') || ''),
         description: String(formData.get('description') || ''),
         url: String(formData.get('url') || ''),
         module: String(formData.get('module') || ''),
@@ -80,6 +81,7 @@ export function MaterialsLibrary({
                   <DialogDescription>Add metadata and an external PDF URL.</DialogDescription>
                 </DialogHeader>
                 <Input name="title" placeholder="Resource title" required />
+                <Input name="author" placeholder="Book author" />
                 <Textarea name="description" placeholder="Description" />
                 <Input name="url" type="url" placeholder="https://.../book.pdf" required />
                 <div className="grid gap-3 sm:grid-cols-2">
@@ -140,6 +142,7 @@ export function MaterialsLibrary({
                     {item.milestone ? ` · ${item.milestone}` : ''}
                   </p>
                   <h2 className="mt-1 font-semibold">{item.title}</h2>
+                  {item.author && <p className="text-xs text-muted-foreground">by {item.author}</p>}
                   <p className="mt-1 line-clamp-3 text-sm text-muted-foreground">
                     {item.description || 'PDF learning resource'}
                   </p>
