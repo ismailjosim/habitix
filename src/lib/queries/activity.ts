@@ -47,6 +47,7 @@ type SessionRow = {
   id: string;
   activityType: string;
   actualMinutes: number | null;
+  plannedMinutes: number;
   completedAt: Date | null;
   notes: string | null;
   task: { id: string; title: string } | null;
@@ -71,6 +72,7 @@ export async function getActivityData(rangeDays = DEFAULT_DAYS): Promise<Activit
         id: true,
         activityType: true,
         actualMinutes: true,
+        plannedMinutes: true,
         completedAt: true,
         notes: true,
         task: { select: { id: true, title: true } },

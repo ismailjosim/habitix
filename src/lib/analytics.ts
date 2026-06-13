@@ -158,7 +158,7 @@ export type LeaderboardAggregation = {
 
 export function aggregateLeaderboardMetrics(
   profiles: Array<{
-    id: string;
+    profileId: string;
     displayName: string;
     avatarUrl: string | null;
     focusSessions: { actualMinutes: number | null; completedAt: Date | null }[];
@@ -167,7 +167,7 @@ export function aggregateLeaderboardMetrics(
   periodStart: Date
 ): LeaderboardAggregation[] {
   return profiles.map((profile) => ({
-    profileId: profile.id,
+    profileId: profile.profileId,
     displayName: profile.displayName,
     avatarUrl: profile.avatarUrl,
     focusMinutes: profile.focusSessions
