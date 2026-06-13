@@ -1,112 +1,106 @@
-'use server';
-
 import { prisma } from '@/lib/prisma';
-import { getCurrentSession } from '@/lib/session';
 import { getTeamPresence } from '@/lib/queries/presence';
+import { getCurrentUserProfile } from '@/lib/session';
+import {
+  buildDailyAnalytics,
+  calculateCurrentStreak,
+  dateKey,
+  percentChange,
+  previousRange,
+  rollingRange,
+  summarizeFocus,
+  summarizeHelp,
+} from '@/lib/analytics';
 
 export async function getDashboardData() {
-  const session = await getCurrentSession();
-  if (!session?.user?.id) {
-    throw new Error('Unauthorized');
-  }
-
-  const authUserId = session.user.id;
-
-  // Get user profile
-  const userProfile = await prisma.userProfile.findUnique({
-    where: { authUserId },
-  });
-
-  if (!userProfile) {
-    throw new Error('User profile not found');
-  }
-  if (userProfile.role === 'CORPORATE_VIEWER') {
+  const current = await getCurrentUserProfile();
+  if (!current) throw new Error('Unauthorized');
+  if (current.profile.role === 'CORPORATE_VIEWER') {
     throw new Error('Corporate viewers must use approved aggregate reports');
   }
 
-  const profileId = userProfile.id;
+  const profileId = current.profile.id;
+  const range = rollingRange(7);
+  const previous = previousRange(range);
+  const queryStart = previous.start;
 
-  // Get today's date range
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
-
-  // Fetch today's focus time (sum of actualMinutes from completed sessions)
-  const todayFocusSessions = await prisma.focusSession.aggregate({
-    where: {
-      profileId,
-      completedAt: {
-        gte: today,
-        lt: tomorrow,
+  const [focusRows, helpResponses, tasks, notifications, membership] = await Promise.all([
+    prisma.focusSession.findMany({
+      where: { profileId, status: 'COMPLETED', completedAt: { gte: queryStart, lte: range.end } },
+      select: { actualMinutes: true, plannedMinutes: true, completedAt: true },
+    }),
+    prisma.helpResponse.findMany({
+      where: { authorProfileId: profileId, updatedAt: { gte: queryStart, lte: range.end } },
+      select: { pointsAwarded: true, isAccepted: true, updatedAt: true },
+    }),
+    prisma.task.findMany({
+      where: {
+        assignedToProfileId: profileId,
+        status: 'DONE',
+        completedAt: { gte: queryStart, lte: range.end },
       },
-      status: 'COMPLETED',
-    },
-    _sum: {
-      actualMinutes: true,
-    },
+      select: { completedAt: true },
+    }),
+    prisma.notification.findMany({
+      where: { recipientProfileId: profileId },
+      orderBy: { createdAt: 'desc' },
+      take: 5,
+    }),
+    prisma.teamMembership.findFirst({
+      where: { profileId, leftAt: null },
+      select: { teamId: true },
+    }),
+  ]);
+
+  const currentFocusRows = focusRows.filter(
+    ({ completedAt }) => completedAt && completedAt >= range.start
+  );
+  const previousFocusRows = focusRows.filter(
+    ({ completedAt }) => completedAt && completedAt < range.start
+  );
+  const currentHelpRows = helpResponses.filter(({ updatedAt }) => updatedAt >= range.start);
+  const previousHelpRows = helpResponses.filter(({ updatedAt }) => updatedAt < range.start);
+  const currentTasks = tasks.filter(({ completedAt }) => completedAt && completedAt >= range.start);
+  const previousTasks = tasks.filter(({ completedAt }) => completedAt && completedAt < range.start);
+  const currentFocus = summarizeFocus(currentFocusRows);
+  const previousFocus = summarizeFocus(previousFocusRows);
+  const currentHelp = summarizeHelp([], currentHelpRows);
+  const previousHelp = summarizeHelp([], previousHelpRows);
+
+  const streakStart = rollingRange(365).start;
+  const streakRows = await prisma.focusSession.findMany({
+    where: { profileId, status: 'COMPLETED', completedAt: { gte: streakStart } },
+    select: { completedAt: true },
   });
-
-  const focusTimeToday = todayFocusSessions._sum.actualMinutes ?? 0;
-  const currentStreak = userProfile.currentStreak;
-  const helpPoints = userProfile.helpPoints;
-
-  // Fetch completed tasks for today
-  const completedTasksToday = await prisma.task.count({
-    where: {
-      assignedToProfileId: profileId,
-      status: 'DONE',
-      completedAt: {
-        gte: today,
-        lt: tomorrow,
-      },
-    },
-  });
-
-  // Fetch recent notifications (last 5)
-  const notifications = await prisma.notification.findMany({
-    where: { recipientProfileId: profileId },
-    orderBy: { createdAt: 'desc' },
-    take: 5,
-  });
-
-  // Fetch user's team memberships to get team and peers
-  const teamMembership = await prisma.teamMembership.findFirst({
-    where: { profileId, leftAt: null },
-    select: { teamId: true },
-  });
-
-  const onlinePeers = teamMembership
+  const onlinePeers = membership
     ? await getTeamPresence({
-        teamId: teamMembership.teamId,
+        teamId: membership.teamId,
         viewerProfileId: profileId,
         includeViewer: false,
       })
     : [];
 
-  // Fetch recent activity events (last 7 days for heatmap)
-  const sevenDaysAgo = new Date(today);
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-
-  const recentActivity = await prisma.activityEvent.findMany({
-    where: {
-      profileId,
-      occurredAt: {
-        gte: sevenDaysAgo,
+  return {
+    range,
+    stats: {
+      focusMinutes: currentFocus.actualMinutes,
+      focusSessions: currentFocus.sessions,
+      currentStreak: calculateCurrentStreak(
+        new Set(
+          streakRows.flatMap(({ completedAt }) => (completedAt ? [dateKey(completedAt)] : []))
+        )
+      ),
+      completedTasks: currentTasks.length,
+      helpPoints: currentHelp.points,
+      helpEfficiency: currentHelp.efficiency,
+      trends: {
+        focus: percentChange(currentFocus.actualMinutes, previousFocus.actualMinutes),
+        tasks: percentChange(currentTasks.length, previousTasks.length),
+        help: percentChange(currentHelp.points, previousHelp.points),
       },
     },
-    orderBy: { occurredAt: 'desc' },
-  });
-
-  return {
-    stats: {
-      focusTimeToday,
-      currentStreak,
-      completedTasksToday,
-      helpPoints,
-    },
+    daily: buildDailyAnalytics(range, currentFocusRows, currentHelpRows),
     notifications,
     onlinePeers,
-    recentActivity,
   };
 }

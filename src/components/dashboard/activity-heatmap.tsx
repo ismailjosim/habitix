@@ -1,59 +1,71 @@
-import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import type { ActivityEventModel } from '@/generated/prisma/models';
+import { formatDate, formatDuration } from '@/lib/display-helpers';
 
-interface ActivityHeatmapProps {
-  activities: ActivityEventModel[];
-}
+type DailyPoint = {
+  date: string;
+  focusMinutes: number;
+  helpCreditMinutes: number;
+  totalMinutes: number;
+};
 
-export function ActivityHeatmap({ activities }: ActivityHeatmapProps) {
-  // Create a map of activity counts by date
-  const activityMap = new Map<string, number>();
-
-  activities.forEach((activity) => {
-    const date = new Date(activity.createdAt).toLocaleDateString();
-    activityMap.set(date, (activityMap.get(date) ?? 0) + 1);
-  });
-
-  // Get last 7 days
-  const days = [];
-  for (let i = 6; i >= 0; i--) {
-    const date = new Date();
-    date.setDate(date.getDate() - i);
-    const dateStr = date.toLocaleDateString();
-    const count = activityMap.get(dateStr) ?? 0;
-    days.push({
-      date: dateStr,
-      day: date.toLocaleDateString('en-US', { weekday: 'short' }),
-      count,
-    });
-  }
-
-  const getIntensity = (count: number) => {
-    if (count === 0) return 'bg-slate-100';
-    if (count === 1) return 'bg-green-200';
-    if (count === 2) return 'bg-green-400';
-    return 'bg-green-600';
-  };
-
+export function ActivityHeatmap({ days }: { days: DailyPoint[] }) {
+  const max = Math.max(...days.map(({ totalMinutes }) => totalMinutes), 1);
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-lg">Activity Heatmap (7 days)</CardTitle>
+        <CardTitle className="text-lg">7-day activity</CardTitle>
+        <p className="text-sm text-muted-foreground">
+          Focus minutes plus 10 minutes of activity credit per help point.
+        </p>
       </CardHeader>
       <CardContent>
-        <div className="flex items-end justify-between gap-2">
-          {days.map((day, idx) => (
-            <div key={idx} className="flex flex-col items-center gap-1">
+        <div
+          className="flex h-44 items-end gap-3"
+          role="img"
+          aria-label="Seven day focus and help-credit chart"
+        >
+          {days.map((day) => (
+            <div key={day.date} className="flex min-w-0 flex-1 flex-col items-center gap-2">
               <div
-                className={`h-8 w-8 rounded ${getIntensity(day.count)} transition-colors hover:ring-2 hover:ring-primary`}
-                title={`${day.date}: ${day.count} activities`}
-              />
-              <p className="text-xs text-muted-foreground">{day.day}</p>
+                className="flex h-32 w-full items-end justify-center overflow-hidden rounded-t-md bg-muted/50"
+                title={`${formatDate(day.date)}: ${formatDuration(day.focusMinutes)} focus, ${formatDuration(day.helpCreditMinutes)} help credit`}
+              >
+                <div
+                  className="flex w-full flex-col-reverse"
+                  style={{
+                    height: `${Math.max((day.totalMinutes / max) * 100, day.totalMinutes ? 5 : 0)}%`,
+                  }}
+                >
+                  <span
+                    className="bg-primary"
+                    style={{
+                      height: `${day.totalMinutes ? (day.focusMinutes / day.totalMinutes) * 100 : 0}%`,
+                    }}
+                  />
+                  <span
+                    className="bg-amber-400"
+                    style={{
+                      height: `${day.totalMinutes ? (day.helpCreditMinutes / day.totalMinutes) * 100 : 0}%`,
+                    }}
+                  />
+                </div>
+              </div>
+              <span className="text-xs text-muted-foreground">
+                {new Date(`${day.date}T00:00:00`).toLocaleDateString('en-US', { weekday: 'short' })}
+              </span>
             </div>
           ))}
         </div>
-        <p className="mt-4 text-xs text-muted-foreground">Total: {activities.length} activities</p>
+        <div className="mt-4 flex gap-4 text-xs text-muted-foreground">
+          <span>
+            <i className="mr-1 inline-block size-2 rounded-full bg-primary" />
+            Focus
+          </span>
+          <span>
+            <i className="mr-1 inline-block size-2 rounded-full bg-amber-400" />
+            Help credit
+          </span>
+        </div>
       </CardContent>
     </Card>
   );

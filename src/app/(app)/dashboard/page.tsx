@@ -27,9 +27,10 @@ export default async function DashboardPage() {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
-          label="Focus Time Today"
-          value={formatFocusTime(data.stats.focusTimeToday)}
+          label="Focus Hours · 7 days"
+          value={formatFocusTime(data.stats.focusMinutes)}
           icon={<IconClock className="h-5 w-5" />}
+          trend={{ value: data.stats.trends.focus }}
         />
         <StatCard
           label="Current Streak"
@@ -37,19 +38,21 @@ export default async function DashboardPage() {
           icon={<IconFlame className="h-5 w-5" />}
         />
         <StatCard
-          label="Tasks Completed"
-          value={data.stats.completedTasksToday}
+          label="Tasks Completed · 7 days"
+          value={data.stats.completedTasks}
           icon={<IconCheck className="h-5 w-5" />}
+          trend={{ value: data.stats.trends.tasks }}
         />
         <StatCard
-          label="Help Points"
+          label="Help Points · 7 days"
           value={data.stats.helpPoints}
           icon={<IconTrophy className="h-5 w-5" />}
+          trend={{ value: data.stats.trends.help }}
         />
       </div>
 
       {/* Activity Heatmap */}
-      <ActivityHeatmap activities={data.recentActivity} />
+      <ActivityHeatmap days={data.daily} />
 
       {/* Peers and Notifications */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">

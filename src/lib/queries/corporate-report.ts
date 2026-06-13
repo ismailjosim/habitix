@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUserProfile } from '@/lib/session';
 import { canAccessModule } from '@/lib/permissions';
+import { summarizeFocus, summarizeHelp } from '@/lib/analytics';
 
 type ReportFilters = {
   studentId?: string;
@@ -168,19 +169,9 @@ export async function getCorporateReportData(filters: ReportFilters = {}) {
       }),
     ]);
 
-  const focusMinutes = focusSessions.reduce(
-    (total, session) => total + (session.actualMinutes ?? 0),
-    0
-  );
-  const focusPlanned = focusSessions.reduce((total, session) => total + session.plannedMinutes, 0);
+  const focusSummary = summarizeFocus(focusSessions);
+  const helpSummary = summarizeHelp(helpPosts, helpResponses);
   const completedTasks = tasks.filter(({ status }) => status === 'DONE').length;
-  const resolvedHelpPosts = helpPosts.filter(({ status }) => status === 'RESOLVED').length;
-  const acceptedResponses = helpResponses.filter(({ isAccepted }) => isAccepted).length;
-  const firstResponseMinutes = helpPosts.flatMap((post) =>
-    post.responses[0]
-      ? [(post.responses[0].createdAt.getTime() - post.createdAt.getTime()) / 60000]
-      : []
-  );
   const feedback = tasks
     .flatMap((task) => task.comments.map((comment) => ({ ...comment, taskTitle: task.title })))
     .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
@@ -197,21 +188,17 @@ export async function getCorporateReportData(filters: ReportFilters = {}) {
       overview: {
         activityEvents: activity._count.id,
         activityPoints: activity._sum.points ?? 0,
-        focusMinutes,
+        focusMinutes: focusSummary.actualMinutes,
         completedTasks,
         badgesEarned: badgeAwards.length,
-        helpPoints: helpResponses.reduce((total, response) => total + response.pointsAwarded, 0),
+        helpPoints: helpSummary.points,
       },
       focus: {
         sessions: focusSessions,
-        plannedMinutes: focusPlanned,
-        actualMinutes: focusMinutes,
-        completionRate: focusPlanned ? Math.round((focusMinutes / focusPlanned) * 100) : 0,
-        activeDays: new Set(
-          focusSessions.flatMap(({ completedAt }) =>
-            completedAt ? [completedAt.toISOString().slice(0, 10)] : []
-          )
-        ).size,
+        plannedMinutes: focusSummary.plannedMinutes,
+        actualMinutes: focusSummary.actualMinutes,
+        completionRate: focusSummary.completionRate,
+        activeDays: focusSummary.activeDays,
       },
       tasks: {
         items: tasks,
@@ -223,22 +210,13 @@ export async function getCorporateReportData(filters: ReportFilters = {}) {
         ).length,
       },
       collaboration: {
-        helpPosts: helpPosts.length,
-        resolvedHelpPosts,
-        resolutionRate: helpPosts.length
-          ? Math.round((resolvedHelpPosts / helpPosts.length) * 100)
-          : 0,
-        responsesGiven: helpResponses.length,
-        acceptedResponses,
-        efficiency: helpResponses.length
-          ? Math.round((acceptedResponses / helpResponses.length) * 100)
-          : 0,
-        averageFirstResponseMinutes: firstResponseMinutes.length
-          ? Math.round(
-              firstResponseMinutes.reduce((total, minutes) => total + minutes, 0) /
-                firstResponseMinutes.length
-            )
-          : null,
+        helpPosts: helpSummary.posts,
+        resolvedHelpPosts: helpSummary.resolvedPosts,
+        resolutionRate: helpSummary.resolutionRate,
+        responsesGiven: helpSummary.responses,
+        acceptedResponses: helpSummary.acceptedResponses,
+        efficiency: helpSummary.efficiency,
+        averageFirstResponseMinutes: helpSummary.averageFirstResponseMinutes,
       },
       badgeAwards,
       feedback,

@@ -1,7 +1,14 @@
 import { prisma } from '@/lib/prisma';
 import { requireModuleAccess } from '@/lib/authorization';
-
-const HELP_CREDIT_MINUTES_PER_POINT = 10;
+import {
+  buildDailyAnalytics,
+  calculateCurrentStreak,
+  dateKey,
+  HELP_CREDIT_MINUTES_PER_POINT,
+  rollingRange,
+  summarizeFocus,
+  summarizeHelp,
+} from '@/lib/analytics';
 const DEFAULT_DAYS = 365;
 
 type DailyActivity = {
@@ -52,8 +59,8 @@ export async function getActivityData(rangeDays = DEFAULT_DAYS): Promise<Activit
 
   const { profile } = current;
   const safeDays = [30, 90, 180, 365].includes(rangeDays) ? rangeDays : DEFAULT_DAYS;
-  const heatmapStart = startOfDay(new Date());
-  heatmapStart.setDate(heatmapStart.getDate() - (safeDays - 1));
+  const range = rollingRange(safeDays);
+  const heatmapStart = range.start;
 
   const [sessions, tasksCompleted, awardedHelp] = await Promise.all([
     prisma.focusSession.findMany({
@@ -76,7 +83,7 @@ export async function getActivityData(rangeDays = DEFAULT_DAYS): Promise<Activit
       where: {
         status: 'DONE',
         completedAt: { gte: heatmapStart },
-        OR: [{ assignedToProfileId: profile.id }, { createdByProfileId: profile.id }],
+        assignedToProfileId: profile.id,
       },
     }),
     prisma.helpResponse.findMany({
@@ -89,42 +96,32 @@ export async function getActivityData(rangeDays = DEFAULT_DAYS): Promise<Activit
     }),
   ]);
 
-  const helpPoints = awardedHelp.reduce((total, response) => total + response.pointsAwarded, 0);
-  const dailyMap = new Map<string, DailyActivity>();
-
-  sessions.forEach((session) => {
-    if (!session.completedAt) return;
-    const day = getOrCreateDay(dailyMap, dateKey(session.completedAt));
-    day.focusMinutes += session.actualMinutes ?? 0;
-    day.totalMinutes += session.actualMinutes ?? 0;
-  });
-
-  awardedHelp.forEach((response) => {
-    const credit = response.pointsAwarded * HELP_CREDIT_MINUTES_PER_POINT;
-    const day = getOrCreateDay(dailyMap, dateKey(response.updatedAt));
-    day.helpCreditMinutes += credit;
-    day.totalMinutes += credit;
-  });
-
-  const totalFocusMinutes = sessions.reduce(
-    (total, session) => total + (session.actualMinutes ?? 0),
-    0
+  const focusSummary = summarizeFocus(sessions);
+  const helpSummary = summarizeHelp(
+    [],
+    awardedHelp.map((response) => ({ ...response, isAccepted: true }))
   );
-  const focusDays = [...dailyMap.values()].filter((day) => day.focusMinutes > 0);
+  const daily = buildDailyAnalytics(
+    range,
+    sessions,
+    awardedHelp.map((response) => ({ ...response, isAccepted: true }))
+  );
+  const focusDays = daily.filter((day) => day.focusMinutes > 0);
+  const totalFocusMinutes = focusSummary.actualMinutes;
   const breakdown = buildBreakdown(sessions, totalFocusMinutes);
 
   return {
     rangeDays: safeDays,
     stats: {
-      totalSessions: sessions.length,
+      totalSessions: focusSummary.sessions,
       totalFocusMinutes,
       tasksCompleted,
-      helpPoints,
-      helpCreditMinutes: helpPoints * HELP_CREDIT_MINUTES_PER_POINT,
+      helpPoints: helpSummary.points,
+      helpCreditMinutes: helpSummary.creditMinutes,
       currentStreak: calculateCurrentStreak(new Set(focusDays.map((day) => day.date))),
       bestDay: focusDays.sort((a, b) => b.focusMinutes - a.focusMinutes)[0] ?? null,
     },
-    heatmap: buildHeatmap(dailyMap, heatmapStart, safeDays),
+    heatmap: daily,
     recentSessions: sessions.slice(0, 8).flatMap((session) =>
       session.completedAt
         ? [
@@ -140,32 +137,6 @@ export async function getActivityData(rangeDays = DEFAULT_DAYS): Promise<Activit
     ),
     breakdown,
   };
-}
-
-export function calculateCurrentStreak(activeDateKeys: Set<string>, now = new Date()) {
-  const cursor = startOfDay(now);
-
-  // A streak remains current until the end of the following day.
-  if (!activeDateKeys.has(dateKey(cursor))) {
-    cursor.setDate(cursor.getDate() - 1);
-  }
-
-  let streak = 0;
-  while (activeDateKeys.has(dateKey(cursor))) {
-    streak += 1;
-    cursor.setDate(cursor.getDate() - 1);
-  }
-
-  return streak;
-}
-
-function buildHeatmap(map: Map<string, DailyActivity>, start: Date, days: number) {
-  return Array.from({ length: days }, (_, index) => {
-    const date = new Date(start);
-    date.setDate(start.getDate() + index);
-    const key = dateKey(date);
-    return map.get(key) ?? { date: key, focusMinutes: 0, helpCreditMinutes: 0, totalMinutes: 0 };
-  });
 }
 
 function buildBreakdown(sessions: SessionRow[], totalMinutes: number) {
@@ -203,26 +174,4 @@ function getActivityLabel(session: Pick<SessionRow, 'activityType' | 'notes'>) {
     .split('_')
     .map((word) => word.charAt(0) + word.slice(1).toLowerCase())
     .join(' ');
-}
-
-function getOrCreateDay(map: Map<string, DailyActivity>, key: string) {
-  const existing = map.get(key);
-  if (existing) return existing;
-
-  const day = { date: key, focusMinutes: 0, helpCreditMinutes: 0, totalMinutes: 0 };
-  map.set(key, day);
-  return day;
-}
-
-function startOfDay(date: Date) {
-  const result = new Date(date);
-  result.setHours(0, 0, 0, 0);
-  return result;
-}
-
-function dateKey(date: Date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
 }

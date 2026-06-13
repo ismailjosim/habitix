@@ -7,7 +7,7 @@ interface StatCardProps {
   icon?: React.ReactNode;
   trend?: {
     value: number;
-    isPositive: boolean;
+    label?: string;
   };
 }
 
@@ -21,10 +21,10 @@ export function StatCard({ label, value, icon, trend }: StatCardProps) {
       <p className="text-2xl font-bold">{value}</p>
       {trend && (
         <p
-          className={`text-xs font-medium ${trend.isPositive ? 'text-green-600' : 'text-red-600'}`}
+          className={`text-xs font-medium ${trend.value >= 0 ? 'text-green-600' : 'text-red-600'}`}
         >
-          {trend.isPositive ? '+' : ''}
-          {trend.value}% from yesterday
+          {trend.value > 0 ? '+' : ''}
+          {trend.value}% {trend.label ?? 'vs previous period'}
         </p>
       )}
     </Card>

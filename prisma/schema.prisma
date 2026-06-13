@@ -320,6 +320,7 @@ model Task {
   focusSessions       FocusSession[]
 
   @@index([assignedToProfileId, status, dueAt])
+  @@index([assignedToProfileId, completedAt])
   @@index([createdByProfileId, createdAt])
   @@index([teamId, status])
   @@index([type, status])
@@ -389,6 +390,7 @@ model FocusSession {
   team           Team?              @relation(fields: [teamId], references: [id], onDelete: SetNull)
 
   @@index([profileId, startedAt])
+  @@index([profileId, completedAt, status])
   @@index([profileId, status])
   @@index([teamId, startedAt])
   @@index([taskId])
