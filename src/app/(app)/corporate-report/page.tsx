@@ -1,25 +1,19 @@
-import { IconBriefcase } from '@tabler/icons-react';
+import { CorporateReportView } from '@/components/corporate-report/corporate-report-view';
+import { LAYOUT_CONSTRAINTS } from '@/lib/layout-constraints';
+import { getCorporateReportData } from '@/lib/queries/corporate-report';
 
-import { ModulePage } from '@/components/app/module-page';
-
-export default function CorporateReportPage() {
+export default async function CorporateReportPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ studentId?: string; from?: string; to?: string; module?: string }>;
+}) {
+  const filters = await searchParams;
+  const data = await getCorporateReportData(filters);
   return (
-    <ModulePage
-      title="Corporate Report"
-      eyebrow="Program insight"
-      description="Summarize anonymized program health, team outcomes, engagement, help desk trends, and completion metrics."
-      icon={IconBriefcase}
-      metrics={[
-        { label: 'Active teams', value: '8' },
-        { label: 'Engagement', value: '76%' },
-        { label: 'Completion', value: '68%' },
-      ]}
-      nextSteps={[
-        'Model report snapshots separately from operational student records.',
-        'Aggregate team and cohort metrics with privacy boundaries.',
-        'Define corporate viewer permissions independently from admin permissions.',
-        'Prepare exportable report data for later PDF or dashboard output.',
-      ]}
-    />
+    <div
+      className={`${LAYOUT_CONSTRAINTS.pageMaxWidth} ${LAYOUT_CONSTRAINTS.pagePadding} mx-auto py-6 print:p-0`}
+    >
+      <CorporateReportView data={data} />
+    </div>
   );
 }

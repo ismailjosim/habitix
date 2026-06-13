@@ -23,7 +23,7 @@ import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/s
 import { SignOutMenuItem } from '@/components/app/sign-out-menu-item';
 import { ThemeToggle } from '@/components/app/theme-toggle';
 import { PresenceHeartbeat } from '@/components/app/presence-heartbeat';
-import { navigationItems } from '@/lib/navigation';
+import { navigationItems, type UserRole } from '@/lib/navigation';
 import { cn } from '@/lib/utils';
 
 type AppShellProps = {
@@ -58,13 +58,15 @@ export function AppShell({ children, user }: AppShellProps) {
   return (
     <div className="min-h-screen bg-canvas text-foreground">
       <PresenceHeartbeat />
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-72 border-r border-white/10 bg-sidebar text-sidebar-foreground lg:block">
-        <SidebarContent />
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-72 border-r border-white/10 bg-sidebar text-sidebar-foreground print:hidden lg:block">
+        <SidebarContent role={user.role} />
       </aside>
 
-      <div className="lg:pl-72">
+      <div className="print:pl-0 lg:pl-72">
         <TopBar user={user} />
-        <main className="min-h-[calc(100vh-4rem)] px-4 py-5 sm:px-6 lg:px-8">{children}</main>
+        <main className="min-h-[calc(100vh-4rem)] px-4 py-5 print:min-h-0 print:p-0 sm:px-6 lg:px-8">
+          {children}
+        </main>
       </div>
     </div>
   );
@@ -75,7 +77,7 @@ function TopBar({ user }: Pick<AppShellProps, 'user'>) {
   const initials = initialsForName(user.name) || 'HX';
 
   return (
-    <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-border bg-card/95 px-4 backdrop-blur sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-border bg-card/95 px-4 backdrop-blur print:hidden sm:px-6 lg:px-8">
       <Sheet>
         <SheetTrigger asChild>
           <Button variant="outline" size="icon" className="lg:hidden" aria-label="Open navigation">
@@ -87,7 +89,7 @@ function TopBar({ user }: Pick<AppShellProps, 'user'>) {
           className="w-72 border-white/10 bg-sidebar p-0 text-sidebar-foreground"
         >
           <SheetTitle className="sr-only">Habitix navigation</SheetTitle>
-          <SidebarContent />
+          <SidebarContent role={user.role} />
         </SheetContent>
       </Sheet>
 
@@ -150,8 +152,10 @@ function TopBar({ user }: Pick<AppShellProps, 'user'>) {
   );
 }
 
-function SidebarContent() {
+function SidebarContent({ role }: { role: string }) {
   const pathname = usePathname();
+  const navigationRole = toNavigationRole(role);
+  const visibleItems = navigationItems.filter((item) => item.roles.includes(navigationRole));
 
   return (
     <div className="flex h-full flex-col">
@@ -161,7 +165,7 @@ function SidebarContent() {
 
       <ScrollArea className="flex-1 px-3 py-4">
         <nav className="space-y-1">
-          {navigationItems.map((item) => {
+          {visibleItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
 
@@ -195,4 +199,9 @@ function SidebarContent() {
       </div>
     </div>
   );
+}
+
+function toNavigationRole(role: string): UserRole {
+  if (role === 'CORPORATE_VIEWER') return 'corporate';
+  return role.toLowerCase() as UserRole;
 }

@@ -87,6 +87,6 @@ export const navigationItems: NavItem[] = [
     title: 'Corporate Report',
     href: '/corporate-report',
     icon: IconBriefcase,
-    roles: ['admin', 'corporate'],
+    roles: ['mentor', 'admin', 'corporate'],
   },
 ];
