@@ -15,9 +15,14 @@
     "db:validate": "prisma validate",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:migrate:status": "prisma migrate status",
+    "db:seed": "prisma db seed",
     "db:studio": "prisma studio",
     "db:test": "tsx scripts/test-database.ts",
-    "security:test": "tsx scripts/test-permissions.ts"
+    "security:test": "tsx scripts/test-permissions.ts",
+    "deploy:check": "npm test && npm run lint && npm run db:validate && npm run build",
+    "deploy:prepare": "npm run db:generate && npm run db:deploy"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",

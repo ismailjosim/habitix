@@ -11,12 +11,21 @@ function pickOne<T>(items: readonly T[]): T {
 async function main() {
   console.log('Starting seed data creation...');
 
+  if (process.env.SEED_DEMO_DATA === 'true' && process.env.NODE_ENV === 'production') {
+    throw new Error('SEED_DEMO_DATA must not be enabled in production');
+  }
+
   for (const definition of BADGE_DEFINITIONS) {
     await prisma.badge.upsert({
       where: { name: definition.name },
       update: definition,
       create: definition,
     });
+  }
+
+  if (process.env.SEED_DEMO_DATA !== 'true') {
+    console.log('Required badge definitions are ready. Demo data was not created.');
+    return;
   }
 
   // Create test user
