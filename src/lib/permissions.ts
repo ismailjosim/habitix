@@ -11,6 +11,7 @@ export type AppModule =
   | 'notifications'
   | 'profile'
   | 'materials'
+  | 'admin'
   | 'corporateReport';
 
 const moduleRoles: Record<AppModule, readonly AppRole[]> = {
@@ -24,6 +25,7 @@ const moduleRoles: Record<AppModule, readonly AppRole[]> = {
   notifications: ['STUDENT', 'MENTOR', 'ADMIN', 'MODERATOR', 'CORPORATE_VIEWER'],
   profile: ['STUDENT', 'MENTOR', 'ADMIN', 'MODERATOR', 'CORPORATE_VIEWER'],
   materials: ['STUDENT', 'MENTOR', 'ADMIN'],
+  admin: ['ADMIN'],
   corporateReport: ['MENTOR', 'ADMIN', 'CORPORATE_VIEWER'],
 };
 

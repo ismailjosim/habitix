@@ -11,6 +11,7 @@ import {
   IconTargetArrow,
   IconUsers,
   IconUserSquareRounded,
+  IconUsersGroup,
 } from '@tabler/icons-react';
 import type { AppModule } from '@/lib/permissions';
 
@@ -81,6 +82,12 @@ export const navigationItems: NavItem[] = [
     href: '/study-materials',
     icon: IconNotebook,
     module: 'materials',
+  },
+  {
+    title: 'User Management',
+    href: '/admin/users',
+    icon: IconUsersGroup,
+    module: 'admin',
   },
   {
     title: 'Corporate Report',

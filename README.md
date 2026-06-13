@@ -52,3 +52,15 @@ required badge definitions; demo accounts are disabled.
 
 See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for the environment, migration, rollback, and release
 checklists.
+
+## First Administrator
+
+New accounts start as students. After the first administrator signs in once, promote that account:
+
+```bash
+npm run admin:promote -- admin@example.com
+```
+
+The administrator can then open `/admin/users` to change platform roles, edit profile details,
+create teams, and assign active team memberships. Help Desk posting requires an active team
+membership, regardless of platform role.

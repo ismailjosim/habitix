@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { IconHelp, IconMessage, IconPlus, IconUsers } from '@tabler/icons-react';
 
 import { createHelpPost, createHelpResponse, resolveHelpPost } from '@/lib/actions/help-desk';
@@ -162,6 +163,23 @@ export function HelpDeskBoard({
           </DialogContent>
         </Dialog>
       </header>
+
+      {!data.canCreatePost && (
+        <Card>
+          <CardContent className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="font-medium">An active team membership is required</p>
+              <p className="text-sm text-muted-foreground">
+                Your platform role already permits Help Desk access, but requests belong to a team.
+                Ask an admin to assign you to a team.
+              </p>
+            </div>
+            <Button asChild variant="outline">
+              <Link href="/team">View team status</Link>
+            </Button>
+          </CardContent>
+        </Card>
+      )}
 
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-6">
         <Stat icon={IconHelp} label="Open requests" value={data.stats.open} />
