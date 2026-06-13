@@ -130,3 +130,80 @@ export function calculateCurrentStreak(activeDateKeys: Set<string>, now = new Da
   }
   return streak;
 }
+
+export function monthKey(date: Date): string {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+}
+
+export function startOfWeek(date: Date): Date {
+  const start = new Date(date);
+  start.setHours(0, 0, 0, 0);
+  const day = start.getDay();
+  start.setDate(start.getDate() - (day === 0 ? 6 : day - 1));
+  return start;
+}
+
+export function startOfMonth(date: Date): Date {
+  return new Date(date.getFullYear(), date.getMonth(), 1);
+}
+
+export type LeaderboardAggregation = {
+  profileId: string;
+  displayName: string;
+  avatarUrl: string | null;
+  focusMinutes: number;
+  helpPoints: number;
+  resolutions: number;
+};
+
+export function aggregateLeaderboardMetrics(
+  profiles: Array<{
+    id: string;
+    displayName: string;
+    avatarUrl: string | null;
+    focusSessions: { actualMinutes: number | null; completedAt: Date | null }[];
+    helpResponses: { pointsAwarded: number; updatedAt: Date; isAccepted: boolean }[];
+  }>,
+  periodStart: Date
+): LeaderboardAggregation[] {
+  return profiles.map((profile) => ({
+    profileId: profile.id,
+    displayName: profile.displayName,
+    avatarUrl: profile.avatarUrl,
+    focusMinutes: profile.focusSessions
+      .filter((session) => session.completedAt && session.completedAt >= periodStart)
+      .reduce((total, session) => total + (session.actualMinutes ?? 0), 0),
+    helpPoints: profile.helpResponses
+      .filter((response) => response.updatedAt >= periodStart)
+      .reduce((total, response) => total + response.pointsAwarded, 0),
+    resolutions: profile.helpResponses.filter(
+      (response) => response.updatedAt >= periodStart && response.isAccepted
+    ).length,
+  }));
+}
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+export function parseCustomDateRange(from?: string, to?: string, defaultDays = 30): AnalyticsRange {
+  const today = new Date();
+  today.setHours(23, 59, 59, 999);
+  const defaultStart = new Date(today.getTime() - (defaultDays - 1) * DAY_MS);
+  defaultStart.setHours(0, 0, 0, 0);
+
+  const start = parseDateString(from, false) ?? defaultStart;
+  const end = parseDateString(to, true) ?? today;
+
+  // Validate range
+  if (start > end || end.getTime() - start.getTime() > 366 * DAY_MS) {
+    return { start: defaultStart, end: today };
+  }
+  return { start, end };
+}
+
+function parseDateString(value: string | undefined, endOfDay: boolean): Date | null {
+  if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
+  const date = new Date(`${value}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return null;
+  date.setHours(endOfDay ? 23 : 0, endOfDay ? 59 : 0, endOfDay ? 59 : 0, endOfDay ? 999 : 0);
+  return date;
+}

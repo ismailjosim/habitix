@@ -454,6 +454,8 @@ model HelpResponse {
 
   @@index([postId, createdAt])
   @@index([authorProfileId, createdAt])
+  @@index([authorProfileId, updatedAt])
+  @@index([authorProfileId, isAccepted])
 }
 
 model HelpPostTag {

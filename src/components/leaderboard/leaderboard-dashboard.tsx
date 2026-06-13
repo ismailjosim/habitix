@@ -71,20 +71,20 @@ export function LeaderboardDashboard({ data }: { data: LeaderboardData }) {
           <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <Metric
               icon={IconMedal}
-              label="Focus rank"
+              label="Focus Rank"
               value={rankLabel(active.currentUserPerformerRank)}
             />
             <Metric
               icon={IconUsers}
-              label="Contributor rank"
+              label="Help Contributor Rank"
               value={rankLabel(active.currentUserContributorRank)}
             />
             <Metric
               icon={IconClock}
-              label="Your focus"
+              label="Your Focus Hours"
               value={formatDuration(current?.focusMinutes ?? 0)}
             />
-            <Metric icon={IconTrophy} label="Your help points" value={current?.helpPoints ?? 0} />
+            <Metric icon={IconTrophy} label="Your Help Points" value={current?.helpPoints ?? 0} />
           </section>
 
           <section className="grid gap-4 md:grid-cols-2">

@@ -3,8 +3,6 @@ import { requireModuleAccess } from '@/lib/authorization';
 import {
   buildDailyAnalytics,
   calculateCurrentStreak,
-  dateKey,
-  HELP_CREDIT_MINUTES_PER_POINT,
   rollingRange,
   summarizeFocus,
   summarizeHelp,

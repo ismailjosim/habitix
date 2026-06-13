@@ -60,16 +60,16 @@ export function ActivityDashboard({ data }: { data: ActivityData }) {
       </header>
 
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <MetricCard icon={IconTargetArrow} label="Focus sessions" value={stats.totalSessions} />
+        <MetricCard icon={IconTargetArrow} label="Focus Sessions" value={stats.totalSessions} />
         <MetricCard
           icon={IconClock}
-          label="Raw focus time"
+          label="Focus Hours"
           value={formatDuration(stats.totalFocusMinutes)}
         />
-        <MetricCard icon={IconCheck} label="Tasks completed" value={stats.tasksCompleted} />
+        <MetricCard icon={IconCheck} label="Tasks Completed" value={stats.tasksCompleted} />
         <MetricCard
           icon={IconSparkles}
-          label="Help points"
+          label="Help Points Awarded"
           value={stats.helpPoints}
           detail={`${formatDuration(stats.helpCreditMinutes)} activity credit`}
         />
@@ -163,7 +163,10 @@ export function ActivityDashboard({ data }: { data: ActivityData }) {
 
         <Card>
           <CardHeader>
-            <CardTitle>Focus breakdown</CardTitle>
+            <CardTitle>Activity Breakdown</CardTitle>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Proportion of focus time spent on different activity types.
+            </p>
           </CardHeader>
           <CardContent className="space-y-4">
             {data.breakdown.length === 0 ? (

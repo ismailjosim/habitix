@@ -1,6 +1,13 @@
 import { prisma } from '@/lib/prisma';
 import { requireModuleAccess } from '@/lib/authorization';
 import { awardBadge, awardEligibleBadges } from '@/lib/badges';
+import {
+  aggregateLeaderboardMetrics,
+  dateKey,
+  monthKey,
+  startOfMonth,
+  startOfWeek,
+} from '@/lib/analytics';
 
 type Period = 'weekly' | 'monthly';
 
@@ -52,7 +59,7 @@ export async function getLeaderboardData(): Promise<LeaderboardData> {
 
   const now = new Date();
   const weekStart = startOfWeek(now);
-  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const monthStart = startOfMonth(now);
   const queryStart = weekStart < monthStart ? weekStart : monthStart;
   const members = await prisma.teamMembership.findMany({
     where: { teamId: membership.teamId, leftAt: null },
@@ -150,20 +157,9 @@ function buildPeriod(
   periodStart: Date,
   period: Period
 ): LeaderboardPeriodData {
-  const totals = rows.map((row) => ({
-    profileId: row.profileId,
-    displayName: row.displayName,
-    avatarUrl: row.avatarUrl,
-    focusMinutes: row.focusSessions
-      .filter((session) => session.completedAt && session.completedAt >= periodStart)
-      .reduce((total, session) => total + (session.actualMinutes ?? 0), 0),
-    helpPoints: row.helpResponses
-      .filter((response) => response.updatedAt >= periodStart)
-      .reduce((total, response) => total + response.pointsAwarded, 0),
-    resolutions: row.helpResponses.filter(
-      (response) => response.updatedAt >= periodStart && response.isAccepted
-    ).length,
-    isCurrentUser: row.profileId === currentProfileId,
+  const totals = aggregateLeaderboardMetrics(rows, periodStart).map((metric) => ({
+    ...metric,
+    isCurrentUser: metric.profileId === currentProfileId,
   }));
 
   const performers = rankRows(totals, (a, b) => b.focusMinutes - a.focusMinutes);
@@ -193,25 +189,6 @@ function rankRows(
         a.profileId.localeCompare(b.profileId)
     )
     .map((row, index) => ({ ...row, rank: index + 1 }));
-}
-
-function startOfWeek(date: Date) {
-  const start = new Date(date);
-  start.setHours(0, 0, 0, 0);
-  const day = start.getDay();
-  start.setDate(start.getDate() - (day === 0 ? 6 : day - 1));
-  return start;
-}
-
-function dateKey(date: Date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
-
-function monthKey(date: Date) {
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
 }
 
 function emptyPeriod(label: string): LeaderboardPeriodData {
