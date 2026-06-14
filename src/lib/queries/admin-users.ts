@@ -9,9 +9,16 @@ export async function getAdminUsersData() {
       select: {
         id: true,
         displayName: true,
+        avatarUrl: true,
         role: true,
+        bio: true,
+        timezone: true,
         institution: true,
         department: true,
+        currentStreak: true,
+        totalFocusMinutes: true,
+        helpPoints: true,
+        createdAt: true,
         authUser: { select: { email: true } },
         memberships: {
           where: { leftAt: null },

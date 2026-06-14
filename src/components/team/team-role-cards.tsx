@@ -14,46 +14,46 @@ function RoleSection({
 }: {
   title: string;
   members: TeamMember[];
-  color: 'indigo' | 'cyan';
+  color: 'primary' | 'accent';
 }) {
   if (members.length === 0) {
     return null;
   }
 
   const colorClasses = {
-    indigo: 'border-indigo-200 bg-indigo-50/70 dark:border-indigo-900 dark:bg-indigo-950/40',
-    cyan: 'border-cyan-200 bg-cyan-50/70 dark:border-cyan-900 dark:bg-cyan-950/40',
+    primary: 'border-primary/25 bg-primary-soft/70',
+    accent: 'border-accent-foreground/20 bg-accent/55',
   };
 
   const badgeClasses = {
-    indigo: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200',
-    cyan: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200',
+    primary: 'bg-primary text-primary-foreground',
+    accent: 'bg-accent text-accent-foreground',
   };
 
   return (
-    <div className="space-y-2">
-      <h3 className="font-semibold text-lg">{title}</h3>
-      <div className="grid gap-3 sm:grid-cols-2">
+    <section className="min-w-0 space-y-3">
+      <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
         {members.map((member) => (
-          <Card key={member.id} className={`border-2 ${colorClasses[color]}`}>
-            <CardHeader className="pb-3">
+          <Card key={member.id} size="sm" className={`h-full ${colorClasses[color]}`}>
+            <CardHeader>
               <div className="flex items-center gap-3">
-                <Avatar className="h-10 w-10">
+                <Avatar className="h-10 w-10 shrink-0">
                   <AvatarImage src={member.avatarUrl || undefined} />
                   <AvatarFallback className={badgeClasses[color]}>
                     {member.displayName.slice(0, 2).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
-                <div className="flex-1">
-                  <CardTitle className="text-sm">{member.displayName}</CardTitle>
-                  <p className="text-xs text-muted-foreground">{member.email}</p>
+                <div className="min-w-0 flex-1">
+                  <CardTitle className="truncate text-sm">{member.displayName}</CardTitle>
+                  <p className="truncate text-xs text-muted-foreground">{member.email}</p>
                 </div>
               </div>
             </CardHeader>
           </Card>
         ))}
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -63,9 +63,9 @@ export function TeamRoleCards({ leaders, mentors }: TeamRoleCardsProps) {
   }
 
   return (
-    <div className="space-y-6">
-      <RoleSection title="Team Leaders" members={leaders} color="indigo" />
-      <RoleSection title="Mentors" members={mentors} color="cyan" />
+    <div className="grid items-start gap-6 lg:grid-cols-2">
+      <RoleSection title="Team Leaders" members={leaders} color="primary" />
+      <RoleSection title="Mentors" members={mentors} color="accent" />
     </div>
   );
 }
