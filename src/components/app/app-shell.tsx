@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useSyncExternalStore } from 'react';
 import {
   IconBell,
   IconChevronDown,
@@ -48,6 +48,27 @@ type AppShellProps = {
   };
 };
 
+const SIDEBAR_STORAGE_KEY = 'habitix-sidebar-collapsed';
+const SIDEBAR_STORAGE_EVENT = 'habitix-sidebar-preference';
+
+function subscribeToSidebarPreference(onStoreChange: () => void) {
+  window.addEventListener('storage', onStoreChange);
+  window.addEventListener(SIDEBAR_STORAGE_EVENT, onStoreChange);
+
+  return () => {
+    window.removeEventListener('storage', onStoreChange);
+    window.removeEventListener(SIDEBAR_STORAGE_EVENT, onStoreChange);
+  };
+}
+
+function getSidebarPreference() {
+  return window.localStorage.getItem(SIDEBAR_STORAGE_KEY) === 'true';
+}
+
+function getServerSidebarPreference() {
+  return false;
+}
+
 function formatRole(role: string) {
   return role
     .toLowerCase()
@@ -66,18 +87,15 @@ function initialsForName(name: string) {
 }
 
 export function AppShell({ children, user, activeFocusSession }: AppShellProps) {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(
-    () =>
-      typeof window !== 'undefined' &&
-      window.localStorage.getItem('habitix-sidebar-collapsed') === 'true'
+  const sidebarCollapsed = useSyncExternalStore(
+    subscribeToSidebarPreference,
+    getSidebarPreference,
+    getServerSidebarPreference
   );
 
   function toggleSidebar() {
-    setSidebarCollapsed((current) => {
-      const next = !current;
-      window.localStorage.setItem('habitix-sidebar-collapsed', String(next));
-      return next;
-    });
+    window.localStorage.setItem(SIDEBAR_STORAGE_KEY, String(!sidebarCollapsed));
+    window.dispatchEvent(new Event(SIDEBAR_STORAGE_EVENT));
   }
 
   return (

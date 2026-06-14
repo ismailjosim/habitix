@@ -11,6 +11,7 @@ export type HelpDeskPost = {
   status: string;
   topic: string | null;
   urgency: string;
+  imageUrl: string | null;
   createdAt: Date;
   resolvedAt: Date | null;
   author: { id: string; displayName: string; avatarUrl: string | null };

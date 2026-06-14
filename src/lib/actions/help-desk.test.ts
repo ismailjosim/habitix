@@ -13,6 +13,7 @@ const mocks = vi.hoisted(() => ({
 vi.mock('@/lib/session', () => ({ getCurrentUserProfile: mocks.getCurrentUserProfile }));
 vi.mock('@/lib/badges', () => ({ awardEligibleBadges: mocks.awardEligibleBadges }));
 vi.mock('@/lib/queries/help-desk', () => ({ MAX_PEER_HELPERS: 3 }));
+vi.mock('@/lib/cloudinary', () => ({ uploadImage: vi.fn(), deleteImage: vi.fn() }));
 vi.mock('next/cache', () => ({ revalidatePath: vi.fn() }));
 vi.mock('@/lib/prisma', () => ({
   prisma: {

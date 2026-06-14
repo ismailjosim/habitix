@@ -42,6 +42,7 @@ export type UserProfileMinAggregateOutputType = {
   authUserId: string | null;
   displayName: string | null;
   avatarUrl: string | null;
+  avatarPublicId: string | null;
   role: $Enums.AppRole | null;
   bio: string | null;
   timezone: string | null;
@@ -59,6 +60,7 @@ export type UserProfileMaxAggregateOutputType = {
   authUserId: string | null;
   displayName: string | null;
   avatarUrl: string | null;
+  avatarPublicId: string | null;
   role: $Enums.AppRole | null;
   bio: string | null;
   timezone: string | null;
@@ -76,6 +78,7 @@ export type UserProfileCountAggregateOutputType = {
   authUserId: number;
   displayName: number;
   avatarUrl: number;
+  avatarPublicId: number;
   role: number;
   bio: number;
   timezone: number;
@@ -106,6 +109,7 @@ export type UserProfileMinAggregateInputType = {
   authUserId?: true;
   displayName?: true;
   avatarUrl?: true;
+  avatarPublicId?: true;
   role?: true;
   bio?: true;
   timezone?: true;
@@ -123,6 +127,7 @@ export type UserProfileMaxAggregateInputType = {
   authUserId?: true;
   displayName?: true;
   avatarUrl?: true;
+  avatarPublicId?: true;
   role?: true;
   bio?: true;
   timezone?: true;
@@ -140,6 +145,7 @@ export type UserProfileCountAggregateInputType = {
   authUserId?: true;
   displayName?: true;
   avatarUrl?: true;
+  avatarPublicId?: true;
   role?: true;
   bio?: true;
   timezone?: true;
@@ -249,6 +255,7 @@ export type UserProfileGroupByOutputType = {
   authUserId: string;
   displayName: string;
   avatarUrl: string | null;
+  avatarPublicId: string | null;
   role: $Enums.AppRole;
   bio: string | null;
   timezone: string;
@@ -286,6 +293,7 @@ export type UserProfileWhereInput = {
   authUserId?: Prisma.StringFilter<'UserProfile'> | string;
   displayName?: Prisma.StringFilter<'UserProfile'> | string;
   avatarUrl?: Prisma.StringNullableFilter<'UserProfile'> | string | null;
+  avatarPublicId?: Prisma.StringNullableFilter<'UserProfile'> | string | null;
   role?: Prisma.EnumAppRoleFilter<'UserProfile'> | $Enums.AppRole;
   bio?: Prisma.StringNullableFilter<'UserProfile'> | string | null;
   timezone?: Prisma.StringFilter<'UserProfile'> | string;
@@ -333,6 +341,7 @@ export type UserProfileOrderByWithRelationInput = {
   authUserId?: Prisma.SortOrder;
   displayName?: Prisma.SortOrder;
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder;
+  avatarPublicId?: Prisma.SortOrderInput | Prisma.SortOrder;
   role?: Prisma.SortOrder;
   bio?: Prisma.SortOrderInput | Prisma.SortOrder;
   timezone?: Prisma.SortOrder;
@@ -378,6 +387,7 @@ export type UserProfileWhereUniqueInput = Prisma.AtLeast<
     NOT?: Prisma.UserProfileWhereInput | Prisma.UserProfileWhereInput[];
     displayName?: Prisma.StringFilter<'UserProfile'> | string;
     avatarUrl?: Prisma.StringNullableFilter<'UserProfile'> | string | null;
+    avatarPublicId?: Prisma.StringNullableFilter<'UserProfile'> | string | null;
     role?: Prisma.EnumAppRoleFilter<'UserProfile'> | $Enums.AppRole;
     bio?: Prisma.StringNullableFilter<'UserProfile'> | string | null;
     timezone?: Prisma.StringFilter<'UserProfile'> | string;
@@ -427,6 +437,7 @@ export type UserProfileOrderByWithAggregationInput = {
   authUserId?: Prisma.SortOrder;
   displayName?: Prisma.SortOrder;
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder;
+  avatarPublicId?: Prisma.SortOrderInput | Prisma.SortOrder;
   role?: Prisma.SortOrder;
   bio?: Prisma.SortOrderInput | Prisma.SortOrder;
   timezone?: Prisma.SortOrder;
@@ -456,6 +467,7 @@ export type UserProfileScalarWhereWithAggregatesInput = {
   authUserId?: Prisma.StringWithAggregatesFilter<'UserProfile'> | string;
   displayName?: Prisma.StringWithAggregatesFilter<'UserProfile'> | string;
   avatarUrl?: Prisma.StringNullableWithAggregatesFilter<'UserProfile'> | string | null;
+  avatarPublicId?: Prisma.StringNullableWithAggregatesFilter<'UserProfile'> | string | null;
   role?: Prisma.EnumAppRoleWithAggregatesFilter<'UserProfile'> | $Enums.AppRole;
   bio?: Prisma.StringNullableWithAggregatesFilter<'UserProfile'> | string | null;
   timezone?: Prisma.StringWithAggregatesFilter<'UserProfile'> | string;
@@ -472,6 +484,7 @@ export type UserProfileCreateInput = {
   id?: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -513,6 +526,7 @@ export type UserProfileUncheckedCreateInput = {
   authUserId: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -552,6 +566,7 @@ export type UserProfileUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -593,6 +608,7 @@ export type UserProfileUncheckedUpdateInput = {
   authUserId?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -633,6 +649,7 @@ export type UserProfileCreateManyInput = {
   authUserId: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -649,6 +666,7 @@ export type UserProfileUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -666,6 +684,7 @@ export type UserProfileUncheckedUpdateManyInput = {
   authUserId?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -688,6 +707,7 @@ export type UserProfileCountOrderByAggregateInput = {
   authUserId?: Prisma.SortOrder;
   displayName?: Prisma.SortOrder;
   avatarUrl?: Prisma.SortOrder;
+  avatarPublicId?: Prisma.SortOrder;
   role?: Prisma.SortOrder;
   bio?: Prisma.SortOrder;
   timezone?: Prisma.SortOrder;
@@ -711,6 +731,7 @@ export type UserProfileMaxOrderByAggregateInput = {
   authUserId?: Prisma.SortOrder;
   displayName?: Prisma.SortOrder;
   avatarUrl?: Prisma.SortOrder;
+  avatarPublicId?: Prisma.SortOrder;
   role?: Prisma.SortOrder;
   bio?: Prisma.SortOrder;
   timezone?: Prisma.SortOrder;
@@ -728,6 +749,7 @@ export type UserProfileMinOrderByAggregateInput = {
   authUserId?: Prisma.SortOrder;
   displayName?: Prisma.SortOrder;
   avatarUrl?: Prisma.SortOrder;
+  avatarPublicId?: Prisma.SortOrder;
   role?: Prisma.SortOrder;
   bio?: Prisma.SortOrder;
   timezone?: Prisma.SortOrder;
@@ -1427,6 +1449,7 @@ export type UserProfileCreateWithoutAuthUserInput = {
   id?: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -1466,6 +1489,7 @@ export type UserProfileUncheckedCreateWithoutAuthUserInput = {
   id?: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -1533,6 +1557,7 @@ export type UserProfileUpdateWithoutAuthUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1572,6 +1597,7 @@ export type UserProfileUncheckedUpdateWithoutAuthUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1611,6 +1637,7 @@ export type UserProfileCreateWithoutPreferencesInput = {
   id?: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -1651,6 +1678,7 @@ export type UserProfileUncheckedCreateWithoutPreferencesInput = {
   authUserId: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -1717,6 +1745,7 @@ export type UserProfileUpdateWithoutPreferencesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1757,6 +1786,7 @@ export type UserProfileUncheckedUpdateWithoutPreferencesInput = {
   authUserId?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1795,6 +1825,7 @@ export type UserProfileCreateWithoutPresenceInput = {
   id?: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -1835,6 +1866,7 @@ export type UserProfileUncheckedCreateWithoutPresenceInput = {
   authUserId: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -1901,6 +1933,7 @@ export type UserProfileUpdateWithoutPresenceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1941,6 +1974,7 @@ export type UserProfileUncheckedUpdateWithoutPresenceInput = {
   authUserId?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1979,6 +2013,7 @@ export type UserProfileCreateWithoutOwnedTeamsInput = {
   id?: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -2019,6 +2054,7 @@ export type UserProfileUncheckedCreateWithoutOwnedTeamsInput = {
   authUserId: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -2085,6 +2121,7 @@ export type UserProfileUpdateWithoutOwnedTeamsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2125,6 +2162,7 @@ export type UserProfileUncheckedUpdateWithoutOwnedTeamsInput = {
   authUserId?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2163,6 +2201,7 @@ export type UserProfileCreateWithoutMembershipsInput = {
   id?: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -2203,6 +2242,7 @@ export type UserProfileUncheckedCreateWithoutMembershipsInput = {
   authUserId: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -2269,6 +2309,7 @@ export type UserProfileUpdateWithoutMembershipsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2309,6 +2350,7 @@ export type UserProfileUncheckedUpdateWithoutMembershipsInput = {
   authUserId?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2347,6 +2389,7 @@ export type UserProfileCreateWithoutMentorAssignmentsInput = {
   id?: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -2387,6 +2430,7 @@ export type UserProfileUncheckedCreateWithoutMentorAssignmentsInput = {
   authUserId: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -2433,6 +2477,7 @@ export type UserProfileCreateWithoutStudentAssignmentsInput = {
   id?: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -2473,6 +2518,7 @@ export type UserProfileUncheckedCreateWithoutStudentAssignmentsInput = {
   authUserId: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -2539,6 +2585,7 @@ export type UserProfileUpdateWithoutMentorAssignmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2579,6 +2626,7 @@ export type UserProfileUncheckedUpdateWithoutMentorAssignmentsInput = {
   authUserId?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2637,6 +2685,7 @@ export type UserProfileUpdateWithoutStudentAssignmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2677,6 +2726,7 @@ export type UserProfileUncheckedUpdateWithoutStudentAssignmentsInput = {
   authUserId?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2715,6 +2765,7 @@ export type UserProfileCreateWithoutCreatedTasksInput = {
   id?: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -2755,6 +2806,7 @@ export type UserProfileUncheckedCreateWithoutCreatedTasksInput = {
   authUserId: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -2801,6 +2853,7 @@ export type UserProfileCreateWithoutAssignedTasksInput = {
   id?: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -2841,6 +2894,7 @@ export type UserProfileUncheckedCreateWithoutAssignedTasksInput = {
   authUserId: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -2907,6 +2961,7 @@ export type UserProfileUpdateWithoutCreatedTasksInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2947,6 +3002,7 @@ export type UserProfileUncheckedUpdateWithoutCreatedTasksInput = {
   authUserId?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -3005,6 +3061,7 @@ export type UserProfileUpdateWithoutAssignedTasksInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -3045,6 +3102,7 @@ export type UserProfileUncheckedUpdateWithoutAssignedTasksInput = {
   authUserId?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -3083,6 +3141,7 @@ export type UserProfileCreateWithoutTaskCommentsInput = {
   id?: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -3123,6 +3182,7 @@ export type UserProfileUncheckedCreateWithoutTaskCommentsInput = {
   authUserId: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -3189,6 +3249,7 @@ export type UserProfileUpdateWithoutTaskCommentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -3229,6 +3290,7 @@ export type UserProfileUncheckedUpdateWithoutTaskCommentsInput = {
   authUserId?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -3267,6 +3329,7 @@ export type UserProfileCreateWithoutTaskActivitiesInput = {
   id?: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -3307,6 +3370,7 @@ export type UserProfileUncheckedCreateWithoutTaskActivitiesInput = {
   authUserId: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -3373,6 +3437,7 @@ export type UserProfileUpdateWithoutTaskActivitiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -3413,6 +3478,7 @@ export type UserProfileUncheckedUpdateWithoutTaskActivitiesInput = {
   authUserId?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -3451,6 +3517,7 @@ export type UserProfileCreateWithoutFocusSessionsInput = {
   id?: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -3491,6 +3558,7 @@ export type UserProfileUncheckedCreateWithoutFocusSessionsInput = {
   authUserId: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -3557,6 +3625,7 @@ export type UserProfileUpdateWithoutFocusSessionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -3597,6 +3666,7 @@ export type UserProfileUncheckedUpdateWithoutFocusSessionsInput = {
   authUserId?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -3635,6 +3705,7 @@ export type UserProfileCreateWithoutActivityEventsInput = {
   id?: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -3675,6 +3746,7 @@ export type UserProfileUncheckedCreateWithoutActivityEventsInput = {
   authUserId: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -3741,6 +3813,7 @@ export type UserProfileUpdateWithoutActivityEventsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -3781,6 +3854,7 @@ export type UserProfileUncheckedUpdateWithoutActivityEventsInput = {
   authUserId?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -3819,6 +3893,7 @@ export type UserProfileCreateWithoutHelpPostsInput = {
   id?: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -3859,6 +3934,7 @@ export type UserProfileUncheckedCreateWithoutHelpPostsInput = {
   authUserId: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -3925,6 +4001,7 @@ export type UserProfileUpdateWithoutHelpPostsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -3965,6 +4042,7 @@ export type UserProfileUncheckedUpdateWithoutHelpPostsInput = {
   authUserId?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -4003,6 +4081,7 @@ export type UserProfileCreateWithoutHelpResponsesInput = {
   id?: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -4043,6 +4122,7 @@ export type UserProfileUncheckedCreateWithoutHelpResponsesInput = {
   authUserId: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -4109,6 +4189,7 @@ export type UserProfileUpdateWithoutHelpResponsesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -4149,6 +4230,7 @@ export type UserProfileUncheckedUpdateWithoutHelpResponsesInput = {
   authUserId?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -4187,6 +4269,7 @@ export type UserProfileCreateWithoutHelperLimitsInput = {
   id?: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -4227,6 +4310,7 @@ export type UserProfileUncheckedCreateWithoutHelperLimitsInput = {
   authUserId: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -4293,6 +4377,7 @@ export type UserProfileUpdateWithoutHelperLimitsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -4333,6 +4418,7 @@ export type UserProfileUncheckedUpdateWithoutHelperLimitsInput = {
   authUserId?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -4371,6 +4457,7 @@ export type UserProfileCreateWithoutAwardedBadgesInput = {
   id?: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -4411,6 +4498,7 @@ export type UserProfileUncheckedCreateWithoutAwardedBadgesInput = {
   authUserId: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -4457,6 +4545,7 @@ export type UserProfileCreateWithoutGivenBadgesInput = {
   id?: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -4497,6 +4586,7 @@ export type UserProfileUncheckedCreateWithoutGivenBadgesInput = {
   authUserId: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -4563,6 +4653,7 @@ export type UserProfileUpdateWithoutAwardedBadgesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -4603,6 +4694,7 @@ export type UserProfileUncheckedUpdateWithoutAwardedBadgesInput = {
   authUserId?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -4661,6 +4753,7 @@ export type UserProfileUpdateWithoutGivenBadgesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -4701,6 +4794,7 @@ export type UserProfileUncheckedUpdateWithoutGivenBadgesInput = {
   authUserId?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -4739,6 +4833,7 @@ export type UserProfileCreateWithoutLeaderboardEntriesInput = {
   id?: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -4779,6 +4874,7 @@ export type UserProfileUncheckedCreateWithoutLeaderboardEntriesInput = {
   authUserId: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -4845,6 +4941,7 @@ export type UserProfileUpdateWithoutLeaderboardEntriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -4885,6 +4982,7 @@ export type UserProfileUncheckedUpdateWithoutLeaderboardEntriesInput = {
   authUserId?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -4923,6 +5021,7 @@ export type UserProfileCreateWithoutReceivedNotificationsInput = {
   id?: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -4963,6 +5062,7 @@ export type UserProfileUncheckedCreateWithoutReceivedNotificationsInput = {
   authUserId: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -5009,6 +5109,7 @@ export type UserProfileCreateWithoutActedNotificationsInput = {
   id?: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -5049,6 +5150,7 @@ export type UserProfileUncheckedCreateWithoutActedNotificationsInput = {
   authUserId: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -5115,6 +5217,7 @@ export type UserProfileUpdateWithoutReceivedNotificationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -5155,6 +5258,7 @@ export type UserProfileUncheckedUpdateWithoutReceivedNotificationsInput = {
   authUserId?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -5213,6 +5317,7 @@ export type UserProfileUpdateWithoutActedNotificationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -5253,6 +5358,7 @@ export type UserProfileUncheckedUpdateWithoutActedNotificationsInput = {
   authUserId?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -5291,6 +5397,7 @@ export type UserProfileCreateWithoutStudyMaterialsInput = {
   id?: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -5331,6 +5438,7 @@ export type UserProfileUncheckedCreateWithoutStudyMaterialsInput = {
   authUserId: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -5397,6 +5505,7 @@ export type UserProfileUpdateWithoutStudyMaterialsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -5437,6 +5546,7 @@ export type UserProfileUncheckedUpdateWithoutStudyMaterialsInput = {
   authUserId?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -5475,6 +5585,7 @@ export type UserProfileCreateWithoutMaterialViewsInput = {
   id?: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -5515,6 +5626,7 @@ export type UserProfileUncheckedCreateWithoutMaterialViewsInput = {
   authUserId: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -5581,6 +5693,7 @@ export type UserProfileUpdateWithoutMaterialViewsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -5621,6 +5734,7 @@ export type UserProfileUncheckedUpdateWithoutMaterialViewsInput = {
   authUserId?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -5659,6 +5773,7 @@ export type UserProfileCreateWithoutStudentReportsInput = {
   id?: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -5699,6 +5814,7 @@ export type UserProfileUncheckedCreateWithoutStudentReportsInput = {
   authUserId: string;
   displayName: string;
   avatarUrl?: string | null;
+  avatarPublicId?: string | null;
   role?: $Enums.AppRole;
   bio?: string | null;
   timezone?: string;
@@ -5765,6 +5881,7 @@ export type UserProfileUpdateWithoutStudentReportsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -5805,6 +5922,7 @@ export type UserProfileUncheckedUpdateWithoutStudentReportsInput = {
   authUserId?: Prisma.StringFieldUpdateOperationsInput | string;
   displayName?: Prisma.StringFieldUpdateOperationsInput | string;
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   role?: Prisma.EnumAppRoleFieldUpdateOperationsInput | $Enums.AppRole;
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   timezone?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -6102,6 +6220,7 @@ export type UserProfileSelect<
     authUserId?: boolean;
     displayName?: boolean;
     avatarUrl?: boolean;
+    avatarPublicId?: boolean;
     role?: boolean;
     bio?: boolean;
     timezone?: boolean;
@@ -6149,6 +6268,7 @@ export type UserProfileSelectCreateManyAndReturn<
     authUserId?: boolean;
     displayName?: boolean;
     avatarUrl?: boolean;
+    avatarPublicId?: boolean;
     role?: boolean;
     bio?: boolean;
     timezone?: boolean;
@@ -6172,6 +6292,7 @@ export type UserProfileSelectUpdateManyAndReturn<
     authUserId?: boolean;
     displayName?: boolean;
     avatarUrl?: boolean;
+    avatarPublicId?: boolean;
     role?: boolean;
     bio?: boolean;
     timezone?: boolean;
@@ -6192,6 +6313,7 @@ export type UserProfileSelectScalar = {
   authUserId?: boolean;
   displayName?: boolean;
   avatarUrl?: boolean;
+  avatarPublicId?: boolean;
   role?: boolean;
   bio?: boolean;
   timezone?: boolean;
@@ -6211,6 +6333,7 @@ export type UserProfileOmit<
   | 'authUserId'
   | 'displayName'
   | 'avatarUrl'
+  | 'avatarPublicId'
   | 'role'
   | 'bio'
   | 'timezone'
@@ -6299,6 +6422,7 @@ export type $UserProfilePayload<
       authUserId: string;
       displayName: string;
       avatarUrl: string | null;
+      avatarPublicId: string | null;
       role: $Enums.AppRole;
       bio: string | null;
       timezone: string;
@@ -7138,6 +7262,7 @@ export interface UserProfileFieldRefs {
   readonly authUserId: Prisma.FieldRef<'UserProfile', 'String'>;
   readonly displayName: Prisma.FieldRef<'UserProfile', 'String'>;
   readonly avatarUrl: Prisma.FieldRef<'UserProfile', 'String'>;
+  readonly avatarPublicId: Prisma.FieldRef<'UserProfile', 'String'>;
   readonly role: Prisma.FieldRef<'UserProfile', 'AppRole'>;
   readonly bio: Prisma.FieldRef<'UserProfile', 'String'>;
   readonly timezone: Prisma.FieldRef<'UserProfile', 'String'>;

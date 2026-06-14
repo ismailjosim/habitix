@@ -8,6 +8,7 @@ import { getCurrentUserProfile } from '@/lib/session';
 import { MAX_PEER_HELPERS } from '@/lib/queries/help-desk';
 import { awardEligibleBadges } from '@/lib/badges';
 import { canAccessModule, canResolveHelpPost } from '@/lib/permissions';
+import { deleteImage, uploadImage } from '@/lib/cloudinary';
 
 const topics = [
   'Coding',
@@ -41,15 +42,23 @@ const resolveSchema = z.object({
 const HELP_AWARD_POINTS = 2;
 
 type ActionResult = { success: true; message: string } | { success: false; message: string };
+type CreateHelpPostInput = z.input<typeof createPostSchema> & { image?: File | null };
 
-export async function createHelpPost(
-  input: z.input<typeof createPostSchema>
-): Promise<ActionResult> {
+export async function createHelpPost(input: CreateHelpPostInput): Promise<ActionResult> {
+  let uploadedPublicId: string | null = null;
+
   try {
     const current = await requireCurrent();
     const data = createPostSchema.parse(input);
     const membership = await requireTeamMembership(current.profile.id);
     const tags = [...new Set([data.topic, ...data.tags.map(normalizeTag)])].slice(0, 5);
+    const uploaded = input.image?.size
+      ? await uploadImage(input.image, {
+          folder: `habitix/help-desk/${membership.teamId}`,
+          transformation: [{ width: 1600, height: 1600, crop: 'limit', quality: 'auto' }],
+        })
+      : null;
+    uploadedPublicId = uploaded?.publicId ?? null;
 
     const post = await prisma.helpPost.create({
       data: {
@@ -59,6 +68,8 @@ export async function createHelpPost(
         body: data.body,
         topic: data.topic,
         urgency: data.urgency,
+        imageUrl: uploaded?.url,
+        imagePublicId: uploaded?.publicId,
         tags: { create: tags.map((tag) => ({ tag })) },
       },
     });
@@ -85,6 +96,7 @@ export async function createHelpPost(
     revalidateHelpDesk();
     return { success: true, message: 'Help request posted' };
   } catch (error) {
+    if (uploadedPublicId) await deleteImage(uploadedPublicId).catch(() => undefined);
     return actionError(error, 'Could not create the help request');
   }
 }

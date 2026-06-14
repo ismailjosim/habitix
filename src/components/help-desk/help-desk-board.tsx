@@ -3,7 +3,8 @@
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { IconHelp, IconMessage, IconPlus, IconUsers } from '@tabler/icons-react';
+import Image from 'next/image';
+import { IconHelp, IconMessage, IconPhoto, IconPlus, IconUsers } from '@tabler/icons-react';
 
 import { createHelpPost, createHelpResponse, resolveHelpPost } from '@/lib/actions/help-desk';
 import type { HelpDeskData, HelpDeskPost } from '@/lib/queries/help-desk';
@@ -54,6 +55,7 @@ export function HelpDeskBoard({
   const [dialogOpen, setDialogOpen] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(data.posts[0]?.id ?? null);
   const [error, setError] = useState<string | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
   function submitPost(formData: FormData) {
@@ -67,9 +69,12 @@ export function HelpDeskBoard({
           .split(',')
           .map((tag) => tag.trim())
           .filter(Boolean),
+        image: formData.get('image') instanceof File ? (formData.get('image') as File) : null,
       });
       if (!result.success) return setError(result.message);
       setError(null);
+      if (imagePreview) URL.revokeObjectURL(imagePreview);
+      setImagePreview(null);
       setDialogOpen(false);
       router.refresh();
     });
@@ -105,7 +110,16 @@ export function HelpDeskBoard({
               : 'Join a team to use peer support.'}
           </p>
         </div>
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <Dialog
+          open={dialogOpen}
+          onOpenChange={(open) => {
+            setDialogOpen(open);
+            if (!open && imagePreview) {
+              URL.revokeObjectURL(imagePreview);
+              setImagePreview(null);
+            }
+          }}
+        >
           <DialogTrigger asChild>
             <Button
               disabled={!data.canCreatePost}
@@ -156,6 +170,36 @@ export function HelpDeskBoard({
                 </Select>
               </div>
               <Input name="tags" placeholder="Optional tags, comma separated" />
+              <div className="space-y-2">
+                <label htmlFor="help-image" className="flex items-center gap-2 text-sm font-medium">
+                  <IconPhoto className="size-4" /> Optional screenshot
+                </label>
+                <Input
+                  id="help-image"
+                  name="image"
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/gif"
+                  onChange={(event) => {
+                    if (imagePreview) URL.revokeObjectURL(imagePreview);
+                    const file = event.target.files?.[0];
+                    setImagePreview(file ? URL.createObjectURL(file) : null);
+                  }}
+                />
+                <p className="text-xs text-muted-foreground">
+                  Attach one JPG, PNG, WebP, or GIF up to 8 MB.
+                </p>
+                {imagePreview && (
+                  <div className="relative aspect-video overflow-hidden rounded-xl border bg-muted">
+                    <Image
+                      src={imagePreview}
+                      alt="Selected attachment preview"
+                      fill
+                      className="object-contain"
+                      unoptimized
+                    />
+                  </div>
+                )}
+              </div>
               {error && <ErrorMessage message={error} />}
               <DialogFooter>
                 <Button type="submit" disabled={isPending}>
@@ -335,6 +379,22 @@ function HelpPostCard({
         {expanded && (
           <div className="mt-5 space-y-4 border-t pt-5">
             <p className="whitespace-pre-wrap text-sm leading-6">{post.body}</p>
+            {post.imageUrl && (
+              <a
+                href={post.imageUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="relative block aspect-video overflow-hidden rounded-xl border bg-muted"
+              >
+                <Image
+                  src={post.imageUrl}
+                  alt={`Attachment for ${post.title}`}
+                  fill
+                  sizes="(min-width: 1024px) 800px, 100vw"
+                  className="object-contain"
+                />
+              </a>
+            )}
             {post.responses.map((response) => (
               <div key={response.id} className="rounded-lg border bg-muted/30 p-3">
                 <div className="flex items-center gap-2">

@@ -6,6 +6,7 @@ import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { PasswordInput } from '@/components/ui/password-input';
 import { signUp } from '@/lib/auth-client';
 import { BrandLogo } from '@/components/app/brand-logo';
 
@@ -68,13 +69,7 @@ export default function SignUpPage() {
           </label>
           <label className="block space-y-1.5 text-sm font-medium">
             <span>Password</span>
-            <Input
-              name="password"
-              type="password"
-              autoComplete="new-password"
-              minLength={8}
-              required
-            />
+            <PasswordInput name="password" autoComplete="new-password" minLength={8} required />
           </label>
           <Button className="w-full" size="lg" type="submit" disabled={isSubmitting}>
             {isSubmitting ? 'Creating account...' : 'Create account'}

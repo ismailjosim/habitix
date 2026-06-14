@@ -32,6 +32,8 @@ export type HelpPostMinAggregateOutputType = {
   status: $Enums.HelpPostStatus | null;
   topic: string | null;
   urgency: $Enums.TaskPriority | null;
+  imageUrl: string | null;
+  imagePublicId: string | null;
   awardedResponseId: string | null;
   resolvedAt: Date | null;
   createdAt: Date | null;
@@ -47,6 +49,8 @@ export type HelpPostMaxAggregateOutputType = {
   status: $Enums.HelpPostStatus | null;
   topic: string | null;
   urgency: $Enums.TaskPriority | null;
+  imageUrl: string | null;
+  imagePublicId: string | null;
   awardedResponseId: string | null;
   resolvedAt: Date | null;
   createdAt: Date | null;
@@ -62,6 +66,8 @@ export type HelpPostCountAggregateOutputType = {
   status: number;
   topic: number;
   urgency: number;
+  imageUrl: number;
+  imagePublicId: number;
   awardedResponseId: number;
   resolvedAt: number;
   createdAt: number;
@@ -78,6 +84,8 @@ export type HelpPostMinAggregateInputType = {
   status?: true;
   topic?: true;
   urgency?: true;
+  imageUrl?: true;
+  imagePublicId?: true;
   awardedResponseId?: true;
   resolvedAt?: true;
   createdAt?: true;
@@ -93,6 +101,8 @@ export type HelpPostMaxAggregateInputType = {
   status?: true;
   topic?: true;
   urgency?: true;
+  imageUrl?: true;
+  imagePublicId?: true;
   awardedResponseId?: true;
   resolvedAt?: true;
   createdAt?: true;
@@ -108,6 +118,8 @@ export type HelpPostCountAggregateInputType = {
   status?: true;
   topic?: true;
   urgency?: true;
+  imageUrl?: true;
+  imagePublicId?: true;
   awardedResponseId?: true;
   resolvedAt?: true;
   createdAt?: true;
@@ -199,6 +211,8 @@ export type HelpPostGroupByOutputType = {
   status: $Enums.HelpPostStatus;
   topic: string | null;
   urgency: $Enums.TaskPriority;
+  imageUrl: string | null;
+  imagePublicId: string | null;
   awardedResponseId: string | null;
   resolvedAt: Date | null;
   createdAt: Date;
@@ -232,6 +246,8 @@ export type HelpPostWhereInput = {
   status?: Prisma.EnumHelpPostStatusFilter<'HelpPost'> | $Enums.HelpPostStatus;
   topic?: Prisma.StringNullableFilter<'HelpPost'> | string | null;
   urgency?: Prisma.EnumTaskPriorityFilter<'HelpPost'> | $Enums.TaskPriority;
+  imageUrl?: Prisma.StringNullableFilter<'HelpPost'> | string | null;
+  imagePublicId?: Prisma.StringNullableFilter<'HelpPost'> | string | null;
   awardedResponseId?: Prisma.StringNullableFilter<'HelpPost'> | string | null;
   resolvedAt?: Prisma.DateTimeNullableFilter<'HelpPost'> | Date | string | null;
   createdAt?: Prisma.DateTimeFilter<'HelpPost'> | Date | string;
@@ -255,6 +271,8 @@ export type HelpPostOrderByWithRelationInput = {
   status?: Prisma.SortOrder;
   topic?: Prisma.SortOrderInput | Prisma.SortOrder;
   urgency?: Prisma.SortOrder;
+  imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder;
+  imagePublicId?: Prisma.SortOrderInput | Prisma.SortOrder;
   awardedResponseId?: Prisma.SortOrderInput | Prisma.SortOrder;
   resolvedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
@@ -280,6 +298,8 @@ export type HelpPostWhereUniqueInput = Prisma.AtLeast<
     status?: Prisma.EnumHelpPostStatusFilter<'HelpPost'> | $Enums.HelpPostStatus;
     topic?: Prisma.StringNullableFilter<'HelpPost'> | string | null;
     urgency?: Prisma.EnumTaskPriorityFilter<'HelpPost'> | $Enums.TaskPriority;
+    imageUrl?: Prisma.StringNullableFilter<'HelpPost'> | string | null;
+    imagePublicId?: Prisma.StringNullableFilter<'HelpPost'> | string | null;
     resolvedAt?: Prisma.DateTimeNullableFilter<'HelpPost'> | Date | string | null;
     createdAt?: Prisma.DateTimeFilter<'HelpPost'> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<'HelpPost'> | Date | string;
@@ -304,6 +324,8 @@ export type HelpPostOrderByWithAggregationInput = {
   status?: Prisma.SortOrder;
   topic?: Prisma.SortOrderInput | Prisma.SortOrder;
   urgency?: Prisma.SortOrder;
+  imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder;
+  imagePublicId?: Prisma.SortOrderInput | Prisma.SortOrder;
   awardedResponseId?: Prisma.SortOrderInput | Prisma.SortOrder;
   resolvedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
@@ -329,6 +351,8 @@ export type HelpPostScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumHelpPostStatusWithAggregatesFilter<'HelpPost'> | $Enums.HelpPostStatus;
   topic?: Prisma.StringNullableWithAggregatesFilter<'HelpPost'> | string | null;
   urgency?: Prisma.EnumTaskPriorityWithAggregatesFilter<'HelpPost'> | $Enums.TaskPriority;
+  imageUrl?: Prisma.StringNullableWithAggregatesFilter<'HelpPost'> | string | null;
+  imagePublicId?: Prisma.StringNullableWithAggregatesFilter<'HelpPost'> | string | null;
   awardedResponseId?: Prisma.StringNullableWithAggregatesFilter<'HelpPost'> | string | null;
   resolvedAt?: Prisma.DateTimeNullableWithAggregatesFilter<'HelpPost'> | Date | string | null;
   createdAt?: Prisma.DateTimeWithAggregatesFilter<'HelpPost'> | Date | string;
@@ -342,6 +366,8 @@ export type HelpPostCreateInput = {
   status?: $Enums.HelpPostStatus;
   topic?: string | null;
   urgency?: $Enums.TaskPriority;
+  imageUrl?: string | null;
+  imagePublicId?: string | null;
   resolvedAt?: Date | string | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
@@ -361,6 +387,8 @@ export type HelpPostUncheckedCreateInput = {
   status?: $Enums.HelpPostStatus;
   topic?: string | null;
   urgency?: $Enums.TaskPriority;
+  imageUrl?: string | null;
+  imagePublicId?: string | null;
   awardedResponseId?: string | null;
   resolvedAt?: Date | string | null;
   createdAt?: Date | string;
@@ -376,6 +404,8 @@ export type HelpPostUpdateInput = {
   status?: Prisma.EnumHelpPostStatusFieldUpdateOperationsInput | $Enums.HelpPostStatus;
   topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   urgency?: Prisma.EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority;
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  imagePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -395,6 +425,8 @@ export type HelpPostUncheckedUpdateInput = {
   status?: Prisma.EnumHelpPostStatusFieldUpdateOperationsInput | $Enums.HelpPostStatus;
   topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   urgency?: Prisma.EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority;
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  imagePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   awardedResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -412,6 +444,8 @@ export type HelpPostCreateManyInput = {
   status?: $Enums.HelpPostStatus;
   topic?: string | null;
   urgency?: $Enums.TaskPriority;
+  imageUrl?: string | null;
+  imagePublicId?: string | null;
   awardedResponseId?: string | null;
   resolvedAt?: Date | string | null;
   createdAt?: Date | string;
@@ -425,6 +459,8 @@ export type HelpPostUpdateManyMutationInput = {
   status?: Prisma.EnumHelpPostStatusFieldUpdateOperationsInput | $Enums.HelpPostStatus;
   topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   urgency?: Prisma.EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority;
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  imagePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -439,6 +475,8 @@ export type HelpPostUncheckedUpdateManyInput = {
   status?: Prisma.EnumHelpPostStatusFieldUpdateOperationsInput | $Enums.HelpPostStatus;
   topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   urgency?: Prisma.EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority;
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  imagePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   awardedResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -464,6 +502,8 @@ export type HelpPostCountOrderByAggregateInput = {
   status?: Prisma.SortOrder;
   topic?: Prisma.SortOrder;
   urgency?: Prisma.SortOrder;
+  imageUrl?: Prisma.SortOrder;
+  imagePublicId?: Prisma.SortOrder;
   awardedResponseId?: Prisma.SortOrder;
   resolvedAt?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
@@ -479,6 +519,8 @@ export type HelpPostMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder;
   topic?: Prisma.SortOrder;
   urgency?: Prisma.SortOrder;
+  imageUrl?: Prisma.SortOrder;
+  imagePublicId?: Prisma.SortOrder;
   awardedResponseId?: Prisma.SortOrder;
   resolvedAt?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
@@ -494,6 +536,8 @@ export type HelpPostMinOrderByAggregateInput = {
   status?: Prisma.SortOrder;
   topic?: Prisma.SortOrder;
   urgency?: Prisma.SortOrder;
+  imageUrl?: Prisma.SortOrder;
+  imagePublicId?: Prisma.SortOrder;
   awardedResponseId?: Prisma.SortOrder;
   resolvedAt?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
@@ -801,6 +845,8 @@ export type HelpPostCreateWithoutAuthorInput = {
   status?: $Enums.HelpPostStatus;
   topic?: string | null;
   urgency?: $Enums.TaskPriority;
+  imageUrl?: string | null;
+  imagePublicId?: string | null;
   resolvedAt?: Date | string | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
@@ -818,6 +864,8 @@ export type HelpPostUncheckedCreateWithoutAuthorInput = {
   status?: $Enums.HelpPostStatus;
   topic?: string | null;
   urgency?: $Enums.TaskPriority;
+  imageUrl?: string | null;
+  imagePublicId?: string | null;
   awardedResponseId?: string | null;
   resolvedAt?: Date | string | null;
   createdAt?: Date | string;
@@ -879,6 +927,8 @@ export type HelpPostScalarWhereInput = {
   status?: Prisma.EnumHelpPostStatusFilter<'HelpPost'> | $Enums.HelpPostStatus;
   topic?: Prisma.StringNullableFilter<'HelpPost'> | string | null;
   urgency?: Prisma.EnumTaskPriorityFilter<'HelpPost'> | $Enums.TaskPriority;
+  imageUrl?: Prisma.StringNullableFilter<'HelpPost'> | string | null;
+  imagePublicId?: Prisma.StringNullableFilter<'HelpPost'> | string | null;
   awardedResponseId?: Prisma.StringNullableFilter<'HelpPost'> | string | null;
   resolvedAt?: Prisma.DateTimeNullableFilter<'HelpPost'> | Date | string | null;
   createdAt?: Prisma.DateTimeFilter<'HelpPost'> | Date | string;
@@ -892,6 +942,8 @@ export type HelpPostCreateWithoutTeamInput = {
   status?: $Enums.HelpPostStatus;
   topic?: string | null;
   urgency?: $Enums.TaskPriority;
+  imageUrl?: string | null;
+  imagePublicId?: string | null;
   resolvedAt?: Date | string | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
@@ -909,6 +961,8 @@ export type HelpPostUncheckedCreateWithoutTeamInput = {
   status?: $Enums.HelpPostStatus;
   topic?: string | null;
   urgency?: $Enums.TaskPriority;
+  imageUrl?: string | null;
+  imagePublicId?: string | null;
   awardedResponseId?: string | null;
   resolvedAt?: Date | string | null;
   createdAt?: Date | string;
@@ -965,6 +1019,8 @@ export type HelpPostCreateWithoutResponsesInput = {
   status?: $Enums.HelpPostStatus;
   topic?: string | null;
   urgency?: $Enums.TaskPriority;
+  imageUrl?: string | null;
+  imagePublicId?: string | null;
   resolvedAt?: Date | string | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
@@ -983,6 +1039,8 @@ export type HelpPostUncheckedCreateWithoutResponsesInput = {
   status?: $Enums.HelpPostStatus;
   topic?: string | null;
   urgency?: $Enums.TaskPriority;
+  imageUrl?: string | null;
+  imagePublicId?: string | null;
   awardedResponseId?: string | null;
   resolvedAt?: Date | string | null;
   createdAt?: Date | string;
@@ -1005,6 +1063,8 @@ export type HelpPostCreateWithoutAwardedResponseInput = {
   status?: $Enums.HelpPostStatus;
   topic?: string | null;
   urgency?: $Enums.TaskPriority;
+  imageUrl?: string | null;
+  imagePublicId?: string | null;
   resolvedAt?: Date | string | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
@@ -1023,6 +1083,8 @@ export type HelpPostUncheckedCreateWithoutAwardedResponseInput = {
   status?: $Enums.HelpPostStatus;
   topic?: string | null;
   urgency?: $Enums.TaskPriority;
+  imageUrl?: string | null;
+  imagePublicId?: string | null;
   resolvedAt?: Date | string | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
@@ -1065,6 +1127,8 @@ export type HelpPostUpdateWithoutResponsesInput = {
   status?: Prisma.EnumHelpPostStatusFieldUpdateOperationsInput | $Enums.HelpPostStatus;
   topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   urgency?: Prisma.EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority;
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  imagePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1083,6 +1147,8 @@ export type HelpPostUncheckedUpdateWithoutResponsesInput = {
   status?: Prisma.EnumHelpPostStatusFieldUpdateOperationsInput | $Enums.HelpPostStatus;
   topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   urgency?: Prisma.EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority;
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  imagePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   awardedResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1117,6 +1183,8 @@ export type HelpPostUpdateWithoutAwardedResponseInput = {
   status?: Prisma.EnumHelpPostStatusFieldUpdateOperationsInput | $Enums.HelpPostStatus;
   topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   urgency?: Prisma.EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority;
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  imagePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1135,6 +1203,8 @@ export type HelpPostUncheckedUpdateWithoutAwardedResponseInput = {
   status?: Prisma.EnumHelpPostStatusFieldUpdateOperationsInput | $Enums.HelpPostStatus;
   topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   urgency?: Prisma.EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority;
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  imagePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1149,6 +1219,8 @@ export type HelpPostCreateWithoutTagsInput = {
   status?: $Enums.HelpPostStatus;
   topic?: string | null;
   urgency?: $Enums.TaskPriority;
+  imageUrl?: string | null;
+  imagePublicId?: string | null;
   resolvedAt?: Date | string | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
@@ -1167,6 +1239,8 @@ export type HelpPostUncheckedCreateWithoutTagsInput = {
   status?: $Enums.HelpPostStatus;
   topic?: string | null;
   urgency?: $Enums.TaskPriority;
+  imageUrl?: string | null;
+  imagePublicId?: string | null;
   awardedResponseId?: string | null;
   resolvedAt?: Date | string | null;
   createdAt?: Date | string;
@@ -1209,6 +1283,8 @@ export type HelpPostUpdateWithoutTagsInput = {
   status?: Prisma.EnumHelpPostStatusFieldUpdateOperationsInput | $Enums.HelpPostStatus;
   topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   urgency?: Prisma.EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority;
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  imagePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1227,6 +1303,8 @@ export type HelpPostUncheckedUpdateWithoutTagsInput = {
   status?: Prisma.EnumHelpPostStatusFieldUpdateOperationsInput | $Enums.HelpPostStatus;
   topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   urgency?: Prisma.EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority;
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  imagePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   awardedResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1242,6 +1320,8 @@ export type HelpPostCreateManyAuthorInput = {
   status?: $Enums.HelpPostStatus;
   topic?: string | null;
   urgency?: $Enums.TaskPriority;
+  imageUrl?: string | null;
+  imagePublicId?: string | null;
   awardedResponseId?: string | null;
   resolvedAt?: Date | string | null;
   createdAt?: Date | string;
@@ -1255,6 +1335,8 @@ export type HelpPostUpdateWithoutAuthorInput = {
   status?: Prisma.EnumHelpPostStatusFieldUpdateOperationsInput | $Enums.HelpPostStatus;
   topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   urgency?: Prisma.EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority;
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  imagePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1272,6 +1354,8 @@ export type HelpPostUncheckedUpdateWithoutAuthorInput = {
   status?: Prisma.EnumHelpPostStatusFieldUpdateOperationsInput | $Enums.HelpPostStatus;
   topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   urgency?: Prisma.EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority;
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  imagePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   awardedResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1288,6 +1372,8 @@ export type HelpPostUncheckedUpdateManyWithoutAuthorInput = {
   status?: Prisma.EnumHelpPostStatusFieldUpdateOperationsInput | $Enums.HelpPostStatus;
   topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   urgency?: Prisma.EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority;
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  imagePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   awardedResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1302,6 +1388,8 @@ export type HelpPostCreateManyTeamInput = {
   status?: $Enums.HelpPostStatus;
   topic?: string | null;
   urgency?: $Enums.TaskPriority;
+  imageUrl?: string | null;
+  imagePublicId?: string | null;
   awardedResponseId?: string | null;
   resolvedAt?: Date | string | null;
   createdAt?: Date | string;
@@ -1315,6 +1403,8 @@ export type HelpPostUpdateWithoutTeamInput = {
   status?: Prisma.EnumHelpPostStatusFieldUpdateOperationsInput | $Enums.HelpPostStatus;
   topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   urgency?: Prisma.EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority;
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  imagePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1332,6 +1422,8 @@ export type HelpPostUncheckedUpdateWithoutTeamInput = {
   status?: Prisma.EnumHelpPostStatusFieldUpdateOperationsInput | $Enums.HelpPostStatus;
   topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   urgency?: Prisma.EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority;
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  imagePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   awardedResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1348,6 +1440,8 @@ export type HelpPostUncheckedUpdateManyWithoutTeamInput = {
   status?: Prisma.EnumHelpPostStatusFieldUpdateOperationsInput | $Enums.HelpPostStatus;
   topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   urgency?: Prisma.EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority;
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  imagePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   awardedResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1412,6 +1506,8 @@ export type HelpPostSelect<
     status?: boolean;
     topic?: boolean;
     urgency?: boolean;
+    imageUrl?: boolean;
+    imagePublicId?: boolean;
     awardedResponseId?: boolean;
     resolvedAt?: boolean;
     createdAt?: boolean;
@@ -1438,6 +1534,8 @@ export type HelpPostSelectCreateManyAndReturn<
     status?: boolean;
     topic?: boolean;
     urgency?: boolean;
+    imageUrl?: boolean;
+    imagePublicId?: boolean;
     awardedResponseId?: boolean;
     resolvedAt?: boolean;
     createdAt?: boolean;
@@ -1461,6 +1559,8 @@ export type HelpPostSelectUpdateManyAndReturn<
     status?: boolean;
     topic?: boolean;
     urgency?: boolean;
+    imageUrl?: boolean;
+    imagePublicId?: boolean;
     awardedResponseId?: boolean;
     resolvedAt?: boolean;
     createdAt?: boolean;
@@ -1481,6 +1581,8 @@ export type HelpPostSelectScalar = {
   status?: boolean;
   topic?: boolean;
   urgency?: boolean;
+  imageUrl?: boolean;
+  imagePublicId?: boolean;
   awardedResponseId?: boolean;
   resolvedAt?: boolean;
   createdAt?: boolean;
@@ -1498,6 +1600,8 @@ export type HelpPostOmit<
   | 'status'
   | 'topic'
   | 'urgency'
+  | 'imageUrl'
+  | 'imagePublicId'
   | 'awardedResponseId'
   | 'resolvedAt'
   | 'createdAt'
@@ -1550,6 +1654,8 @@ export type $HelpPostPayload<
       status: $Enums.HelpPostStatus;
       topic: string | null;
       urgency: $Enums.TaskPriority;
+      imageUrl: string | null;
+      imagePublicId: string | null;
       awardedResponseId: string | null;
       resolvedAt: Date | null;
       createdAt: Date;
@@ -2190,6 +2296,8 @@ export interface HelpPostFieldRefs {
   readonly status: Prisma.FieldRef<'HelpPost', 'HelpPostStatus'>;
   readonly topic: Prisma.FieldRef<'HelpPost', 'String'>;
   readonly urgency: Prisma.FieldRef<'HelpPost', 'TaskPriority'>;
+  readonly imageUrl: Prisma.FieldRef<'HelpPost', 'String'>;
+  readonly imagePublicId: Prisma.FieldRef<'HelpPost', 'String'>;
   readonly awardedResponseId: Prisma.FieldRef<'HelpPost', 'String'>;
   readonly resolvedAt: Prisma.FieldRef<'HelpPost', 'DateTime'>;
   readonly createdAt: Prisma.FieldRef<'HelpPost', 'DateTime'>;

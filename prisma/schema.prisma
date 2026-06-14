@@ -179,6 +179,7 @@ model UserProfile {
   authUserId            String              @unique
   displayName           String
   avatarUrl             String?
+  avatarPublicId        String?
   role                  AppRole             @default(STUDENT)
   bio                   String?
   timezone              String              @default("UTC")
@@ -423,6 +424,8 @@ model HelpPost {
   status            HelpPostStatus @default(OPEN)
   topic             String?
   urgency           TaskPriority   @default(MEDIUM)
+  imageUrl          String?
+  imagePublicId     String?
   awardedResponseId String?        @unique
   resolvedAt        DateTime?
   createdAt         DateTime       @default(now())
