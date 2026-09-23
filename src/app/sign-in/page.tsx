@@ -4,11 +4,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+import { BrandLogo } from '@/components/app/brand-logo';
+import { GoogleSignInButton } from '@/components/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 import { signIn } from '@/lib/auth-client';
-import { BrandLogo } from '@/components/app/brand-logo';
 
 export default function SignInPage() {
   const router = useRouter();
@@ -56,6 +57,22 @@ export default function SignInPage() {
             {error}
           </p>
         ) : null}
+
+        <div className="space-y-3">
+          <GoogleSignInButton
+            label="Sign in with Google"
+            callbackUrl="/dashboard"
+            onError={setError}
+          />
+
+          <div className="my-5 flex items-center gap-3">
+            <div className="h-px flex-1 bg-border" />
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Or continue with email
+            </span>
+            <div className="h-px flex-1 bg-border" />
+          </div>
+        </div>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
           <label className="block space-y-1.5 text-sm font-medium">
