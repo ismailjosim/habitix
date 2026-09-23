@@ -1,6 +1,6 @@
-import Image from 'next/image';
-import { IconPhoto, IconPlus } from '@tabler/icons-react';
+import { IconPlus } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
+import { ImageUploadDropzone } from '@/components/ui/image-upload-dropzone';
 import {
   Dialog,
   DialogContent,
@@ -100,35 +100,15 @@ export function CreateHelpPostModal({
 
           <Input name="tags" placeholder="Optional tags, comma separated" />
 
-          <div className="space-y-2">
-            <label htmlFor="help-image" className="flex items-center gap-2 text-sm font-medium">
-              <IconPhoto className="size-4" /> Optional screenshot
-            </label>
-            <Input
-              id="help-image"
-              name="image"
-              type="file"
-              accept="image/jpeg,image/png,image/webp,image/gif"
-              onChange={(event) => {
-                const file = event.target.files?.[0] || null;
-                onImageChange(file);
-              }}
-            />
-            <p className="text-xs text-muted-foreground">
-              Attach one JPG, PNG, WebP, or GIF up to 8 MB.
-            </p>
-            {imagePreview && (
-              <div className="relative aspect-video overflow-hidden rounded-xl border bg-muted">
-                <Image
-                  src={imagePreview}
-                  alt="Selected attachment preview"
-                  fill
-                  className="object-contain"
-                  unoptimized
-                />
-              </div>
-            )}
-          </div>
+          <ImageUploadDropzone
+            name="image"
+            value={imagePreview}
+            aspectRatio="video"
+            label="Optional screenshot"
+            description="Drag & drop or click to upload an error screenshot to Cloudinary"
+            onChange={(file) => onImageChange(file)}
+            disabled={isPending}
+          />
 
           {error && (
             <div

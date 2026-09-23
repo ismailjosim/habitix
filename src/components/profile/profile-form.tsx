@@ -1,12 +1,14 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { DataPanel } from '@/components/shared';
-import { updateProfile, updateProfileImage } from '@/lib/actions/profile';
+import { updateProfile } from '@/lib/actions/profile';
+import { uploadFile } from '@/lib/upload-client';
 import { useEffect, useRef, useState } from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { ImageUploadDropzone } from '@/components/ui/image-upload-dropzone';
 import type { ProfileData } from '@/lib/queries/profile';
 
 interface ProfileFormProps {
@@ -14,6 +16,7 @@ interface ProfileFormProps {
 }
 
 export function ProfileForm({ profile }: ProfileFormProps) {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [displayName, setDisplayName] = useState(profile.displayName);
   const [bio, setBio] = useState(profile.bio || '');
@@ -67,46 +70,52 @@ export function ProfileForm({ profile }: ProfileFormProps) {
     setMessage('');
     setMessageSuccess(false);
 
-    const formData = new FormData();
-    formData.set('image', imageFile);
-    const result = await updateProfileImage(formData);
-    setMessage(result.message);
-    setMessageSuccess(result.success);
-    if (result.success) {
+    try {
+      const result = await uploadFile(imageFile, 'avatar');
+      setMessage('Profile photo updated successfully!');
+      setMessageSuccess(true);
       if (previewObjectUrl.current) URL.revokeObjectURL(previewObjectUrl.current);
       previewObjectUrl.current = null;
       setImagePreview(result.url);
       setImageFile(null);
+      router.refresh();
+    } catch (err: unknown) {
+      setMessage(err instanceof Error ? err.message : 'Failed to update profile photo');
+      setMessageSuccess(false);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   return (
     <DataPanel title="Personal Information" description="Update your profile details">
-      <form onSubmit={handleImageSubmit} className="mb-6 rounded-xl border bg-muted/30 p-4">
+      <form
+        onSubmit={handleImageSubmit}
+        className="mb-6 rounded-2xl border border-border bg-card/60 p-5 shadow-xs"
+      >
+        <h3 className="mb-1 text-sm font-semibold text-foreground">Profile Picture</h3>
+        <p className="mb-4 text-xs text-muted-foreground">
+          Upload and crop your avatar directly to Cloudinary.
+        </p>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-          <Avatar className="h-20 w-20 shrink-0 border-2 border-card shadow-sm">
-            <AvatarImage src={imagePreview || undefined} />
-            <AvatarFallback className="bg-primary text-primary-foreground">
-              {profile.displayName.slice(0, 2).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <div className="min-w-0 flex-1 space-y-2">
-            <label htmlFor="profile-image" className="text-sm font-medium">
-              Profile image
-            </label>
-            <Input
-              id="profile-image"
-              type="file"
-              accept="image/jpeg,image/png,image/webp,image/gif"
-              onChange={(event) => selectImage(event.target.files?.[0] ?? null)}
-              disabled={loading}
-            />
-            <p className="text-xs text-muted-foreground">JPG, PNG, WebP, or GIF up to 8 MB.</p>
+          <ImageUploadDropzone
+            value={imagePreview}
+            onChange={(file) => selectImage(file)}
+            aspectRatio="square"
+            label=""
+            description="Drag or click to choose photo"
+            disabled={loading}
+          />
+          <div className="space-y-2">
+            <Button type="submit" disabled={loading || !imageFile}>
+              {loading ? 'Uploading to Cloudinary...' : 'Save photo'}
+            </Button>
+            {imageFile && (
+              <p className="text-xs text-muted-foreground">
+                Click &quot;Save photo&quot; to commit changes to Cloudinary.
+              </p>
+            )}
           </div>
-          <Button type="submit" variant="outline" disabled={loading || !imageFile}>
-            {loading ? 'Uploading...' : 'Upload image'}
-          </Button>
         </div>
       </form>
       <form onSubmit={handleSubmit} className="space-y-4">
