@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
+import TeamLoading from './loading';
 import { getTeamData } from '@/lib/queries/team';
 import { getTeamTasks } from '@/lib/queries/team-tasks';
 import { getTeamPresence } from '@/lib/queries/presence';
@@ -68,8 +69,6 @@ async function TeamContent() {
     </>
   );
 }
-
-import TeamLoading from './loading';
 
 export default function TeamPage() {
   return (

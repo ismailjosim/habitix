@@ -39,8 +39,6 @@ async function ProfileContent() {
   );
 }
 
-import ProfileLoading from './loading';
-
 export default function ProfilePage() {
   return (
     <Suspense fallback={<ProfileLoading />}>
