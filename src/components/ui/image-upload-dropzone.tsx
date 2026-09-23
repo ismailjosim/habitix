@@ -112,6 +112,15 @@ export function ImageUploadDropzone({
 
     const file = e.dataTransfer.files?.[0];
     if (file) {
+      if (inputRef.current) {
+        try {
+          const dt = new DataTransfer();
+          dt.items.add(file);
+          inputRef.current.files = dt.files;
+        } catch {
+          // Fallback if DataTransfer constructor not supported
+        }
+      }
       handleFile(file);
     }
   };
@@ -196,7 +205,7 @@ export function ImageUploadDropzone({
               ? 'border-primary bg-primary/10 scale-[1.01]'
               : 'border-border bg-card/60 hover:border-primary/60 hover:bg-muted/40',
             disabled && 'cursor-not-allowed opacity-50',
-            aspectRatio === 'square' && 'max-w-[200px] aspect-square'
+            aspectRatio === 'square' && 'max-w-50 aspect-square'
           )}
           role="button"
           tabIndex={0}

@@ -17,11 +17,17 @@ export function HelpDeskBoard({ data, filters }: HelpDeskBoardProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(data.posts[0]?.id ?? null);
   const [error, setError] = useState<string | null>(null);
+  const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
   function submitPost(formData: FormData) {
     startTransition(async () => {
+      const file =
+        formData.get('image') instanceof File && (formData.get('image') as File).size > 0
+          ? (formData.get('image') as File)
+          : selectedImageFile;
+
       const result = await createHelpPost({
         title: String(formData.get('title') ?? ''),
         body: String(formData.get('body') ?? ''),
@@ -31,12 +37,13 @@ export function HelpDeskBoard({ data, filters }: HelpDeskBoardProps) {
           .split(',')
           .map((tag) => tag.trim())
           .filter(Boolean),
-        image: formData.get('image') instanceof File ? (formData.get('image') as File) : null,
+        image: file,
       });
       if (!result.success) return setError(result.message);
       setError(null);
       if (imagePreview) URL.revokeObjectURL(imagePreview);
       setImagePreview(null);
+      setSelectedImageFile(null);
       setDialogOpen(false);
       router.refresh();
     });
@@ -63,6 +70,7 @@ export function HelpDeskBoard({ data, filters }: HelpDeskBoardProps) {
   function handleImageChange(file: File | null) {
     if (imagePreview) URL.revokeObjectURL(imagePreview);
     setImagePreview(file ? URL.createObjectURL(file) : null);
+    setSelectedImageFile(file);
   }
 
   return (

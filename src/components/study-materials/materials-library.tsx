@@ -174,11 +174,11 @@ export function MaterialsLibrary({
                 </div>
 
                 <div className="relative flex py-1 items-center">
-                  <div className="flex-grow border-t border-border"></div>
-                  <span className="flex-shrink mx-3 text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
+                  <div className="grow border-t border-border"></div>
+                  <span className="shrink mx-3 text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
                     Or External URL
                   </span>
-                  <div className="flex-grow border-t border-border"></div>
+                  <div className="grow border-t border-border"></div>
                 </div>
 
                 <div className="space-y-1.5">

@@ -5,7 +5,7 @@ import { getTeamTasks } from '@/lib/queries/team-tasks';
 import { getTeamPresence } from '@/lib/queries/presence';
 import { TeamHeader, TeamRoleCards, TeamMembers, TeamTasks } from '@/components/team';
 import { TeamPresencePanel } from '@/components/presence';
-import { LoadingState, PageHeader, EmptyState } from '@/components/shared';
+import { PageHeader, EmptyState } from '@/components/shared';
 import { LAYOUT_CONSTRAINTS } from '@/lib/layout-constraints';
 
 export const metadata: Metadata = {
@@ -69,19 +69,11 @@ async function TeamContent() {
   );
 }
 
+import TeamLoading from './loading';
+
 export default function TeamPage() {
   return (
-    <Suspense
-      fallback={
-        <div
-          className={`${LAYOUT_CONSTRAINTS.pageMaxWidth} ${LAYOUT_CONSTRAINTS.pagePadding} mx-auto`}
-        >
-          <div className={LAYOUT_CONSTRAINTS.pageVerticalSpacing}>
-            <LoadingState title="Loading team..." count={4} />
-          </div>
-        </div>
-      }
-    >
+    <Suspense fallback={<TeamLoading />}>
       <TeamContent />
     </Suspense>
   );

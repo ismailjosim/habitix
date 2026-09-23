@@ -150,6 +150,60 @@ export async function updateStudyMaterial(input: z.input<typeof updateSchema>) {
   }
 }
 
+export async function updateStudyMaterialWithUpload(formData: FormData) {
+  try {
+    const current = await getCurrentUserProfile();
+    if (!current || !canManageStudyMaterials(current.profile.role))
+      throw new Error('Only mentors and admins can edit materials');
+
+    const materialId = String(formData.get('materialId') ?? '').trim();
+    if (!materialId) throw new Error('Material ID is required');
+
+    const title = String(formData.get('title') ?? '').trim();
+    const author = String(formData.get('author') ?? '').trim() || undefined;
+    const description = String(formData.get('description') ?? '').trim() || undefined;
+    const moduleName = String(formData.get('module') ?? '').trim();
+    const milestone = String(formData.get('milestone') ?? '').trim() || undefined;
+    const isPublished = formData.get('published') === 'on' || formData.get('published') === 'true';
+    const tags = String(formData.get('tags') ?? '')
+      .split(',')
+      .map((t) => t.trim())
+      .filter(Boolean);
+
+    let url = String(formData.get('url') ?? '').trim();
+    const file = formData.get('file');
+
+    if (file instanceof File && file.size > 0) {
+      const isDoc = file.type === 'application/pdf' || file.name.endsWith('.pdf');
+      const uploaded = isDoc
+        ? await uploadDocument(file, { folder: 'habitix/materials' })
+        : await uploadImage(file, { folder: 'habitix/materials' });
+      url = uploaded.url;
+    }
+
+    if (!url) {
+      throw new Error('Please provide either a resource URL or upload a file');
+    }
+
+    return await updateStudyMaterial({
+      materialId,
+      title,
+      author,
+      description,
+      url,
+      module: moduleName,
+      milestone,
+      isPublished,
+      tags,
+    });
+  } catch (error) {
+    return {
+      success: false as const,
+      message: error instanceof Error ? error.message : 'Could not update material',
+    };
+  }
+}
+
 export async function trackStudyMaterial(input: {
   materialId: string;
   action: 'view' | 'download';

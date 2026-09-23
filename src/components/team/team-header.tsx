@@ -83,7 +83,7 @@ export function TeamHeader({ team }: TeamHeaderProps) {
   }
 
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary via-primary to-primary-hover px-6 py-10 text-primary-foreground shadow-[0_24px_60px_rgba(249,115,91,0.22)]">
+    <div className="relative overflow-hidden rounded-2xl bg-linear-to-br from-primary via-primary to-primary-hover px-6 py-10 text-primary-foreground shadow-[0_24px_60px_rgba(249,115,91,0.22)]">
       <div className="pointer-events-none absolute -right-16 -top-24 size-72 rounded-full bg-white/20 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-28 left-1/3 size-64 rounded-full bg-warning/20 blur-3xl" />
       <div className="relative flex flex-col items-start gap-6 sm:flex-row sm:items-center">

@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
+import ProfileLoading from './loading';
 import { getProfileData } from '@/lib/queries/profile';
 import { ProfileHeader, ProfileForm, ProfileStats, ProfileBadges } from '@/components/profile';
 import { LAYOUT_CONSTRAINTS } from '@/lib/layout-constraints';
-import { LoadingState } from '@/components/shared';
 
 export const metadata: Metadata = {
   title: 'Profile | Habitix',
@@ -39,19 +39,11 @@ async function ProfileContent() {
   );
 }
 
+import ProfileLoading from './loading';
+
 export default function ProfilePage() {
   return (
-    <Suspense
-      fallback={
-        <div
-          className={`${LAYOUT_CONSTRAINTS.pageMaxWidth} ${LAYOUT_CONSTRAINTS.pagePadding} mx-auto`}
-        >
-          <div className={LAYOUT_CONSTRAINTS.pageVerticalSpacing}>
-            <LoadingState title="Loading profile..." count={4} />
-          </div>
-        </div>
-      }
-    >
+    <Suspense fallback={<ProfileLoading />}>
       <ProfileContent />
     </Suspense>
   );
