@@ -1,6 +1,12 @@
-import { ActivityDashboard } from '@/components/activity/activity-dashboard';
+import type { Metadata } from 'next';
+import { ActivityDashboard } from '@/components/activity';
 import { LAYOUT_CONSTRAINTS } from '@/lib/layout-constraints';
 import { getActivityData } from '@/lib/queries/activity';
+
+export const metadata: Metadata = {
+  title: 'Activity | Habitix',
+  description: 'Detailed activity history, daily heatmaps, and focus breakdown.',
+};
 
 export default async function ActivityPage({
   searchParams,

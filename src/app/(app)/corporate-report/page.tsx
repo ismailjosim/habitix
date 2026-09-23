@@ -1,6 +1,12 @@
-import { CorporateReportView } from '@/components/corporate-report/corporate-report-view';
+import type { Metadata } from 'next';
+import { CorporateReportView } from '@/components/corporate-report';
 import { LAYOUT_CONSTRAINTS } from '@/lib/layout-constraints';
 import { getCorporateReportData } from '@/lib/queries/corporate-report';
+
+export const metadata: Metadata = {
+  title: 'Corporate Report | Habitix',
+  description: 'Learner performance and organization aggregate reports for corporate reviewers.',
+};
 
 export default async function CorporateReportPage({
   searchParams,

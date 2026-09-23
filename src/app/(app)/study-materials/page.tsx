@@ -1,6 +1,12 @@
-import { MaterialsLibrary } from '@/components/study-materials/materials-library';
+import type { Metadata } from 'next';
+import { MaterialsLibrary } from '@/components/study-materials';
 import { LAYOUT_CONSTRAINTS } from '@/lib/layout-constraints';
 import { getStudyMaterials } from '@/lib/queries/study-materials';
+
+export const metadata: Metadata = {
+  title: 'Study Materials | Habitix',
+  description: 'Curated study materials, reference docs, and learning guides.',
+};
 
 export default async function StudyMaterialsPage({
   searchParams,

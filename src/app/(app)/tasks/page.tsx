@@ -1,6 +1,12 @@
-import { TaskBoard } from '@/components/tasks/task-board';
+import type { Metadata } from 'next';
+import { TaskBoard } from '@/components/tasks';
 import { LAYOUT_CONSTRAINTS } from '@/lib/layout-constraints';
 import { getTaskBoardData } from '@/lib/queries/tasks';
+
+export const metadata: Metadata = {
+  title: 'Tasks | Habitix',
+  description: 'Plan personal work, track assigned tasks, and move active work across the board.',
+};
 
 export default async function TasksPage({
   searchParams,

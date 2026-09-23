@@ -1,6 +1,12 @@
-import { NotificationsInbox } from '@/components/notifications/notifications-inbox';
+import type { Metadata } from 'next';
+import { NotificationsInbox } from '@/components/notifications';
 import { LAYOUT_CONSTRAINTS } from '@/lib/layout-constraints';
 import { getNotificationsData, type NotificationCategory } from '@/lib/queries/notifications';
+
+export const metadata: Metadata = {
+  title: 'Notifications | Habitix',
+  description: 'Manage platform alerts, assignments, help requests, and achievement notices.',
+};
 
 export default async function NotificationsPage({
   searchParams,

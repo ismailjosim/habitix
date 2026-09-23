@@ -1,8 +1,8 @@
-import { AppShell } from '@/components/app/app-shell';
-import { getCurrentUserProfile } from '@/lib/session';
 import { redirect } from 'next/navigation';
-import { getUnreadNotificationCount } from '@/lib/queries/notifications';
+import { AppShell } from '@/components/app/app-shell';
 import { getActiveFocusSession } from '@/lib/queries/focus';
+import { getUnreadNotificationCount } from '@/lib/queries/notifications';
+import { getCurrentUserProfile } from '@/lib/session';
 
 export default async function ProtectedAppLayout({ children }: { children: React.ReactNode }) {
   const currentUser = await getCurrentUserProfile();

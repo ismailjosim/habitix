@@ -1,8 +1,14 @@
+import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import { getProfileData } from '@/lib/queries/profile';
 import { ProfileHeader, ProfileForm, ProfileStats, ProfileBadges } from '@/components/profile';
 import { LAYOUT_CONSTRAINTS } from '@/lib/layout-constraints';
 import { LoadingState } from '@/components/shared';
+
+export const metadata: Metadata = {
+  title: 'Profile | Habitix',
+  description: 'Manage your learner profile, view stats, and showcase earned badges.',
+};
 
 async function ProfileContent() {
   const profile = await getProfileData();

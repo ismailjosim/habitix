@@ -1,11 +1,17 @@
+import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import { getTeamData } from '@/lib/queries/team';
 import { getTeamTasks } from '@/lib/queries/team-tasks';
-import { TeamHeader, TeamRoleCards, TeamMembers, TeamTasks } from '@/components/team';
-import { LAYOUT_CONSTRAINTS } from '@/lib/layout-constraints';
-import { LoadingState, PageHeader, EmptyState } from '@/components/shared';
-import { TeamPresencePanel } from '@/components/presence/team-presence-panel';
 import { getTeamPresence } from '@/lib/queries/presence';
+import { TeamHeader, TeamRoleCards, TeamMembers, TeamTasks } from '@/components/team';
+import { TeamPresencePanel } from '@/components/presence';
+import { LoadingState, PageHeader, EmptyState } from '@/components/shared';
+import { LAYOUT_CONSTRAINTS } from '@/lib/layout-constraints';
+
+export const metadata: Metadata = {
+  title: 'Team | Habitix',
+  description: 'Team workspace, member roles, shared tasks, and active presence.',
+};
 
 async function TeamContent() {
   const teamData = await getTeamData();

@@ -1,6 +1,12 @@
-import { HelpDeskBoard } from '@/components/help-desk/help-desk-board';
+import type { Metadata } from 'next';
+import { HelpDeskBoard } from '@/components/help-desk';
 import { LAYOUT_CONSTRAINTS } from '@/lib/layout-constraints';
 import { getHelpDeskData } from '@/lib/queries/help-desk';
+
+export const metadata: Metadata = {
+  title: 'Help Desk | Habitix',
+  description: 'Peer support board to ask and answer questions with your teammates.',
+};
 
 export default async function HelpDeskPage({
   searchParams,
