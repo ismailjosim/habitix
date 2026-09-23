@@ -1,3 +1,4 @@
+import { BADGE_DEFINITIONS } from '@/lib/badge-definitions';
 import { prisma } from '@/lib/prisma';
 
 export { BADGE_DEFINITIONS } from '@/lib/badge-definitions';

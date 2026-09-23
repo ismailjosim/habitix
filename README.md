@@ -1,214 +1,410 @@
 # Habitix
 
-Habitix is a full-stack student productivity and collaboration platform. It combines focused-work
-tracking, task and subtask management, team presence, coding Q&A, help-point recognition,
-leaderboards, study materials, analytics, and role-aware reporting in one responsive application.
+**Habitix** is a full-stack student productivity and team collaboration platform built for learners and mentors. It unifies focused-work tracking, structured task management, peer Q&A, live team presence, leaderboards, study materials, image uploads, role-aware reporting, and admin tooling in a single, responsive Next.js application.
 
-## Highlights
+---
 
-- Persistent Focus Mode with pause/resume and task linking.
-- Personal, mentor-assigned, admin-assigned, and team task workflows.
-- Team-scoped coding Help Desk with accepted answers and one-time point awards.
-- Dashboard, activity heatmaps, trends, streaks, and focus breakdowns.
-- Weekly/monthly team leaderboards and automatic badges.
-- Team presence and mentor-student assignments.
-- Published learning-resource library with visibility controls.
-- Student performance reports and aggregate corporate snapshots.
-- Admin user, role, team, and membership management.
-- Light/dark theme and collapsible desktop sidebar.
-- Server-enforced permissions for five platform roles.
+## Features
 
-The complete implemented feature catalog is maintained in the workspace at
-`planning/features.md`.
+### 🎯 Focus Mode
 
-## Technology
+- Persistent timer with start, pause, resume, and session completion
+- Activity-type tagging (Coding, Study, Writing, Research, Review)
+- Optional task and team linking per session
+- Planned vs. actual minute tracking with session notes
+- VS Code extension integration roadmap
+- Full session history and daily statistics
 
-- Next.js 16 App Router
-- React 19 and TypeScript
-- PostgreSQL
-- Prisma 7 with `@prisma/adapter-pg`
-- Better Auth
-- Tailwind CSS 4 and Radix-based UI components
-- Vitest and Testing Library
+### ✅ Task Management
+
+- Four task types: **Personal**, **Mentor Assigned**, **Admin Assigned**, **Team**
+- Six statuses: `TODO → IN_PROGRESS → BLOCKED → IN_REVIEW → DONE → ARCHIVED`
+- Priorities: Urgent, High, Medium, Low
+- Subtask checklists with completion tracking
+- Task comments with screenshot attachments (Cloudinary)
+- Activity history timeline on every task
+- Progress bar calculated from subtask completion
+- Metadata sidebar (due date, category, assignee, creator)
+
+### 👥 Team & Presence
+
+- Multi-team support with unique slugs
+- Six membership roles: Owner, Admin, Lead, Mentor, Member, Viewer
+- Live presence panel showing recently active teammates
+- Mentor-student assignment tracking per team
+- Team avatar/logo upload (role-restricted)
+
+### 🆘 Help Desk
+
+- Team-scoped coding Q&A board
+- Urgency levels and topic tags
+- Screenshot uploads on question posts
+- Answer acceptance with one-time help-point awards
+- ANSWERED / RESOLVED / OPEN status flow
+- Moderation role for Help Desk oversight
+
+### 📊 Dashboard & Analytics
+
+- Welcome banner with streak, focus, and help-point stats
+- 28-day activity heatmap
+- Online peers panel and notification feed
+- Dedicated `/activity` page with date-range filtering
+- Focus breakdown by activity type
+- Streak and trend tracking
+
+### 🏆 Leaderboard & Badges
+
+- Weekly and monthly team-scoped leaderboard snapshots
+- Rankings by composite score (focus + tasks + help points + badges)
+- Seven automatic badge definitions with eligibility criteria
+- Badge award history and notification on earn
+
+### 📚 Study Materials
+
+- Published resource library with LINK, PDF, and NOTE types
+- Visibility controls: Public, Team, Organization
+- Module and milestone tagging
+- Document/PDF upload to Cloudinary (up to 15 MB)
+- Mentor/admin-only create and edit with student browse access
+- View and download tracking
+
+### 🔔 Notifications
+
+- Real-time inbox with category filtering
+- Types: Task Assigned, Help Resolved, Badge Awarded, Team Update, Mention
+- Read/unread state with bulk-mark support
+
+### 👤 Profile
+
+- Avatar upload with drag-and-drop dropzone (Cloudinary)
+- Display name, bio, institution, and department
+- Focus statistics, streak, and help points
+- Earned badge showcase gallery
+
+### 📈 Corporate Report
+
+- Student-level performance report (focus, tasks, badges)
+- Aggregate corporate snapshots for Corporate Viewer role
+- Printable report layout
+
+### 🛡️ Admin Panel
+
+- User search and role management
+- Team creation and membership editing
+- Profile editing and deactivation
+- Role promotion/demotion with admin guard (final admin protected)
+
+### 🎨 UI & UX
+
+- Light / dark theme toggle with `next-themes`
+- Collapsible desktop sidebar with keyboard navigation
+- **Skeleton loading states** on every major route (layout-matching, no spinners)
+- Glassmorphism cards, smooth micro-animations, HSL color palette
+- Google Fonts (Inter) for modern typography
+- Fully responsive down to mobile
+
+---
+
+## Technology Stack
+
+| Layer           | Technology                                                 |
+| --------------- | ---------------------------------------------------------- |
+| Framework       | [Next.js 16](https://nextjs.org/) App Router (Turbopack)   |
+| Language        | TypeScript 5                                               |
+| UI              | React 19, Tailwind CSS 4, Radix UI                         |
+| Database        | PostgreSQL (Neon serverless)                               |
+| ORM             | Prisma 7 with `@prisma/adapter-pg`                         |
+| Auth            | [Better Auth](https://better-auth.com/) with Google OAuth  |
+| File Storage    | [Cloudinary](https://cloudinary.com/) (images + documents) |
+| Testing         | Vitest + Testing Library                                   |
+| Linting         | ESLint 9, Prettier, Husky + lint-staged                    |
+| Package Manager | pnpm                                                       |
+
+---
+
+## Project Structure
+
+```
+habitix-project/
+├── prisma/
+│   ├── schema.prisma          # 30+ models, enums, relations
+│   ├── seed.ts                # Badge definitions seed (safe/repeatable)
+│   ├── demo-seed.ts           # Full showcase dataset
+│   └── migrations/            # Applied SQL migrations
+├── src/
+│   ├── app/
+│   │   ├── (app)/             # Protected layout — all feature pages
+│   │   │   ├── dashboard/
+│   │   │   ├── tasks/[taskId]/
+│   │   │   ├── team/
+│   │   │   ├── help-desk/
+│   │   │   ├── study-materials/[materialId]/
+│   │   │   ├── leaderboard/
+│   │   │   ├── focus-mode/
+│   │   │   ├── profile/
+│   │   │   ├── notifications/
+│   │   │   ├── activity/
+│   │   │   ├── corporate-report/
+│   │   │   └── admin/users/
+│   │   ├── (auth)/            # Login, sign-up, sign-in pages
+│   │   └── api/
+│   │       ├── auth/[...all]/ # Better Auth handler
+│   │       └── upload/        # Cloudinary upload API route
+│   ├── components/            # Feature-scoped component folders
+│   ├── lib/
+│   │   ├── actions/           # Server Actions (tasks, focus, help-desk…)
+│   │   ├── queries/           # Read-only data fetching per feature
+│   │   ├── auth.ts            # Better Auth config
+│   │   ├── cloudinary.ts      # Upload / delete helpers
+│   │   ├── upload-client.ts   # Client-side upload streaming
+│   │   ├── badges.ts          # Badge logic and awarding
+│   │   ├── permissions.ts     # Role permission matrix
+│   │   └── authorization.ts   # Auth guards
+│   └── generated/prisma/      # Auto-generated Prisma client
+```
+
+---
 
 ## Requirements
 
-- Node.js 20 or newer
-- npm
-- PostgreSQL
+- **Node.js** 20 or newer
+- **pnpm** (or npm / yarn)
+- **PostgreSQL** database (local or cloud, e.g. [Neon](https://neon.tech))
+- **Cloudinary** account (free tier works)
+- (Optional) **Google OAuth** credentials for social login
 
-## Environment
+---
 
-Copy `.env.example` to `.env` and configure:
+## Environment Setup
+
+Copy `.env.example` to `.env` and fill in all values:
 
 ```env
-DATABASE_URL="postgresql://..."
-BETTER_AUTH_SECRET="a-unique-secret-at-least-32-characters"
+# Database
+DATABASE_URL="postgresql://user:password@host:5432/habitix?sslmode=require"
+
+# Better Auth
+BETTER_AUTH_SECRET="a-random-secret-at-least-32-characters-long"
 BETTER_AUTH_URL="http://localhost:3000"
-SEED_DEMO_DATA="false"
+
+# Cloudinary
+CLOUDINARY_CLOUD_NAME="your-cloud-name"
+CLOUDINARY_API_KEY="your-api-key"
+CLOUDINARY_API_SECRET="your-api-secret"
+
+# Google OAuth (optional)
+GOOGLE_CLIENT_ID="your-google-client-id"
+GOOGLE_CLIENT_SECRET="your-google-client-secret"
 ```
 
-`BETTER_AUTH_URL` must exactly match the public application origin. Production values must use
-HTTPS and a unique secret.
+> **Production**: `BETTER_AUTH_URL` must use HTTPS and match your public domain exactly. Never share `BETTER_AUTH_SECRET` or `CLOUDINARY_API_SECRET`.
 
-## Local Setup
+---
+
+## Local Development Setup
 
 ```bash
-npm install
-npm run db:generate
-npm run db:deploy
-npm run db:seed
-npm run dev
+# 1. Install dependencies
+pnpm install
+
+# 2. Generate Prisma client
+pnpm db:generate
+
+# 3. Apply database migrations
+pnpm db:deploy
+
+# 4. Seed required badge definitions
+pnpm db:seed
+
+# 5. Start the dev server
+pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
 
-The standard seed creates required badge definitions only and is safe to run repeatedly.
+---
 
-## Full Demo Dataset
+## Demo Dataset
 
-First sign in once with your normal local account. Then run:
+To explore every feature with realistic data:
 
-```bash
-npm run demo:seed
-```
+**Step 1 — Sign in once** with your account at [http://localhost:3000/sign-up](http://localhost:3000/sign-up).
 
-The command is deterministic and rerunnable. It preserves unrelated local data, uses your existing
-admin account as the showcase owner, makes the Habitix Product Lab its active team, and creates:
-
-- Five role-specific demo accounts.
-- A populated team with owner, lead, mentor, member, moderator, and viewer roles.
-- Mentor assignments.
-- Tasks covering all major statuses, priorities, types, subtasks, comments, and activity history.
-- Fourteen days of focus sessions across multiple users.
-- Open and resolved Help Desk conversations with an accepted point award.
-- Notifications, presence records, badges, materials, views, reports, and leaderboard snapshots.
-
-All demo accounts use:
-
-```txt
-Password: HabitixDemo123!
-```
-
-| Experience            | Email                          |
-| --------------------- | ------------------------------ |
-| Mentor                | `mentor.demo@habitix.local`    |
-| Student               | `student.demo@habitix.local`   |
-| Student and team lead | `peer.demo@habitix.local`      |
-| Moderator             | `moderator.demo@habitix.local` |
-| Corporate Viewer      | `corporate.demo@habitix.local` |
-
-The seed refuses to run when `NODE_ENV=production`.
-
-To choose a specific existing showcase owner:
+**Step 2 — Run the demo seed:**
 
 ```bash
-DEMO_OWNER_EMAIL=admin@example.com npm run demo:seed
+pnpm demo:seed
+# or on Windows PowerShell:
+npx tsx prisma/demo-seed.ts
 ```
 
-On PowerShell:
+This creates a "Habitix Product Lab" team and populates:
 
-```powershell
-$env:DEMO_OWNER_EMAIL="admin@example.com"
-npm run demo:seed
+- 5 role-specific demo accounts
+- 8 tasks across all statuses, priorities, and types with subtasks and comments
+- 65 focus sessions across 14 days (4 users)
+- 3 help desk posts with answers and accepted resolution
+- 3 study materials (links and notes)
+- Leaderboard snapshot with 3 ranked entries
+- 10 badge awards and 14 notifications
+- Corporate report snapshot and student performance reports
+- Presence records for live presence panel
+
+**Demo accounts** — all use password `HabitixDemo123!`:
+
+| Role                | Email                          |
+| ------------------- | ------------------------------ |
+| Mentor              | `mentor.demo@habitix.local`    |
+| Student             | `student.demo@habitix.local`   |
+| Student & Team Lead | `peer.demo@habitix.local`      |
+| Moderator           | `moderator.demo@habitix.local` |
+| Corporate Viewer    | `corporate.demo@habitix.local` |
+
+To specify a custom showcase owner:
+
+```bash
+# bash
+DEMO_OWNER_EMAIL=admin@example.com npx tsx prisma/demo-seed.ts
+
+# PowerShell
+$env:DEMO_OWNER_EMAIL="admin@example.com"; npx tsx prisma/demo-seed.ts
 ```
+
+> The seed is safe to re-run — it clears only `demo-` prefixed records and preserves all other data. It is blocked when `NODE_ENV=production`.
+
+---
 
 ## First Administrator
 
-New accounts start as students. After the first administrator account has signed in once:
+New accounts default to `STUDENT` role. To promote your first admin:
 
 ```bash
-npm run admin:promote -- admin@example.com
+# Sign in first, then:
+npx tsx scripts/promote-admin.ts admin@example.com
 ```
 
-Admins can open `/admin/users` to manage platform roles, profile details, teams, active
-memberships, and team roles. The final administrator cannot demote themselves.
+Admins can manage all users, roles, teams, and memberships from `/admin/users`.
+
+---
 
 ## Application Routes
 
-| Route               | Purpose                                                                  |
-| ------------------- | ------------------------------------------------------------------------ |
-| `/dashboard`        | Focus, tasks, streak, help points, activity, presence, and notifications |
-| `/activity`         | Date-range analytics, heatmap, session history, and breakdown            |
-| `/focus-mode`       | Persistent focus timer and daily sessions                                |
-| `/tasks`            | Personal and assigned task board                                         |
-| `/tasks/[taskId]`   | Task detail, subtasks, comments, history, and focus sessions             |
-| `/help-desk`        | Team coding Q&A, responses, resolutions, and point awards                |
-| `/leaderboard`      | Weekly/monthly focus and contribution rankings                           |
-| `/team`             | Team members, roles, presence, and tasks                                 |
-| `/notifications`    | Notification inbox and read state                                        |
-| `/profile`          | Profile editing, statistics, and badges                                  |
-| `/study-materials`  | Searchable learning-resource library                                     |
-| `/corporate-report` | Student or aggregate reporting based on role                             |
-| `/admin/users`      | Admin-only role, profile, team, and membership management                |
+| Route                   | Purpose                                                        |
+| ----------------------- | -------------------------------------------------------------- |
+| `/dashboard`            | Stats, activity heatmap, presence, and notifications           |
+| `/tasks`                | Kanban board — personal and assigned tasks                     |
+| `/tasks/[taskId]`       | Task detail, subtasks, comments with screenshots, history      |
+| `/focus-mode`           | Persistent focus timer and session history                     |
+| `/team`                 | Team members, roles, shared tasks, and presence                |
+| `/help-desk`            | Team Q&A board with screenshot uploads and point awards        |
+| `/leaderboard`          | Weekly/monthly team rankings and badge gallery                 |
+| `/study-materials`      | Searchable learning resource library with PDF upload           |
+| `/study-materials/[id]` | Resource detail view with edit/replace for mentors             |
+| `/activity`             | Date-range analytics, heatmap, and focus breakdown             |
+| `/notifications`        | Notification inbox with read state management                  |
+| `/profile`              | Profile editing with drag-and-drop avatar upload               |
+| `/corporate-report`     | Performance report (student) or aggregate snapshot (corporate) |
+| `/admin/users`          | Admin-only user, role, team, and membership management         |
 
-## Roles
+---
 
-| Role             | Main access                                                                 |
-| ---------------- | --------------------------------------------------------------------------- |
-| Student          | Dashboard, activity, focus, tasks, Help Desk, leaderboard, team, materials  |
-| Mentor           | Student features plus assignments, reporting, and owned material management |
-| Admin            | Operational modules, Focus Mode, reporting, materials, and user management  |
-| Moderator        | Dashboard, Help Desk moderation, notifications, and profile                 |
-| Corporate Viewer | Notifications, profile, and approved aggregate reports only                 |
+## Role Permissions
 
-Platform role and team role are separate. Help Desk posting requires an active team membership even
-when the platform role permits Help Desk access.
+| Role                 | Access Summary                                                                                   |
+| -------------------- | ------------------------------------------------------------------------------------------------ |
+| **Student**          | Dashboard, focus, tasks (personal), help desk, leaderboard, team, study materials, profile       |
+| **Mentor**           | All student features + mentor-assigned tasks, student reports, material management, badge awards |
+| **Admin**            | All operational modules + user management, admin-assigned tasks, all reports                     |
+| **Moderator**        | Dashboard, help desk moderation, notifications, profile only                                     |
+| **Corporate Viewer** | Approved aggregate reports, notifications, and profile only                                      |
+
+Platform role and team membership role are independent. Help Desk posting requires active team membership.
+
+---
 
 ## Commands
 
-| Command                          | Purpose                                                         |
-| -------------------------------- | --------------------------------------------------------------- |
-| `npm run dev`                    | Start the development server                                    |
-| `npm run build`                  | Create the production build                                     |
-| `npm start`                      | Start the production server                                     |
-| `npm test`                       | Run Vitest once                                                 |
-| `npm run test:watch`             | Run tests in watch mode                                         |
-| `npm run test:coverage`          | Generate test coverage                                          |
-| `npm run lint`                   | Run ESLint                                                      |
-| `npm run qa:check`               | Run tests, permission audit, lint, Prisma validation, and build |
-| `npm run db:generate`            | Generate Prisma Client                                          |
-| `npm run db:deploy`              | Apply committed migrations                                      |
-| `npm run db:migrate`             | Create migrations during development only                       |
-| `npm run db:migrate:status`      | Inspect migration status                                        |
-| `npm run db:seed`                | Seed required defaults                                          |
-| `npm run demo:seed`              | Load the local showcase dataset                                 |
-| `npm run db:studio`              | Open Prisma Studio                                              |
-| `npm run admin:promote -- EMAIL` | Promote the first administrator                                 |
-| `npm run deploy:prepare`         | Generate Prisma Client and deploy migrations                    |
+| Command                       | Purpose                           |
+| ----------------------------- | --------------------------------- |
+| `pnpm dev`                    | Start development server          |
+| `pnpm build`                  | Create production build           |
+| `pnpm start`                  | Start production server           |
+| `pnpm lint`                   | Run ESLint                        |
+| `pnpm lint:fix`               | Run ESLint with auto-fix          |
+| `pnpm format`                 | Format all files with Prettier    |
+| `pnpm vitest run`             | Run unit test suite once          |
+| `pnpm vitest`                 | Run tests in watch mode           |
+| `pnpm db:generate`            | Generate Prisma Client            |
+| `pnpm db:migrate`             | Create a new migration (dev only) |
+| `pnpm db:deploy`              | Apply committed migrations        |
+| `pnpm db:migrate:status`      | Inspect migration status          |
+| `pnpm db:seed`                | Seed required badge definitions   |
+| `npx tsx prisma/demo-seed.ts` | Load full showcase dataset        |
+
+---
 
 ## Testing
 
 ```bash
-npm run qa:check
+pnpm vitest run
 ```
 
-The test suite covers analytics, all platform roles, protected routes, task/subtask behavior, focus
-completion, Help Desk award idempotency, notification ownership, admin membership changes, and UI
-smoke rendering. Tests mock Prisma/session boundaries and never reset the development database.
+The test suite covers:
+
+- Analytics calculations
+- All 5 platform roles and permission checks
+- Task/subtask creation and assignment rules
+- Focus session start, pause, resume, and completion
+- Help Desk point award idempotency
+- Notification ownership guards
+- Admin membership changes
+- UI smoke rendering (activity dashboard)
+
+Tests mock Prisma and session boundaries — they never modify the development database.
+
+---
+
+## Image & File Uploads
+
+Cloudinary is used for all media storage. The following upload types are supported:
+
+| Feature                 | Type             | Max Size |
+| ----------------------- | ---------------- | -------- |
+| Profile avatar          | Image            | 5 MB     |
+| Team logo               | Image            | 5 MB     |
+| Help Desk screenshot    | Image            | 5 MB     |
+| Task comment attachment | Image            | 5 MB     |
+| Study material document | PDF / EPUB / DOC | 15 MB    |
+
+All uploads go through the authenticated `/api/upload` route. Stale files are removed from Cloudinary on replacement.
+
+---
+
+## Skeleton Loading
+
+Every major route has a dedicated `loading.tsx` with a layout-matching skeleton that mirrors the exact component structure of the page — no generic spinners. This eliminates layout shift and provides a seamless perceived loading experience during server data fetching.
+
+---
 
 ## Production Deployment
 
 ```bash
-npm run deploy:check
-npm run deploy:prepare
-npm run db:seed
+# Run checks
+pnpm build
+
+# Apply migrations against production DB
+DATABASE_URL="..." pnpm db:deploy
+
+# Seed badge definitions only (safe)
+DATABASE_URL="..." pnpm db:seed
 ```
 
-Use `prisma migrate deploy` in production. Never run `prisma migrate dev`, `migrate reset`, or
-`npm run demo:seed` against production.
+> Never run `demo:seed`, `migrate dev`, or `migrate reset` against a production database.
 
-See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for environment, migration, release, and rollback
-instructions.
+For Vercel deployment, the `vercel-build` script in `package.json` handles Prisma generation and migration automatically.
 
-## Documentation
+---
 
-- [User Guide](docs/USER-GUIDE.md)
-- [Access Control](docs/access-control.md)
-- [Database Design](docs/database-design-v1.md)
-- [UI System](docs/UI-SYSTEM.md)
-- [Final QA Checklist](docs/FINAL-QA.md)
-- [Developer Handoff](docs/DEVELOPER-HANDOFF.md)
-- [Known Limitations](docs/KNOWN-LIMITATIONS.md)
-- [VS Code Extension Roadmap](docs/VSCODE-EXTENSION-ROADMAP.md)
-- [Deployment Guide](docs/DEPLOYMENT.md)
+## License
+
+Private — all rights reserved.
