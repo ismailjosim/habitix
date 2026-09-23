@@ -3,8 +3,8 @@ import 'dotenv/config';
 import { hashPassword } from 'better-auth/crypto';
 
 import type { AppRole } from '../src/generated/prisma/client';
-import { BADGE_DEFINITIONS } from '../src/lib/badges';
-import { prisma } from '../src/lib/prisma';
+import { BADGE_DEFINITIONS } from '../src/lib/badge-definitions';
+import { prisma } from './prisma-seed';
 
 const DEMO_PASSWORD = 'HabitixDemo123!';
 

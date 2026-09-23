@@ -1,8 +1,8 @@
 import 'dotenv/config';
 
 import { ActivitySourceType, FocusActivityType, TaskPriority } from '../src/generated/prisma/enums';
-import { prisma } from '../src/lib/prisma';
-import { BADGE_DEFINITIONS } from '../src/lib/badges';
+import { prisma } from './prisma-seed';
+import { BADGE_DEFINITIONS } from '../src/lib/badge-definitions';
 
 function pickOne<T>(items: readonly T[]): T {
   return items[Math.floor(Math.random() * items.length)];
